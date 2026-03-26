@@ -1,65 +1,62 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useCallback, useRef } from "react";
+import { Hero } from "@/components/hero";
+import { Sidebar } from "@/components/sidebar";
+import { MobileHeader } from "@/components/mobile-header";
+import { MobileMenu } from "@/components/mobile-menu";
+import { ButtonCustomization } from "@/components/button-customization";
 
 export default function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const mainRef = useRef<HTMLElement>(null);
+
+  const handleTypingComplete = useCallback(() => {
+    setShowSidebar(true);
+  }, []);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div className="flex flex-col lg:flex-row h-screen px-4 lg:gap-0 relative">
+      {/* Mobile Header */}
+      <MobileHeader
+        isMenuOpen={isMenuOpen}
+        onToggleMenu={() => setIsMenuOpen(!isMenuOpen)}
+        show={showSidebar}
+      />
+
+      {/* Mobile Menu — expanding glass panel */}
+      <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} scrollContainer={mainRef} />
+
+      {/* Desktop Sidebar */}
+      <Sidebar show={showSidebar} delay={0} scrollContainer={mainRef} />
+
+      {/* Main Content */}
+      <main ref={mainRef} className="flex flex-col flex-1 relative overflow-y-auto scroll-smooth pt-20 lg:pt-0">
+        <Hero onTypingComplete={handleTypingComplete} />
+
+        {/* Mock sections for anchor navigation */}
+        <section id="works" className="min-h-screen flex flex-col p-10 pt-20">
+          <h2 className="text-5xl font-bold mb-4">Works & Bits</h2>
+          <p className="text-xl max-w-xl opacity-70">Selected projects and experiments. This is a placeholder section for testing anchor navigation.</p>
+        </section>
+
+        <section id="about" className="min-h-screen flex flex-col p-10 pt-20">
+          <h2 className="text-5xl font-bold mb-4">Why / How / What</h2>
+          <p className="text-xl max-w-xl opacity-70">About me, my approach, and what drives my work. This is a placeholder section for testing anchor navigation.</p>
+        </section>
+
+        <section id="contact" className="min-h-screen flex flex-col p-10 pt-20">
+          <h2 className="text-5xl font-bold mb-4">Let&apos;s Talk</h2>
+          <p className="text-xl max-w-xl opacity-70">Get in touch for collaboration, consulting, or just to say hello. This is a placeholder section for testing anchor navigation.</p>
+        </section>
+
       </main>
+
+      {/* Color Switcher — bottom right, 72px wrapper centers the 64→72px growth */}
+      <div className="fixed bottom-4 right-4 z-30 flex items-center justify-center w-[72px] h-[72px]">
+        <ButtonCustomization delay={showSidebar ? 2000 : 5000} />
+      </div>
     </div>
   );
 }
