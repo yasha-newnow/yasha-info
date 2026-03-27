@@ -68,7 +68,7 @@ export function MobileMenu({ isOpen, onClose, scrollContainer }: MobileMenuProps
             transition: "background 0.5s ease",
           }}
           initial={{ height: 64, opacity: 0.8 }}
-          animate={{ height: "calc(100vh - 32px)", opacity: 1 }}
+          animate={{ height: "calc(100dvh - 32px)", opacity: 1 }}
           exit={{ height: 64, opacity: 0 }}
           transition={{
             height: { type: "spring", stiffness: 300, damping: 30 },
@@ -76,7 +76,7 @@ export function MobileMenu({ isOpen, onClose, scrollContainer }: MobileMenuProps
           }}
         >
           {/* Content */}
-          <div className="flex flex-col justify-between h-full pt-3 pb-7 px-3">
+          <div className="flex flex-col justify-between h-full pt-3 pb-4 px-1">
             {/* Top: Logo + Close + Name (group 0) */}
             <motion.div
               className="flex flex-col gap-4"
@@ -85,23 +85,26 @@ export function MobileMenu({ isOpen, onClose, scrollContainer }: MobileMenuProps
               animate="visible"
               exit="exit"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center justify-center w-10 h-10">
-                  <Logo size={40} />
+              <div className="px-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-center w-10 h-10">
+                    <Logo size={40} />
+                  </div>
+                  <button
+                    onClick={onClose}
+                    className="flex items-center justify-center w-10 h-10 p-2 cursor-pointer"
+                    aria-label="Close menu"
+                  >
+                    <PlusIcon size={24} isOpen={true} />
+                  </button>
                 </div>
-                <button
-                  onClick={onClose}
-                  className="flex items-center justify-center w-10 h-10 p-2 cursor-pointer"
-                  aria-label="Close menu"
-                >
-                  <PlusIcon size={24} isOpen={true} />
-                </button>
               </div>
 
               {/* Name */}
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-5 px-3">
                 <motion.span
-                  className="text-2xl font-bold leading-8"
+                  className="text-[28px] leading-8 font-normal"
+                  style={{ fontFamily: "var(--font-homemade-apple), cursive" }}
                   variants={fadeInItem}
                 >
                   Yasha Petrunin

@@ -1,6 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { AnimatedClock, AnimatedGlobe } from "./icons";
+
+function Badge({ icon, text }: { icon: ReactNode; text: string }) {
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-full font-tag font-medium text-[12px] uppercase tracking-[0.03em] opacity-70"
+      style={{
+        padding: "2px 8px 2px 3px",
+        backgroundColor:
+          "color-mix(in srgb, var(--foreground) 10%, transparent)",
+        transition: "background-color 0.5s ease",
+      }}
+    >
+      {icon}
+      {text}
+    </span>
+  );
+}
 
 export function LocalTime() {
   const [time, setTime] = useState("");
@@ -22,8 +40,9 @@ export function LocalTime() {
   }, []);
 
   return (
-    <span className="font-mono text-xs leading-6">
-      Local time {time} • Valencia, Spain.
-    </span>
+    <div className="flex gap-2 flex-wrap">
+      <Badge icon={<AnimatedClock size={16} />} text={`Local time ${time}`} />
+      <Badge icon={<AnimatedGlobe size={16} />} text="Valencia. Spain" />
+    </div>
   );
 }

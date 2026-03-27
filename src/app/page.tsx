@@ -17,7 +17,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen px-4 lg:gap-0 relative">
+    <div className="flex flex-col lg:flex-row h-dvh px-4 lg:gap-0 relative">
       {/* Mobile Header */}
       <MobileHeader
         isMenuOpen={isMenuOpen}

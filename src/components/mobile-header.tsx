@@ -12,7 +12,7 @@ interface MobileHeaderProps {
 export function MobileHeader({ isMenuOpen, onToggleMenu, show }: MobileHeaderProps) {
   return (
     <motion.header
-      className="flex lg:hidden items-center justify-between p-3 rounded-3xl absolute top-4 left-4 right-4 z-30"
+      className="lg:hidden py-3 px-1 rounded-3xl absolute top-4 left-4 right-4 z-30"
       style={{
         background:
           "linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05)), color-mix(in srgb, var(--accent) 70%, transparent)",
@@ -27,19 +27,21 @@ export function MobileHeader({ isMenuOpen, onToggleMenu, show }: MobileHeaderPro
       }
       transition={{ type: "spring", visualDuration: 0.4, bounce: 0 }}
     >
-      {/* Logo */}
-      <div className="flex items-center justify-center w-10 h-10">
-        <Logo size={40} />
-      </div>
+      <div className="flex items-center justify-between px-3">
+        {/* Logo */}
+        <div className="flex items-center justify-center w-10 h-10">
+          <Logo size={40} />
+        </div>
 
-      {/* Burger / Close */}
-      <button
-        onClick={onToggleMenu}
-        className="flex items-center justify-center w-10 h-10 p-2 cursor-pointer"
-        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-      >
-        <PlusIcon size={24} isOpen={isMenuOpen} />
-      </button>
+        {/* Burger / Close */}
+        <button
+          onClick={onToggleMenu}
+          className="flex items-center justify-center w-10 h-10 p-2 cursor-pointer"
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        >
+          <PlusIcon size={24} isOpen={isMenuOpen} />
+        </button>
+      </div>
     </motion.header>
   );
 }

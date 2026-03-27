@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter_Tight, Roboto_Mono, Stick_No_Bills } from "next/font/google";
+import { Inter_Tight, Roboto_Mono, Stick_No_Bills, Homemade_Apple } from "next/font/google";
 import { DialRoot } from "dialkit";
 import "dialkit/styles.css";
 import { Agentation } from "agentation";
@@ -20,7 +20,14 @@ const robotoMono = Roboto_Mono({
 const stickNoBills = Stick_No_Bills({
   variable: "--font-stick-no-bills",
   subsets: ["latin"],
-  weight: ["600"],
+  weight: ["500", "600"],
+});
+
+const homemadeApple = Homemade_Apple({
+  variable: "--font-homemade-apple",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -37,7 +44,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${interTight.variable} ${robotoMono.variable} ${stickNoBills.variable} h-full antialiased`}
+      className={`${interTight.variable} ${robotoMono.variable} ${stickNoBills.variable} ${homemadeApple.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         {children}

@@ -68,27 +68,30 @@ export function Sidebar({ show = false, delay = 0, scrollContainer }: SidebarPro
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col justify-between h-full p-6">
+      <div className="relative z-10 flex flex-col justify-between h-full px-3 pt-3 pb-5">
         {/* Top: Logo + Name (group 0) */}
         <motion.div
-          className="flex flex-col gap-4"
+          className="flex flex-col"
           variants={sectionVariants(0)}
           initial="hidden"
           animate={show ? "visible" : "hidden"}
         >
-          <motion.div variants={fadeInItem}>
-            <Logo size={40} />
-          </motion.div>
-          <div className="flex flex-col">
-            <motion.span
-              className="text-2xl font-bold leading-8"
-              variants={fadeInItem}
-            >
-              Yasha Petrunin
-            </motion.span>
+          <div className="flex flex-col gap-4 p-3">
             <motion.div variants={fadeInItem}>
-              <LocalTime />
+              <Logo size={40} />
             </motion.div>
+            <div className="flex flex-col gap-5">
+              <motion.span
+                className="text-[28px] leading-8 font-normal"
+                style={{ fontFamily: "var(--font-homemade-apple), cursive" }}
+                variants={fadeInItem}
+              >
+                Yasha Petrunin
+              </motion.span>
+              <motion.div variants={fadeInItem}>
+                <LocalTime />
+              </motion.div>
+            </div>
           </div>
         </motion.div>
 
