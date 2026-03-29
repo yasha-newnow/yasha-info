@@ -103,8 +103,7 @@ export function MobileMenu({ isOpen, onClose, scrollContainer }: MobileMenuProps
               {/* Name */}
               <div className="flex flex-col gap-5 px-3">
                 <motion.span
-                  className="text-[28px] leading-8 font-normal"
-                  style={{ fontFamily: "var(--font-homemade-apple), cursive" }}
+                  className="font-handwritten text-[28px] leading-8 font-normal"
                   variants={fadeInItem}
                 >
                   Yasha Petrunin

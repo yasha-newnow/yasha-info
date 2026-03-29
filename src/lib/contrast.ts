@@ -8,8 +8,13 @@ const LIGHT_FOREGROUND = "#FFFFFF";
 const WCAG_AA_THRESHOLD = 4.5;
 
 export function hexToRgb(hex: string): [number, number, number] {
-  const clean = hex.replace("#", "");
-  const num = parseInt(clean, 16);
+  let clean = hex.replace("#", "");
+  // Normalize 3-char hex to 6-char
+  if (clean.length === 3) {
+    clean = clean[0] + clean[0] + clean[1] + clean[1] + clean[2] + clean[2];
+  }
+  if (clean.length < 6) clean = clean.padEnd(6, "0");
+  const num = parseInt(clean.substring(0, 6), 16);
   return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
 }
 

@@ -82,8 +82,7 @@ export function Sidebar({ show = false, delay = 0, scrollContainer }: SidebarPro
             </motion.div>
             <div className="flex flex-col gap-5">
               <motion.span
-                className="text-[28px] leading-8 font-normal"
-                style={{ fontFamily: "var(--font-homemade-apple), cursive" }}
+                className="font-handwritten text-[28px] leading-8 font-normal"
                 variants={fadeInItem}
               >
                 Yasha Petrunin
