@@ -63,7 +63,7 @@ export function MobileMenu({ isOpen, onClose, scrollContainer }: MobileMenuProps
           className="absolute inset-4 z-40 flex flex-col lg:hidden rounded-3xl overflow-hidden"
           style={{
             background:
-              "linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05)), color-mix(in srgb, var(--accent) 70%, transparent)",
+              "linear-gradient(var(--glass-overlay), var(--glass-overlay)), color-mix(in srgb, var(--accent) 70%, transparent)",
             backdropFilter: "blur(50px)",
             transition: "background 0.5s ease",
           }}

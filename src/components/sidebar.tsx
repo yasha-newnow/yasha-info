@@ -61,7 +61,7 @@ export function Sidebar({ show = false, delay = 0, scrollContainer }: SidebarPro
         className="absolute inset-0 rounded-3xl"
         style={{
           background:
-            "linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05)), color-mix(in srgb, var(--accent) 70%, transparent)",
+            "linear-gradient(var(--glass-overlay), var(--glass-overlay)), color-mix(in srgb, var(--accent) 70%, transparent)",
           backdropFilter: "blur(50px)",
           transition: "background 0.5s ease",
         }}

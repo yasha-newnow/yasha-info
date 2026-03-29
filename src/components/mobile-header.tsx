@@ -15,7 +15,7 @@ export function MobileHeader({ isMenuOpen, onToggleMenu, show }: MobileHeaderPro
       className="lg:hidden py-3 px-1 rounded-3xl absolute top-4 left-4 right-4 z-30"
       style={{
         background:
-          "linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05)), color-mix(in srgb, var(--accent) 70%, transparent)",
+          "linear-gradient(var(--glass-overlay), var(--glass-overlay)), color-mix(in srgb, var(--accent) 70%, transparent)",
         backdropFilter: "blur(10px)",
         transition: "background 0.5s ease",
       }}

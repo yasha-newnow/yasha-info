@@ -3,16 +3,17 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { PaletteIcon } from "./icons";
+import { applyTheme } from "@/lib/contrast";
 
 const ACCENT_COLORS = [
-  "#C5F640", // lime (default)
-  "#FF6B35", // tangerine
-  "#7B61FF", // electric violet
-  "#00D4AA", // mint
-  "#FF3F8E", // hot pink
-  "#FFD93D", // golden yellow
-  "#4CC9F0", // sky blue
-  "#FF9F1C", // amber
+  "#C5F640", // lime (default) — light mode
+  "#FF6B35", // tangerine — light mode
+  "#7B61FF", // electric violet — light mode
+  "#FF3F8E", // hot pink — light mode
+  "#4CC9F0", // sky blue — light mode
+  "#2D1B69", // deep purple — dark mode
+  "#1A1A2E", // midnight — dark mode
+  "#8B0000", // dark red — dark mode
 ];
 
 interface ButtonCustomizationProps {
@@ -27,10 +28,7 @@ export function ButtonCustomization({
   const cycleColor = () => {
     const nextIndex = (colorIndex + 1) % ACCENT_COLORS.length;
     setColorIndex(nextIndex);
-    document.documentElement.style.setProperty(
-      "--accent",
-      ACCENT_COLORS[nextIndex]
-    );
+    applyTheme(ACCENT_COLORS[nextIndex]);
   };
 
   return (
