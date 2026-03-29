@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { PaletteIcon } from "./icons";
 import { applyTheme } from "@/lib/contrast";
 
@@ -23,29 +23,104 @@ interface ButtonCustomizationProps {
 export function ButtonCustomization({
   delay = 3000,
 }: ButtonCustomizationProps) {
-  const [colorIndex, setColorIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeColor, setActiveColor] = useState(ACCENT_COLORS[0]);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const cycleColor = () => {
-    const nextIndex = (colorIndex + 1) % ACCENT_COLORS.length;
-    setColorIndex(nextIndex);
-    applyTheme(ACCENT_COLORS[nextIndex]);
-  };
+  const toggle = useCallback(() => setIsOpen((prev) => !prev), []);
+
+  const selectColor = useCallback((hex: string) => {
+    setActiveColor(hex);
+    applyTheme(hex);
+    setIsOpen(false);
+  }, []);
+
+  // Close on mousedown outside
+  useEffect(() => {
+    if (!isOpen) return;
+    function onMouseDown(e: MouseEvent) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onMouseDown);
+    return () => document.removeEventListener("mousedown", onMouseDown);
+  }, [isOpen]);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!isOpen) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setIsOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [isOpen]);
 
   return (
-    <motion.button
-      onClick={cycleColor}
-      className="button-customization"
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{
-        type: "spring",
-        stiffness: 400,
-        damping: 15,
-        delay: delay / 1000,
-      }}
-      aria-label="Change accent color"
-    >
-      <PaletteIcon size={24} />
-    </motion.button>
+    <div ref={containerRef} className="relative">
+      {/* Preset palette panel — positioned above the button */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="absolute bottom-full right-0 mb-3 flex gap-2 p-2 rounded-2xl"
+            style={{
+              backgroundColor:
+                "color-mix(in srgb, var(--foreground) 90%, transparent)",
+              backdropFilter: "blur(20px)",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+            }}
+            initial={{ opacity: 0, scale: 0.8, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 10 }}
+            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+          >
+            {ACCENT_COLORS.map((color, i) => (
+              <motion.button
+                key={color}
+                onClick={() => selectColor(color)}
+                className="w-8 h-8 rounded-full border-2 shrink-0 cursor-pointer"
+                style={{
+                  backgroundColor: color,
+                  borderColor:
+                    activeColor === color
+                      ? "rgba(255,255,255,0.8)"
+                      : "transparent",
+                }}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 25,
+                  delay: i * 0.03,
+                }}
+                aria-label={`Select color ${color}`}
+              />
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Main button */}
+      <motion.button
+        onClick={toggle}
+        className="button-customization"
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{
+          type: "spring",
+          stiffness: 400,
+          damping: 15,
+          delay: delay / 1000,
+        }}
+        aria-label="Change accent color"
+      >
+        <PaletteIcon size={24} />
+      </motion.button>
+    </div>
   );
 }

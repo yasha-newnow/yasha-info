@@ -54,6 +54,6 @@ export function applyTheme(accentHex: string): void {
   );
   root.style.setProperty(
     "--glass-overlay",
-    darkMode ? "rgba(0,0,0,0.20)" : "rgba(0,0,0,0.05)"
+    darkMode ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"
   );
 }

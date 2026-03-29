@@ -54,7 +54,7 @@ export default function Home() {
       </main>
 
       {/* Color Switcher — bottom right, 72px wrapper centers the 64→72px growth */}
-      <div className="fixed bottom-4 right-4 z-30 flex items-center justify-center w-[72px] h-[72px]">
+      <div className="fixed bottom-4 right-4 z-30">
         <ButtonCustomization delay={showSidebar ? 2000 : 5000} />
       </div>
     </div>
