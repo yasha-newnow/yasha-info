@@ -7,6 +7,7 @@
   --shadow-s: 0px 2px 3px color-mix(in srgb, var(--foreground) 12%, transparent);
   --shadow-m: 0px 4px 10px color-mix(in srgb, var(--foreground) 12%, transparent);
   --shadow-l: 0px 4px 20px color-mix(in srgb, var(--foreground) 15%, transparent);
+  --blur-glass: 10px;
 }
 
 @theme inline {

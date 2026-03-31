@@ -3,12 +3,10 @@
 import { useState, useCallback, useRef } from "react";
 import { Hero } from "@/components/hero";
 import { Sidebar } from "@/components/sidebar";
-import { MobileHeader } from "@/components/mobile-header";
-import { MobileMenu } from "@/components/mobile-menu";
+import { MobileNav } from "@/components/mobile-nav";
 import { ButtonCustomization } from "@/components/button-customization";
 
 export default function Home() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
 
@@ -18,15 +16,8 @@ export default function Home() {
 
   return (
     <div className="flex flex-col lg:flex-row h-dvh px-4 lg:gap-0 relative">
-      {/* Mobile Header */}
-      <MobileHeader
-        isMenuOpen={isMenuOpen}
-        onToggleMenu={() => setIsMenuOpen(!isMenuOpen)}
-        show={showSidebar}
-      />
-
-      {/* Mobile Menu — expanding glass panel */}
-      <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} scrollContainer={mainRef} />
+      {/* Mobile Nav — morphing header/menu */}
+      <MobileNav show={showSidebar} scrollContainer={mainRef} />
 
       {/* Desktop Sidebar */}
       <Sidebar show={showSidebar} delay={0} scrollContainer={mainRef} />
@@ -53,7 +44,7 @@ export default function Home() {
 
       </main>
 
-      {/* Color Switcher — bottom right, 72px wrapper centers the 64→72px growth */}
+      {/* Color Switcher — bottom right */}
       <div className="fixed bottom-4 right-4 z-30">
         <ButtonCustomization delay={showSidebar ? 2000 : 5000} />
       </div>
