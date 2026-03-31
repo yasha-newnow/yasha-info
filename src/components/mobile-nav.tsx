@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Logo, ArrowUpRight, CopyIcon, PlusIcon } from "./icons";
 import { ButtonMenuPrimary } from "./button-menu-primary";
@@ -49,7 +49,7 @@ const fadeInItem = {
     opacity: 0,
     y: -8,
     filter: "blur(5px)",
-    transition: { duration: 0.15, ease: "easeIn" as const }, // faster exit per Emil
+    transition: { duration: 0.35, ease: "easeIn" as const },
   },
 };
 
@@ -66,13 +66,74 @@ const glassStyle = {
   transition: "background 0.5s ease",
 };
 
+type NavState = "closed" | "open" | "closing" | "shrinking";
+
 /* ── Component ───────────────────────────────────── */
 
 export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [state, setState] = useState<NavState>("closed");
+  const [pendingScroll, setPendingScroll] = useState<string | null>(null);
+  const forcedActiveRef = useRef<string | null>(null);
+  const shrinkTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const forcedTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const getForcedActive = useCallback(() => forcedActiveRef.current, []);
 
-  const toggle = useCallback(() => setIsOpen((prev) => !prev), []);
-  const close = useCallback(() => setIsOpen(false), []);
+  const isExpanded = state === "open" || state === "closing";
+  const showContent = state === "open";
+
+  // When entering "closing" → start shrink after items mostly exited
+  useEffect(() => {
+    if (state === "closing") {
+      shrinkTimerRef.current = setTimeout(() => {
+        setState("shrinking");
+      }, 400);
+    }
+    return () => clearTimeout(shrinkTimerRef.current);
+  }, [state]);
+
+  const toggle = useCallback(() => {
+    setState((prev) => {
+      if (prev === "closed" || prev === "shrinking") return "open";
+      if (prev === "open") return "closing";
+      return prev;
+    });
+  }, []);
+
+  const handleContentExitComplete = useCallback(() => {
+    // If still in closing (shrink timer hasn't fired yet), force shrink
+    setState((prev) => (prev === "closing" ? "shrinking" : prev));
+    // Execute pending scroll
+    if (pendingScroll) {
+      const el = document.querySelector(pendingScroll);
+      el?.scrollIntoView({ behavior: "smooth" });
+      setPendingScroll(null);
+    }
+  }, [pendingScroll]);
+
+  // Container is expanded for "open" and "closing", shrinks for "shrinking" and "closed"
+  const containerExpanded = state === "open" || state === "closing";
+
+  const handleNavigate = useCallback(
+    (href: string) => {
+      forcedActiveRef.current = href;  // 1. instant ref update (sync)
+      setPendingScroll(href);
+      setState("closing");              // 2. triggers render → BP reads ref
+      // Safety: clear forced state after 0.8s
+      clearTimeout(forcedTimerRef.current);
+      forcedTimerRef.current = setTimeout(() => {
+        forcedActiveRef.current = null;
+      }, 800);
+    },
+    []
+  );
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      clearTimeout(shrinkTimerRef.current);
+      clearTimeout(forcedTimerRef.current);
+    };
+  }, []);
 
   return (
     <motion.div
@@ -85,7 +146,7 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
               opacity: 1,
               y: 0,
               filter: "blur(0px)",
-              height: isOpen ? "calc(100dvh - 32px)" : 64,
+              height: containerExpanded ? "calc(100dvh - 32px)" : 64,
             }
           : { opacity: 0, y: -20, filter: "blur(5px)", height: 64 }
       }
@@ -104,22 +165,22 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
         <button
           onClick={toggle}
           className="flex items-center justify-center w-10 h-10 p-2 mr-1 cursor-pointer"
-          aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-label={containerExpanded ? "Close menu" : "Open menu"}
         >
-          <PlusIcon size={24} isOpen={isOpen} />
+          <PlusIcon size={24} isOpen={containerExpanded} />
         </button>
       </div>
 
-      {/* Menu content — appears when open */}
-      <AnimatePresence>
-        {isOpen && (
+      {/* Menu content — appears when open, exits before container shrinks */}
+      <AnimatePresence onExitComplete={handleContentExitComplete}>
+        {showContent && (
           <motion.div
             className="flex flex-col justify-between px-2 pb-4"
             style={{ height: "calc(100% - 64px)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            exit={{}}
+            transition={{ duration: 0.2 }}
           >
             {/* Top: Name + Badges (group 0) */}
             <motion.div
@@ -152,13 +213,10 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
             >
               <ButtonMenuPrimary
                 variant="mobile"
-                onNavigate={(href) => {
-                  close();
-                  const el = document.querySelector(href);
-                  el?.scrollIntoView({ behavior: "smooth" });
-                }}
+                onNavigate={handleNavigate}
                 itemVariants={fadeInItem}
                 scrollContainer={scrollContainer}
+                getForcedActive={getForcedActive}
               />
             </motion.nav>
 

@@ -14,6 +14,7 @@ interface ButtonMenuPrimaryProps {
   onNavigate?: (href: string) => void;
   itemVariants?: Variants;
   scrollContainer?: React.RefObject<HTMLElement | null>;
+  getForcedActive?: () => string | null;
 }
 
 function Tag({
@@ -187,10 +188,12 @@ function MobileNav({
   onNavigate,
   itemVariants,
   scrollContainer,
+  getForcedActive,
 }: {
   onNavigate?: (href: string) => void;
   itemVariants?: Variants;
   scrollContainer?: React.RefObject<HTMLElement | null>;
+  getForcedActive?: () => string | null;
 }) {
   const [pressedIndex, setPressedIndex] = useState<number | null>(null);
   const activeHref = useActiveSection(scrollContainer);
@@ -198,8 +201,11 @@ function MobileNav({
 
   function getActiveIndex() {
     if (pressedIndex !== null) return pressedIndex;
-    if (activeHref) {
-      const idx = NAV_ITEMS.findIndex((item) => item.href === activeHref);
+    // Forced active from nav tap (ref-based, survives AnimatePresence freeze)
+    const forced = getForcedActive?.() ?? null;
+    const effectiveHref = forced ?? activeHref;
+    if (effectiveHref) {
+      const idx = NAV_ITEMS.findIndex((item) => item.href === effectiveHref);
       return idx >= 0 ? idx : null;
     }
     return null;
@@ -234,7 +240,6 @@ function MobileNav({
               }
               onPointerDown={() => setPressedIndex(index)}
               onPointerUp={() => {
-                setPressedIndex(null);
                 onNavigate?.(item.href);
               }}
               onPointerLeave={() => setPressedIndex(null)}
@@ -277,6 +282,7 @@ export function ButtonMenuPrimary({
   onNavigate,
   itemVariants,
   scrollContainer,
+  getForcedActive,
 }: ButtonMenuPrimaryProps) {
   if (variant === "desktop") {
     return (
@@ -286,5 +292,5 @@ export function ButtonMenuPrimary({
       />
     );
   }
-  return <MobileNav onNavigate={onNavigate} itemVariants={itemVariants} scrollContainer={scrollContainer} />;
+  return <MobileNav onNavigate={onNavigate} itemVariants={itemVariants} scrollContainer={scrollContainer} getForcedActive={getForcedActive} />;
 }
