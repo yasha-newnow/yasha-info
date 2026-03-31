@@ -137,7 +137,7 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
 
   return (
     <motion.div
-      className="lg:hidden absolute top-4 left-4 right-4 z-40 rounded-3xl overflow-hidden"
+      className="lg:hidden absolute top-4 left-4 right-4 z-40 px-2 rounded-3xl overflow-hidden"
       style={glassStyle}
       initial={{ opacity: 0, y: -20, filter: "blur(5px)" }}
       animate={
