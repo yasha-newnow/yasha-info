@@ -62,3 +62,12 @@ export function applyTheme(accentHex: string): void {
     darkMode ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.05)"
   );
 }
+
+/** Picker uses inverted theme: dark page → light picker, light page → dark picker */
+export function getPickerBackground(accentHex: string): string {
+  return shouldUseDarkMode(accentHex) ? "#FFFFFF" : "#0E0E0E";
+}
+
+export function getPickerForeground(accentHex: string): string {
+  return shouldUseDarkMode(accentHex) ? "#0A0A0A" : "#FFFFFF";
+}
