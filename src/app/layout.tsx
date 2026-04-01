@@ -49,7 +49,7 @@ export default function RootLayout({
       <body className="min-h-full">
         {children}
         <DialRoot />
-        {process.env.NODE_ENV === "development" && <Agentation />}
+        {process.env.NODE_ENV === "development" && <Agentation className="!bottom-4 !left-4 !right-auto" />}
       </body>
     </html>
   );

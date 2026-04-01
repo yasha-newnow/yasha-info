@@ -6,6 +6,14 @@ import { ColorSlider } from "./color-slider";
 import { hexToOklch, oklchToHex } from "@/lib/oklab";
 import { contrastRatio } from "@/lib/contrast";
 
+const ACCENT_COLORS = [
+  "#06E979", // green
+  "#FF3F8E", // pink
+  "#7B61FF", // purple
+  "#4DC9F0", // cyan
+  "#2E1B69", // dark indigo
+];
+
 // Exact hue gradient from Paper Design (oklab stops)
 const HUE_GRADIENT =
   "linear-gradient(in oklab 180deg, oklab(63.5% 0.245 0.068) 0%, oklab(67% 0.275 -0.085) 9.88%, oklab(65.6% 0.244 -0.195) 19.55%, oklab(45.3% -0.029 -0.311) 32.75%, oklab(84.9% -0.129 -0.069) 46.16%, oklab(87.8% -0.203 0.108) 58.66%, oklab(88.8% -0.175 0.036) 71.69%, oklab(95.6% -0.064 0.196) 85.85%)";
@@ -29,6 +37,12 @@ interface ColorPickerPanelProps {
   pickerBg: string;
   pickerFg: string;
   onChange: (hex: string) => void;
+  onPresetClick: (hex: string) => void;
+  activeColor: string;
+  getDotBorder: (color: string, isSelected: boolean) => string;
+  selectedShadow: string;
+  rainbowGradient: string;
+  dividerBg: string;
 }
 
 export function ColorPickerPanel({
@@ -37,6 +51,12 @@ export function ColorPickerPanel({
   pickerBg,
   pickerFg,
   onChange,
+  onPresetClick,
+  activeColor,
+  getDotBorder,
+  selectedShadow,
+  rainbowGradient,
+  dividerBg,
 }: ColorPickerPanelProps) {
   const [oklch, setOklch] = useState(() => hexToOklch(color));
   const [hexInput, setHexInput] = useState(color.replace("#", ""));
@@ -106,7 +126,7 @@ export function ColorPickerPanel({
 
   // Thumb colors
   const lightnessThumbColor = oklchToHex(oklch.L, oklch.C, oklch.H);
-  const hueThumbColor = oklchToHex(oklch.L, oklch.C, oklch.H);
+  const hueThumbColor = oklchToHex(0.7, 0.2, oklch.H);
 
   const contrast = contrastRatio(color, foreground);
   const isDarkPicker = pickerBg === "#0E0E0E";
@@ -240,27 +260,71 @@ export function ColorPickerPanel({
         </div>
       </div>
 
-      {/* Sliders */}
-      <div className="flex self-stretch" style={{ gap: 24, flex: 1 }}>
-        {/* Lightness slider */}
-        <ColorSlider
-          value={oklch.L / 0.95}
-          onChange={handleLightnessChange}
-          gradient={lightnessGradient}
-          thumbColor={lightnessThumbColor}
-          label="Lightness"
-          border={sliderBorder}
+      {/* Bottom area: sliders + divider + dots */}
+      <div className="flex" style={{ gap: 28, justifyContent: "space-between", flex: 1, alignSelf: "stretch" }}>
+        {/* Sliders sub-container */}
+        <div className="flex" style={{ gap: 24 }}>
+          {/* Lightness slider */}
+          <ColorSlider
+            value={oklch.L / 0.95}
+            onChange={handleLightnessChange}
+            gradient={lightnessGradient}
+            thumbColor={lightnessThumbColor}
+            label="Lightness"
+            border={sliderBorder}
+          />
+
+          {/* Hue slider */}
+          <ColorSlider
+            value={oklch.H / 360}
+            onChange={handleHueChange}
+            gradient={HUE_GRADIENT}
+            thumbColor={hueThumbColor}
+            label="Hue"
+            border={sliderBorder}
+          />
+        </div>
+
+        {/* Divider */}
+        <div
+          className="self-stretch shrink-0"
+          style={{ width: 1, borderRadius: 100, backgroundColor: dividerBg }}
         />
 
-        {/* Hue slider */}
-        <ColorSlider
-          value={oklch.H / 360}
-          onChange={handleHueChange}
-          gradient={HUE_GRADIENT}
-          thumbColor={hueThumbColor}
-          label="Hue"
-          border={sliderBorder}
-        />
+        {/* Dots column */}
+        <div className="flex flex-col items-center" style={{ gap: 16, justifyContent: "center" }}>
+          {ACCENT_COLORS.map((c) => (
+            <button
+              key={c}
+              onClick={() => onPresetClick(c)}
+              className="cursor-pointer"
+              style={{
+                backgroundColor: c,
+                borderRadius: 8,
+                width: 24,
+                height: 24,
+                boxShadow: "none",
+                border: getDotBorder(c, false),
+                padding: 0,
+              }}
+              aria-label={`Select color ${c}`}
+            />
+          ))}
+          <button
+            className="cursor-default"
+            style={{
+              backgroundImage: rainbowGradient,
+              borderRadius: 8,
+              width: 24,
+              height: 24,
+              boxShadow: selectedShadow,
+              border: "none",
+              padding: 0,
+            }}
+            disabled
+            aria-label="Custom color active"
+          />
+        </div>
       </div>
     </motion.div>
   );

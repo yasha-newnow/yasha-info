@@ -133,7 +133,7 @@ export function ButtonCustomization({
       : "#0D0D0D33 0px 4px 10px"; // expanded: 20% opacity
 
   // Icon color from Paper Design
-  const iconColor = isDarkMode ? "#143322F2" : "#00F67FF2";
+  const iconColor = activeColor;
 
   // Dot border rules differ per state and theme
   const getDotBorder = useCallback(
@@ -210,10 +210,8 @@ export function ButtonCustomization({
         </div>
       )}
 
-      {/* Dots column — absolutely positioned to bottom-right of container.
-          The container is fixed bottom-right, so right/bottom edges don't move
-          during morphing. This prevents dots from shifting. */}
-      {(level === "presets" || level === "full") && (
+      {/* STATE 2: Dots column — absolutely positioned */}
+      {level === "presets" && (
         <motion.div
           key="dots-column"
           className="flex flex-col gap-4 items-center"
@@ -232,23 +230,15 @@ export function ButtonCustomization({
               key={color}
               onClick={(e) => {
                 e.stopPropagation();
-                level === "presets"
-                  ? selectPresetLevel2(color)
-                  : selectPresetLevel3(color);
+                selectPresetLevel2(color);
               }}
               className="w-6 h-6 shrink-0 cursor-pointer"
               style={{
                 backgroundColor: color,
                 borderRadius: 8,
                 boxShadow:
-                  level === "presets" && activeColor === color
-                    ? selectedShadow
-                    : "none",
-                border: getDotBorder(
-                  color,
-                  level === "presets" && activeColor === color,
-                  level === "full"
-                ),
+                  activeColor === color ? selectedShadow : "none",
+                border: getDotBorder(color, activeColor === color, false),
               }}
               initial={{ opacity: 0, filter: "blur(5px)", scale: 0.8 }}
               animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
@@ -262,23 +252,19 @@ export function ButtonCustomization({
             />
           ))}
 
-          {/* Rainbow dot → opens full picker (STATE 2) or shows selected (STATE 3) */}
+          {/* Rainbow dot → opens full picker */}
           <motion.button
             onClick={(e) => {
               e.stopPropagation();
-              if (level === "presets") setLevel("full");
+              setLevel("full");
             }}
             className="w-6 h-6 shrink-0 cursor-pointer"
             style={{
               backgroundImage: RAINBOW_GRADIENT,
               borderRadius: 8,
-              boxShadow: level === "full" ? selectedShadow : "none",
-              border:
-                level === "full"
-                  ? "none"
-                  : getDotBorder("rainbow", false, false),
+              boxShadow: "none",
+              border: getDotBorder("rainbow", false, false),
             }}
-            disabled={level === "full"}
             initial={{ opacity: 0, filter: "blur(5px)", scale: 0.8 }}
             animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
             transition={{
@@ -287,40 +273,29 @@ export function ButtonCustomization({
               damping: 25,
               delay: ACCENT_COLORS.length * 0.04,
             }}
-            aria-label={
-              level === "full" ? "Custom color active" : "Open color picker"
-            }
+            aria-label="Open color picker"
           />
         </motion.div>
       )}
 
-      {/* STATE 3: Picker + divider — dots are handled by the absolute-positioned column above */}
+      {/* STATE 3: Full color picker panel (sliders + divider + dots inside) */}
       {level === "full" && (
-        <div
-          className="flex w-full h-full"
-          style={{ gap: 24, paddingRight: 48 }}
-        >
-          <AnimatePresence mode="wait">
-            <ColorPickerPanel
-              key="full"
-              color={activeColor}
-              foreground={foreground}
-              pickerBg={pickerBg}
-              pickerFg={pickerFg}
-              onChange={handlePickerChange}
-            />
-          </AnimatePresence>
-
-          {/* Divider — no animation */}
-          <div
-            className="self-stretch shrink-0"
-            style={{
-              width: 1,
-              borderRadius: 100,
-              backgroundColor: dividerBg,
-            }}
+        <AnimatePresence mode="wait">
+          <ColorPickerPanel
+            key="full"
+            color={activeColor}
+            foreground={foreground}
+            pickerBg={pickerBg}
+            pickerFg={pickerFg}
+            onChange={handlePickerChange}
+            onPresetClick={selectPresetLevel3}
+            activeColor={activeColor}
+            getDotBorder={(c: string, sel: boolean) => getDotBorder(c, sel, true)}
+            selectedShadow={selectedShadow}
+            rainbowGradient={RAINBOW_GRADIENT}
+            dividerBg={dividerBg}
           />
-        </div>
+        </AnimatePresence>
       )}
     </motion.div>
   );
