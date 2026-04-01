@@ -173,6 +173,7 @@ export function ButtonCustomization() {
         border: containerBorder,
         boxShadow: containerShadow,
         backdropFilter: "blur(10px)",
+        transition: "background-color 0.5s ease",
         overflow: "hidden",
       }}
       initial={{ opacity: 0, filter: "blur(5px)", x: 4, y: 4, width: 64, height: 64, borderRadius: 24, padding: 12 }}
