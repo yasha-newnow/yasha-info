@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PaletteIcon } from "./icons";
 import {
@@ -108,6 +108,9 @@ export function ButtonCustomization({
   const pickerFg = getPickerForeground(activeColor);
   const isDarkPicker = pickerBg === "#0E0E0E";
 
+  // Divider color from Paper Design
+  const dividerBg = isDarkPicker ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
+
   // Container background: closed = foreground color (button), open = picker bg
   const containerBg = level === "closed"
     ? (isDarkMode ? "#FFFFFF" : "#000000")
@@ -207,55 +210,45 @@ export function ButtonCustomization({
         </div>
       )}
 
-      <AnimatePresence mode="wait">
-        {/* STATE 2: Preset dots */}
-        {level === "presets" && (
-          <motion.div
-            key="presets"
-            className="flex flex-col gap-4 items-center w-full"
-            initial={{ opacity: 0, filter: "blur(5px)" }}
-            animate={{ opacity: 1, filter: "blur(0px)" }}
-            exit={{ opacity: 0, filter: "blur(5px)" }}
-            transition={{ duration: 0.15 }}
-          >
-            {ACCENT_COLORS.map((color, i) => (
-              <motion.button
-                key={color}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  selectPresetLevel2(color);
-                }}
-                className="w-6 h-6 shrink-0 cursor-pointer"
-                style={{
-                  backgroundColor: color,
-                  borderRadius: 8,
-                  boxShadow: activeColor === color ? selectedShadow : "none",
-                  border: getDotBorder(color, activeColor === color, false),
-                }}
-                initial={{ opacity: 0, filter: "blur(5px)", scale: 0.8 }}
-                animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 500,
-                  damping: 25,
-                  delay: i * 0.04,
-                }}
-                aria-label={`Select color ${color}`}
-              />
-            ))}
-
-            {/* Rainbow dot → opens full picker */}
+      {/* Dots column — absolutely positioned to bottom-right of container.
+          The container is fixed bottom-right, so right/bottom edges don't move
+          during morphing. This prevents dots from shifting. */}
+      {(level === "presets" || level === "full") && (
+        <motion.div
+          key="dots-column"
+          className="flex flex-col gap-4 items-center"
+          style={{
+            position: "absolute",
+            right: 24,
+            bottom: 24,
+          }}
+          initial={{ opacity: 0, filter: "blur(5px)" }}
+          animate={{ opacity: 1, filter: "blur(0px)" }}
+          exit={{ opacity: 0, filter: "blur(5px)" }}
+          transition={{ duration: 0.15 }}
+        >
+          {ACCENT_COLORS.map((color, i) => (
             <motion.button
+              key={color}
               onClick={(e) => {
                 e.stopPropagation();
-                setLevel("full");
+                level === "presets"
+                  ? selectPresetLevel2(color)
+                  : selectPresetLevel3(color);
               }}
               className="w-6 h-6 shrink-0 cursor-pointer"
               style={{
-                backgroundImage: RAINBOW_GRADIENT,
+                backgroundColor: color,
                 borderRadius: 8,
-                boxShadow: "none",
-                border: getDotBorder("rainbow", false, false),
+                boxShadow:
+                  level === "presets" && activeColor === color
+                    ? selectedShadow
+                    : "none",
+                border: getDotBorder(
+                  color,
+                  level === "presets" && activeColor === color,
+                  level === "full"
+                ),
               }}
               initial={{ opacity: 0, filter: "blur(5px)", scale: 0.8 }}
               animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
@@ -263,30 +256,72 @@ export function ButtonCustomization({
                 type: "spring",
                 stiffness: 500,
                 damping: 25,
-                delay: ACCENT_COLORS.length * 0.04,
+                delay: i * 0.04,
               }}
-              aria-label="Open color picker"
+              aria-label={`Select color ${color}`}
             />
-          </motion.div>
-        )}
+          ))}
 
-        {/* STATE 3: Full picker */}
-        {level === "full" && (
-          <ColorPickerPanel
-            key="full"
-            color={activeColor}
-            foreground={foreground}
-            pickerBg={pickerBg}
-            pickerFg={pickerFg}
-            onChange={handlePickerChange}
-            onPresetClick={selectPresetLevel3}
-            activeColor={activeColor}
-            getDotBorder={(c: string, sel: boolean) => getDotBorder(c, sel, true)}
-            selectedShadow={selectedShadow}
-            rainbowGradient={RAINBOW_GRADIENT}
+          {/* Rainbow dot → opens full picker (STATE 2) or shows selected (STATE 3) */}
+          <motion.button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (level === "presets") setLevel("full");
+            }}
+            className="w-6 h-6 shrink-0 cursor-pointer"
+            style={{
+              backgroundImage: RAINBOW_GRADIENT,
+              borderRadius: 8,
+              boxShadow: level === "full" ? selectedShadow : "none",
+              border:
+                level === "full"
+                  ? "none"
+                  : getDotBorder("rainbow", false, false),
+            }}
+            disabled={level === "full"}
+            initial={{ opacity: 0, filter: "blur(5px)", scale: 0.8 }}
+            animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+            transition={{
+              type: "spring",
+              stiffness: 500,
+              damping: 25,
+              delay: ACCENT_COLORS.length * 0.04,
+            }}
+            aria-label={
+              level === "full" ? "Custom color active" : "Open color picker"
+            }
           />
-        )}
-      </AnimatePresence>
+        </motion.div>
+      )}
+
+      {/* STATE 3: Picker + divider — dots are handled by the absolute-positioned column above */}
+      {level === "full" && (
+        <div
+          className="flex w-full h-full"
+          style={{ gap: 24, paddingRight: 48 }}
+        >
+          <AnimatePresence mode="wait">
+            <ColorPickerPanel
+              key="full"
+              color={activeColor}
+              foreground={foreground}
+              pickerBg={pickerBg}
+              pickerFg={pickerFg}
+              onChange={handlePickerChange}
+            />
+          </AnimatePresence>
+
+          {/* Divider — no animation */}
+          <div
+            className="self-stretch shrink-0"
+            style={{
+              width: 1,
+              borderRadius: 100,
+              backgroundColor: dividerBg,
+            }}
+          />
+        </div>
+      )}
     </motion.div>
   );
 }

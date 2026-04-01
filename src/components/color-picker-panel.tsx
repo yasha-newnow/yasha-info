@@ -6,14 +6,6 @@ import { ColorSlider } from "./color-slider";
 import { hexToOklch, oklchToHex } from "@/lib/oklab";
 import { contrastRatio } from "@/lib/contrast";
 
-const ACCENT_COLORS = [
-  "#06E979",
-  "#FF3F8E",
-  "#7B61FF",
-  "#4DC9F0",
-  "#2E1B69",
-];
-
 // Exact hue gradient from Paper Design (oklab stops)
 const HUE_GRADIENT =
   "linear-gradient(in oklab 180deg, oklab(63.5% 0.245 0.068) 0%, oklab(67% 0.275 -0.085) 9.88%, oklab(65.6% 0.244 -0.195) 19.55%, oklab(45.3% -0.029 -0.311) 32.75%, oklab(84.9% -0.129 -0.069) 46.16%, oklab(87.8% -0.203 0.108) 58.66%, oklab(88.8% -0.175 0.036) 71.69%, oklab(95.6% -0.064 0.196) 85.85%)";
@@ -37,11 +29,6 @@ interface ColorPickerPanelProps {
   pickerBg: string;
   pickerFg: string;
   onChange: (hex: string) => void;
-  onPresetClick: (hex: string) => void;
-  activeColor: string;
-  getDotBorder: (color: string, isSelected: boolean) => string;
-  selectedShadow: string;
-  rainbowGradient: string;
 }
 
 export function ColorPickerPanel({
@@ -50,11 +37,6 @@ export function ColorPickerPanel({
   pickerBg,
   pickerFg,
   onChange,
-  onPresetClick,
-  activeColor,
-  getDotBorder,
-  selectedShadow,
-  rainbowGradient,
 }: ColorPickerPanelProps) {
   const [oklch, setOklch] = useState(() => hexToOklch(color));
   const [hexInput, setHexInput] = useState(color.replace("#", ""));
@@ -144,9 +126,6 @@ export function ColorPickerPanel({
     ? "1px solid rgba(255,255,255,0.15)"
     : "1px solid rgba(0,0,0,0.1)";
 
-  // Divider color from Paper Design
-  const dividerBg = isDarkPicker ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
-
   return (
     <motion.div
       className="flex flex-col w-full h-full"
@@ -211,14 +190,14 @@ export function ColorPickerPanel({
         </div>
 
         {/* Hex input — split pill */}
-        <div className="flex flex-1" style={{ gap: 1 }}>
+        <div className="flex flex-1 items-center" style={{ gap: 1, minWidth: 0 }}>
           {/* Hash segment */}
           <div
             className="flex items-center justify-center shrink-0"
             style={{
               width: 14,
               height: 24,
-              borderRadius: "8px 2px 8px 2px",
+              borderRadius: "8px 2px 2px 8px",
               backgroundColor: hexBg,
               padding: "0 4px 0 3px",
             }}
@@ -247,90 +226,41 @@ export function ColorPickerPanel({
             className="font-tag uppercase outline-none bg-transparent flex-1"
             style={{
               height: 24,
-              borderRadius: "2px 8px 2px 8px",
+              borderRadius: "2px 8px 8px 2px",
               backgroundColor: hexBg,
               padding: "0 4px 0 3px",
               fontSize: 16,
               fontWeight: 500,
               lineHeight: "16px",
               color: hexTextColor,
+              minWidth: 0,
             }}
             maxLength={6}
           />
         </div>
       </div>
 
-      {/* Bottom area: sliders + divider + presets */}
-      <div
-        className="flex self-stretch justify-between"
-        style={{ gap: 28, flex: 1 }}
-      >
-        {/* Sliders sub-container */}
-        <div className="flex self-stretch" style={{ gap: 24 }}>
-          {/* Lightness slider */}
-          <ColorSlider
-            value={oklch.L / 0.95}
-            onChange={handleLightnessChange}
-            gradient={lightnessGradient}
-            thumbColor={lightnessThumbColor}
-            label="Lightness"
-            border={sliderBorder}
-          />
-
-          {/* Hue slider */}
-          <ColorSlider
-            value={oklch.H / 360}
-            onChange={handleHueChange}
-            gradient={HUE_GRADIENT}
-            thumbColor={hueThumbColor}
-            label="Hue"
-            border={sliderBorder}
-          />
-        </div>
-
-        {/* Divider */}
-        <motion.div
-          className="self-stretch"
-          style={{
-            width: 1,
-            borderRadius: 100,
-            backgroundColor: dividerBg,
-          }}
-          initial={{ scaleY: 0 }}
-          animate={{ scaleY: 1 }}
-          exit={{ scaleY: 0 }}
-          transition={{ type: "spring", stiffness: 350, damping: 25, delay: 0.06 }}
+      {/* Sliders */}
+      <div className="flex self-stretch" style={{ gap: 24, flex: 1 }}>
+        {/* Lightness slider */}
+        <ColorSlider
+          value={oklch.L / 0.95}
+          onChange={handleLightnessChange}
+          gradient={lightnessGradient}
+          thumbColor={lightnessThumbColor}
+          label="Lightness"
+          border={sliderBorder}
         />
 
-        {/* Preset dots column */}
-        <div className="flex flex-col gap-4 items-center">
-          {ACCENT_COLORS.map((c) => (
-            <button
-              key={c}
-              onClick={() => onPresetClick(c)}
-              className="w-6 h-6 shrink-0 cursor-pointer"
-              style={{
-                backgroundColor: c,
-                borderRadius: 8,
-                boxShadow: activeColor === c ? selectedShadow : "none",
-                border: getDotBorder(c, activeColor === c),
-              }}
-              aria-label={`Select color ${c}`}
-            />
-          ))}
-          {/* Rainbow dot — selected in expanded state */}
-          <button
-            className="w-6 h-6 shrink-0 cursor-pointer"
-            style={{
-              backgroundImage: rainbowGradient,
-              borderRadius: 8,
-              boxShadow: selectedShadow,
-              border: "none",
-            }}
-            aria-label="Custom color active"
-            disabled
-          />
-        </div>
+        {/* Hue slider */}
+        <ColorSlider
+          value={oklch.H / 360}
+          onChange={handleHueChange}
+          gradient={HUE_GRADIENT}
+          thumbColor={hueThumbColor}
+          label="Hue"
+          border={sliderBorder}
+        />
       </div>
     </motion.div>
   );
