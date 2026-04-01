@@ -166,6 +166,7 @@ export function ColorPickerPanel({
                 borderRadius: 3,
                 backgroundColor: color,
                 boxShadow: `${contrastRectRing} 0px 0px 0px 2px`,
+                border: isDarkPicker ? "1px solid rgba(255,255,255,0.2)" : "1px solid rgba(0,0,0,0.2)",
                 top: "50%",
                 left: 10,
                 transform: "translateY(-50%)",
@@ -227,7 +228,8 @@ export function ColorPickerPanel({
               padding: "0 4px 0 3px",
               fontSize: 16,
               fontWeight: 500,
-              lineHeight: "16px",
+              lineHeight: "24px",
+              textAlign: "center",
               color: hexTextColor,
               minWidth: 0,
             }}
