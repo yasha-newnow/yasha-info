@@ -276,7 +276,8 @@ export function ButtonCustomization() {
               background: RAINBOW_GRADIENT,
               borderRadius: 8,
               boxShadow: level === "full" ? selectedShadow : "none",
-              border: level === "full" ? "none" : getDotBorder("rainbow", false, false),
+              border: "none",
+              overflow: "hidden",
             }}
             initial={{ opacity: 0, filter: "blur(5px)", scale: 0.8 }}
             animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
