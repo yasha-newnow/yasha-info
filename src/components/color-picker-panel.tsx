@@ -141,6 +141,7 @@ export function ColorPickerPanel({
             backgroundColor: contrastChipBg,
             padding: "0 4px 0 7px",
             gap: 4,
+            transition: "background-color 0.5s ease",
           }}
         >
           {/* Overlapping color rectangles */}
