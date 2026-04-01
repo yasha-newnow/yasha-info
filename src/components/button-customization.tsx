@@ -25,10 +25,6 @@ const RAINBOW_GRADIENT =
 
 type PickerLevel = "closed" | "presets" | "full";
 
-interface ButtonCustomizationProps {
-  delay?: number;
-}
-
 // Morphing dimensions per state
 const STATE_STYLES = {
   closed: { width: 64, height: 64, borderRadius: 24, padding: 12 },
@@ -36,20 +32,17 @@ const STATE_STYLES = {
   full: { width: 208, height: 320, borderRadius: 28, padding: 24 },
 };
 
-export function ButtonCustomization({
-  delay = 3000,
-}: ButtonCustomizationProps) {
+export function ButtonCustomization() {
   const [level, setLevel] = useState<PickerLevel>("closed");
-  const [activeColor, setActiveColor] = useState(ACCENT_COLORS[0]);
+  const [activeColor, setActiveColor] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+      return accent || '#C5F640';
+    }
+    return '#C5F640';
+  });
   const [foreground, setForeground] = useState("#0A0A0A");
   const containerRef = useRef<HTMLDivElement>(null);
-  const [entered, setEntered] = useState(false);
-
-  // Entrance animation
-  useEffect(() => {
-    const t = setTimeout(() => setEntered(true), delay);
-    return () => clearTimeout(t);
-  }, [delay]);
 
   const toggle = useCallback(() => {
     setLevel((prev) => (prev === "closed" ? "presets" : "closed"));
@@ -155,8 +148,6 @@ export function ButtonCustomization({
 
   const dims = STATE_STYLES[level];
 
-  if (!entered) return null;
-
   return (
     <motion.div
       ref={containerRef}
@@ -168,13 +159,13 @@ export function ButtonCustomization({
         boxShadow: containerShadow,
         backdropFilter: "blur(10px)",
         overflow: "hidden",
-        // Anchor bottom-right: the container grows upward and leftward
-        // This is handled by the parent fixed positioning
       }}
-      initial={{ scale: 0, opacity: 0, width: 64, height: 64, borderRadius: 24, padding: 12 }}
+      initial={{ opacity: 0, filter: "blur(5px)", x: 4, y: 4, width: 64, height: 64, borderRadius: 24, padding: 12 }}
       animate={{
-        scale: 1,
         opacity: 1,
+        filter: "blur(0px)",
+        x: 0,
+        y: 0,
         width: dims.width,
         height: dims.height,
         borderRadius: level === "presets" && isDarkPicker ? 27 : dims.borderRadius,
@@ -189,8 +180,10 @@ export function ButtonCustomization({
         type: "spring",
         stiffness: 400,
         damping: 25,
-        scale: { delay: delay / 1000 },
-        opacity: { delay: delay / 1000 },
+        opacity: { delay: 0.8 },
+        filter: { delay: 0.8 },
+        x: { delay: 0.8 },
+        y: { delay: 0.8 },
         width: { type: "spring", stiffness: 400, damping: 28 },
         height: { type: "spring", stiffness: 400, damping: 28 },
         borderRadius: { type: "spring", stiffness: 400, damping: 28 },
@@ -276,6 +269,7 @@ export function ButtonCustomization({
             className="w-6 h-6 shrink-0 cursor-pointer"
             style={{
               backgroundImage: RAINBOW_GRADIENT,
+              backgroundSize: "100% 100%",
               borderRadius: 8,
               boxShadow: level === "full" ? selectedShadow : "none",
               border: level === "full" ? "none" : getDotBorder("rainbow", false, false),

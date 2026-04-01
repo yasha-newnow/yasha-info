@@ -46,7 +46,7 @@ export default function Home() {
 
       {/* Color Switcher — bottom right */}
       <div className="fixed bottom-4 right-4 z-30 flex items-end justify-end">
-        <ButtonCustomization delay={showSidebar ? 2000 : 5000} />
+        <ButtonCustomization />
       </div>
     </div>
   );

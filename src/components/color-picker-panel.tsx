@@ -3,12 +3,10 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ColorSlider } from "./color-slider";
-import { hexToOklch, oklchToHex } from "@/lib/oklab";
+import { hexToHsl, hslToHex } from "@/lib/color";
 import { contrastRatio } from "@/lib/contrast";
 
-// Exact hue gradient from Paper Design (oklab stops)
-const HUE_GRADIENT =
-  "linear-gradient(in oklab 180deg, oklab(63.5% 0.245 0.068) 0%, oklab(67% 0.275 -0.085) 9.88%, oklab(65.6% 0.244 -0.195) 19.55%, oklab(45.3% -0.029 -0.311) 32.75%, oklab(84.9% -0.129 -0.069) 46.16%, oklab(87.8% -0.203 0.108) 58.66%, oklab(88.8% -0.175 0.036) 71.69%, oklab(95.6% -0.064 0.196) 85.85%)";
+const SPECTRUM_GRADIENT = "linear-gradient(to bottom, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)";
 
 const fadeBlurIn = {
   initial: { opacity: 0, filter: "blur(5px)", x: -12 },
@@ -40,18 +38,12 @@ export function ColorPickerPanel({
   onChange,
   dividerBg,
 }: ColorPickerPanelProps) {
-  const [oklch, setOklch] = useState(() => hexToOklch(color));
+  const [hsl, setHsl] = useState(() => hexToHsl(color));
   const [hexInput, setHexInput] = useState(color.replace("#", ""));
   const rafRef = useRef(0);
-  const isInternalChange = useRef(false);
 
-  // Sync oklch only when color changes from OUTSIDE (preset selection)
   useEffect(() => {
-    if (isInternalChange.current) {
-      isInternalChange.current = false;
-      return;
-    }
-    setOklch(hexToOklch(color));
+    setHsl(hexToHsl(color));
     setHexInput(color.replace("#", ""));
   }, [color]);
 
@@ -61,54 +53,48 @@ export function ColorPickerPanel({
 
   const handleLightnessChange = useCallback(
     (v: number) => {
-      const newL = v * 0.95;
-      const newOklch = { ...oklch, L: newL };
-      setOklch(newOklch);
-      const hex = oklchToHex(newOklch.L, newOklch.C, newOklch.H);
+      const newL = Math.round(v * 100);
+      const newHsl = { ...hsl, l: newL };
+      setHsl(newHsl);
+      const hex = hslToHex(newHsl.h, newHsl.s, newL);
       setHexInput(hex.replace("#", ""));
-      isInternalChange.current = true;
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => onChange(hex));
     },
-    [oklch, onChange]
+    [hsl, onChange]
   );
 
   const handleHueChange = useCallback(
     (v: number) => {
-      const newH = v * 360;
-      const newOklch = { ...oklch, H: newH };
-      setOklch(newOklch);
-      const hex = oklchToHex(newOklch.L, newOklch.C, newOklch.H);
+      const newH = Math.round(v * 360);
+      const newHsl = { ...hsl, h: newH };
+      setHsl(newHsl);
+      const hex = hslToHex(newH, newHsl.s, newHsl.l);
       setHexInput(hex.replace("#", ""));
-      isInternalChange.current = true;
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => onChange(hex));
     },
-    [oklch, onChange]
+    [hsl, onChange]
   );
 
   const handleHexSubmit = useCallback(() => {
     const clean = hexInput.replace("#", "");
     if (/^[0-9A-Fa-f]{6}$/.test(clean)) {
       const hex = `#${clean.toUpperCase()}`;
-      setOklch(hexToOklch(hex));
+      setHsl(hexToHsl(hex));
       onChange(hex);
     } else {
       setHexInput(color.replace("#", ""));
     }
   }, [hexInput, color, onChange]);
 
-  // Lightness gradient: compute oklab a,b from oklch C,H for CSS
-  const lightnessGradient = useMemo(() => {
-    const rad = (oklch.H * Math.PI) / 180;
-    const a = 0.25 * Math.cos(rad);
-    const b = 0.25 * Math.sin(rad);
-    return `linear-gradient(in oklab 180deg, oklab(65% ${a.toFixed(3)} ${b.toFixed(3)}) 0%, oklab(0% 0 0) 100%)`;
-  }, [oklch.H]);
+  const lightnessGradient = useMemo(
+    () => `linear-gradient(to bottom, ${hslToHex(hsl.h, 100, 50)}, #000000)`,
+    [hsl.h]
+  );
 
-  // Thumb colors
-  const lightnessThumbColor = oklchToHex(oklch.L, oklch.C, oklch.H);
-  const hueThumbColor = oklchToHex(0.7, 0.2, oklch.H);
+  const lightnessThumbColor = hslToHex(hsl.h, hsl.s, hsl.l);
+  const spectrumThumbColor = hslToHex(hsl.h, 100, 50);
 
   const contrast = contrastRatio(color, foreground);
   const isDarkPicker = pickerBg === "#0E0E0E";
@@ -246,7 +232,7 @@ export function ColorPickerPanel({
       <div className="flex" style={{ gap: 24, flex: 1, alignSelf: "stretch" }}>
         {/* Lightness slider */}
         <ColorSlider
-          value={oklch.L / 0.95}
+          value={Math.min(1, Math.max(0, hsl.l / 100))}
           onChange={handleLightnessChange}
           gradient={lightnessGradient}
           thumbColor={lightnessThumbColor}
@@ -256,11 +242,11 @@ export function ColorPickerPanel({
 
         {/* Hue slider */}
         <ColorSlider
-          value={oklch.H / 360}
+          value={Math.min(1, Math.max(0, hsl.h / 360))}
           onChange={handleHueChange}
-          gradient={HUE_GRADIENT}
-          thumbColor={hueThumbColor}
-          label="Hue"
+          gradient={SPECTRUM_GRADIENT}
+          thumbColor={spectrumThumbColor}
+          label="Color"
           border={sliderBorder}
         />
 

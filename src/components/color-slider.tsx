@@ -59,7 +59,7 @@ export function ColorSlider({
   }, []);
 
   // Thumb position: top of track = value 1, bottom = value 0
-  const thumbTop = (1 - value) * 100;
+  const thumbTop = Math.max(0, Math.min(100, (1 - value) * 100));
 
   return (
     <div
