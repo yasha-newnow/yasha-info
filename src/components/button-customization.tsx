@@ -19,9 +19,9 @@ const ACCENT_COLORS = [
   "#2E1B69", // dark indigo
 ];
 
-// Exact from Paper Design (oklab stops)
+// Updated from Paper Design (7-stop oklab conic)
 const RAINBOW_GRADIENT =
-  "conic-gradient(in oklab from 180deg at 50% 50%, oklab(63.5% 0.245 0.068) 0%, oklab(67% 0.275 -0.085) 9.88%, oklab(65.6% 0.244 -0.195) 19.55%, oklab(45.3% -0.029 -0.311) 32.75%, oklab(84.9% -0.129 -0.069) 46.16%, oklab(87.8% -0.203 0.108) 58.66%, oklab(88.8% -0.175 0.036) 71.69%, oklab(95.6% -0.064 0.196) 85.85%)";
+  "conic-gradient(in oklab from 180deg at 50% 50%, oklab(62.8% 0.226 0.124) 0%, oklab(69% 0.276 -0.142) 16.82%, oklab(45.4% -0.027 -0.310) 33.16%, oklab(86.3% -0.134 -0.061) 49.22%, oklab(86.6% -0.234 0.179) 67.58%, oklab(96.6% -0.070 0.198) 83.79%, oklab(62.9% 0.223 0.126) 100%)";
 
 type PickerLevel = "closed" | "presets" | "full";
 
@@ -36,6 +36,8 @@ export function ButtonCustomization() {
   const [level, setLevel] = useState<PickerLevel>("closed");
   const [activeColor, setActiveColor] = useState("#C5F640");
   const [foreground, setForeground] = useState("#0A0A0A");
+  const [isHovered, setIsHovered] = useState(false);
+  const [isCustomColor, setIsCustomColor] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Sync activeColor with CSS --accent on client mount
@@ -47,9 +49,12 @@ export function ButtonCustomization() {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Reset hover when level changes (prevents sticky hover after picker close)
+  useEffect(() => { setIsHovered(false); }, [level]);
+
   const toggle = useCallback(() => {
-    setLevel((prev) => (prev === "closed" ? "presets" : "closed"));
-  }, []);
+    setLevel((prev) => (prev === "closed" ? (isCustomColor ? "full" : "presets") : "closed"));
+  }, [isCustomColor]);
 
   const applyColor = useCallback((hex: string) => {
     setActiveColor(hex);
@@ -59,7 +64,10 @@ export function ButtonCustomization() {
 
   // STATE 2: apply, stay open
   const selectPresetLevel2 = useCallback(
-    (hex: string) => applyColor(hex),
+    (hex: string) => {
+      applyColor(hex);
+      setIsCustomColor(false);
+    },
     [applyColor]
   );
 
@@ -67,13 +75,17 @@ export function ButtonCustomization() {
   const selectPresetLevel3 = useCallback(
     (hex: string) => {
       applyColor(hex);
+      setIsCustomColor(false);
       setLevel("presets");
     },
     [applyColor]
   );
 
   const handlePickerChange = useCallback(
-    (hex: string) => applyColor(hex),
+    (hex: string) => {
+      applyColor(hex);
+      setIsCustomColor(true);
+    },
     [applyColor]
   );
 
@@ -169,16 +181,15 @@ export function ButtonCustomization() {
         filter: "blur(0px)",
         x: 0,
         y: 0,
-        width: dims.width,
-        height: dims.height,
-        borderRadius: level === "presets" && isDarkPicker ? 27 : dims.borderRadius,
+        width: level === "closed" && isHovered ? 72 : dims.width,
+        height: level === "closed" && isHovered ? 72 : dims.height,
+        borderRadius: level === "closed" && isHovered
+          ? (isDarkMode ? 24 : 28)
+          : level === "presets" && isDarkPicker ? 27 : dims.borderRadius,
         padding: dims.padding,
       }}
-      whileHover={level === "closed" ? {
-        width: 72,
-        height: 72,
-        borderRadius: isDarkMode ? 24 : 28,
-      } : undefined}
+      onHoverStart={() => level === "closed" && setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
       transition={{
         type: "spring",
         stiffness: 400,
@@ -247,19 +258,24 @@ export function ButtonCustomization() {
               style={{
                 backgroundColor: color,
                 borderRadius: 8,
-                boxShadow:
-                  level === "presets" && activeColor === color
-                    ? selectedShadow
-                    : "none",
                 border: getDotBorder(color, activeColor === color, level === "full"),
               }}
               initial={{ opacity: 0, filter: "blur(5px)", scale: 0.8 }}
-              animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+              animate={{
+                opacity: 1,
+                filter: "blur(0px)",
+                scale: 1,
+                boxShadow:
+                  level === "presets" && activeColor === color
+                    ? selectedShadow
+                    : "white 0px 0px 0px 0px, rgba(0,0,0,0) 0px 0px 10px 1px",
+              }}
               transition={{
                 type: "spring",
                 stiffness: 500,
                 damping: 25,
                 delay: i * 0.04,
+                boxShadow: { type: "spring", stiffness: 600, damping: 35, delay: 0 },
               }}
               aria-label={`Select color ${color}`}
             />
@@ -275,17 +291,23 @@ export function ButtonCustomization() {
             style={{
               background: RAINBOW_GRADIENT,
               borderRadius: 8,
-              boxShadow: level === "full" ? selectedShadow : "none",
               border: "none",
-              overflow: "hidden",
             }}
             initial={{ opacity: 0, filter: "blur(5px)", scale: 0.8 }}
-            animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+            animate={{
+              opacity: 1,
+              filter: "blur(0px)",
+              scale: 1,
+              boxShadow: level === "full"
+                ? `white 0px 0px 0px 3px, rgba(0,0,0,0.3) 0px 0px 10px 1px, inset 0 0 0 0px ${isDarkPicker ? "rgba(255,255,255,0)" : "rgba(0,0,0,0)"}`
+                : `white 0px 0px 0px 0px, rgba(0,0,0,0) 0px 0px 10px 1px, inset 0 0 0 1px ${isDarkPicker ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.15)"}`,
+            }}
             transition={{
               type: "spring",
               stiffness: 500,
               damping: 25,
               delay: ACCENT_COLORS.length * 0.04,
+              boxShadow: { type: "spring", stiffness: 600, damping: 35, delay: 0 },
             }}
             aria-label={level === "full" ? "Custom color active" : "Open color picker"}
           />

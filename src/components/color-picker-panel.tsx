@@ -166,7 +166,7 @@ export function ColorPickerPanel({
                 borderRadius: 3,
                 backgroundColor: color,
                 boxShadow: `${contrastRectRing} 0px 0px 0px 2px`,
-                border: isDarkPicker ? "1px solid rgba(255,255,255,0.2)" : "1px solid rgba(0,0,0,0.2)",
+                border: isDarkPicker ? "1px solid rgba(0,0,0,0.2)" : "1px solid rgba(255,255,255,0.2)",
                 top: "50%",
                 left: 10,
                 transform: "translateY(-50%)",
@@ -176,8 +176,10 @@ export function ColorPickerPanel({
           <span
             className="font-tag font-medium uppercase"
             style={{
+              flex: 1,
               fontSize: 16,
-              lineHeight: "16px",
+              lineHeight: "24px",
+              textAlign: "center",
               letterSpacing: "0.03em",
               color: contrastChipText,
             }}
@@ -238,27 +240,26 @@ export function ColorPickerPanel({
         </div>
       </div>
 
-      {/* Bottom area: sliders + divider */}
-      <div className="flex" style={{ gap: 24, flex: 1, alignSelf: "stretch" }}>
-        {/* Lightness slider */}
-        <ColorSlider
-          value={Math.min(1, Math.max(0, hsl.l / 100))}
-          onChange={handleLightnessChange}
-          gradient={lightnessGradient}
-          thumbColor={lightnessThumbColor}
-          label="Lightness"
-          border={sliderBorder}
-        />
-
-        {/* Spectrum slider — gradient goes top(0°)→bottom(360°), so invert value */}
-        <ColorSlider
-          value={Math.min(1, Math.max(0, 1 - hsl.h / 360))}
-          onChange={handleHueChange}
-          gradient={SPECTRUM_GRADIENT}
-          thumbColor={spectrumThumbColor}
-          label="Color"
-          border={sliderBorder}
-        />
+      {/* Bottom area: sliders sub-container + divider */}
+      <div className="flex" style={{ gap: 36, flex: 1, alignSelf: "stretch" }}>
+        <div className="flex" style={{ gap: 24 }}>
+          <ColorSlider
+            value={Math.min(1, Math.max(0, hsl.l / 100))}
+            onChange={handleLightnessChange}
+            gradient={lightnessGradient}
+            thumbColor={lightnessThumbColor}
+            label="Lightness"
+            border={sliderBorder}
+          />
+          <ColorSlider
+            value={Math.min(1, Math.max(0, 1 - hsl.h / 360))}
+            onChange={handleHueChange}
+            gradient={SPECTRUM_GRADIENT}
+            thumbColor={spectrumThumbColor}
+            label="Color"
+            border={sliderBorder}
+          />
+        </div>
 
         {/* Divider */}
         <div
