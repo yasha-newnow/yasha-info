@@ -210,27 +210,42 @@ export function ButtonCustomization({
         </div>
       )}
 
-      {/* STATE 2: Dots column — absolutely positioned */}
-      {level === "presets" && (
-        <motion.div
-          key="dots-column"
-          className="flex flex-col gap-4 items-center"
+      {/* STATE 3: Full color picker panel (sliders + divider) */}
+      {level === "full" && (
+        <AnimatePresence mode="wait">
+          <ColorPickerPanel
+            key="full"
+            color={activeColor}
+            foreground={foreground}
+            pickerBg={pickerBg}
+            pickerFg={pickerFg}
+            onChange={handlePickerChange}
+            dividerBg={dividerBg}
+          />
+        </AnimatePresence>
+      )}
+
+      {/* Dots column — shared across STATE 2 and STATE 3, never re-mounts */}
+      {level !== "closed" && (
+        <div
+          className="flex flex-col items-center"
           style={{
             position: "absolute",
             right: 24,
             bottom: 24,
+            gap: 16,
           }}
-          initial={{ opacity: 0, filter: "blur(5px)" }}
-          animate={{ opacity: 1, filter: "blur(0px)" }}
-          exit={{ opacity: 0, filter: "blur(5px)" }}
-          transition={{ duration: 0.15 }}
         >
           {ACCENT_COLORS.map((color, i) => (
             <motion.button
               key={color}
               onClick={(e) => {
                 e.stopPropagation();
-                selectPresetLevel2(color);
+                if (level === "full") {
+                  selectPresetLevel3(color);
+                } else {
+                  selectPresetLevel2(color);
+                }
               }}
               className="w-6 h-6 shrink-0 cursor-pointer"
               style={{
@@ -238,7 +253,7 @@ export function ButtonCustomization({
                 borderRadius: 8,
                 boxShadow:
                   activeColor === color ? selectedShadow : "none",
-                border: getDotBorder(color, activeColor === color, false),
+                border: getDotBorder(color, activeColor === color, level === "full"),
               }}
               initial={{ opacity: 0, filter: "blur(5px)", scale: 0.8 }}
               animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
@@ -252,18 +267,18 @@ export function ButtonCustomization({
             />
           ))}
 
-          {/* Rainbow dot → opens full picker */}
+          {/* Rainbow dot → opens full picker (or disabled if already in full) */}
           <motion.button
             onClick={(e) => {
               e.stopPropagation();
-              setLevel("full");
+              if (level !== "full") setLevel("full");
             }}
             className="w-6 h-6 shrink-0 cursor-pointer"
             style={{
               backgroundImage: RAINBOW_GRADIENT,
               borderRadius: 8,
-              boxShadow: "none",
-              border: getDotBorder("rainbow", false, false),
+              boxShadow: level === "full" ? selectedShadow : "none",
+              border: level === "full" ? "none" : getDotBorder("rainbow", false, false),
             }}
             initial={{ opacity: 0, filter: "blur(5px)", scale: 0.8 }}
             animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
@@ -273,29 +288,9 @@ export function ButtonCustomization({
               damping: 25,
               delay: ACCENT_COLORS.length * 0.04,
             }}
-            aria-label="Open color picker"
+            aria-label={level === "full" ? "Custom color active" : "Open color picker"}
           />
-        </motion.div>
-      )}
-
-      {/* STATE 3: Full color picker panel (sliders + divider + dots inside) */}
-      {level === "full" && (
-        <AnimatePresence mode="wait">
-          <ColorPickerPanel
-            key="full"
-            color={activeColor}
-            foreground={foreground}
-            pickerBg={pickerBg}
-            pickerFg={pickerFg}
-            onChange={handlePickerChange}
-            onPresetClick={selectPresetLevel3}
-            activeColor={activeColor}
-            getDotBorder={(c: string, sel: boolean) => getDotBorder(c, sel, true)}
-            selectedShadow={selectedShadow}
-            rainbowGradient={RAINBOW_GRADIENT}
-            dividerBg={dividerBg}
-          />
-        </AnimatePresence>
+        </div>
       )}
     </motion.div>
   );
