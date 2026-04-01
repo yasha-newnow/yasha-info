@@ -34,15 +34,18 @@ const STATE_STYLES = {
 
 export function ButtonCustomization() {
   const [level, setLevel] = useState<PickerLevel>("closed");
-  const [activeColor, setActiveColor] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-      return accent || '#C5F640';
-    }
-    return '#C5F640';
-  });
+  const [activeColor, setActiveColor] = useState("#C5F640");
   const [foreground, setForeground] = useState("#0A0A0A");
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Sync activeColor with CSS --accent on client mount
+  useEffect(() => {
+    const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    if (accent && accent !== activeColor) {
+      setActiveColor(accent);
+      setForeground(shouldUseDarkMode(accent) ? "#FFFFFF" : "#0A0A0A");
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggle = useCallback(() => {
     setLevel((prev) => (prev === "closed" ? "presets" : "closed"));
@@ -245,7 +248,9 @@ export function ButtonCustomization() {
                 backgroundColor: color,
                 borderRadius: 8,
                 boxShadow:
-                  activeColor === color ? selectedShadow : "none",
+                  level === "presets" && activeColor === color
+                    ? selectedShadow
+                    : "none",
                 border: getDotBorder(color, activeColor === color, level === "full"),
               }}
               initial={{ opacity: 0, filter: "blur(5px)", scale: 0.8 }}
@@ -268,8 +273,7 @@ export function ButtonCustomization() {
             }}
             className="w-6 h-6 shrink-0 cursor-pointer"
             style={{
-              backgroundImage: RAINBOW_GRADIENT,
-              backgroundSize: "100% 100%",
+              background: RAINBOW_GRADIENT,
               borderRadius: 8,
               boxShadow: level === "full" ? selectedShadow : "none",
               border: level === "full" ? "none" : getDotBorder("rainbow", false, false),

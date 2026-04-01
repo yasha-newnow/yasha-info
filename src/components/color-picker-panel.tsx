@@ -41,8 +41,14 @@ export function ColorPickerPanel({
   const [hsl, setHsl] = useState(() => hexToHsl(color));
   const [hexInput, setHexInput] = useState(color.replace("#", ""));
   const rafRef = useRef(0);
+  const isInternalChange = useRef(false);
 
+  // Sync HSL only from EXTERNAL color changes (presets), not from slider round-trips
   useEffect(() => {
+    if (isInternalChange.current) {
+      isInternalChange.current = false;
+      return;
+    }
     setHsl(hexToHsl(color));
     setHexInput(color.replace("#", ""));
   }, [color]);
@@ -53,11 +59,12 @@ export function ColorPickerPanel({
 
   const handleLightnessChange = useCallback(
     (v: number) => {
-      const newL = Math.round(v * 100);
+      const newL = v * 100;
       const newHsl = { ...hsl, l: newL };
       setHsl(newHsl);
       const hex = hslToHex(newHsl.h, newHsl.s, newL);
       setHexInput(hex.replace("#", ""));
+      isInternalChange.current = true;
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => onChange(hex));
     },
@@ -66,11 +73,12 @@ export function ColorPickerPanel({
 
   const handleHueChange = useCallback(
     (v: number) => {
-      const newH = Math.round(v * 360);
+      const newH = v * 360;
       const newHsl = { ...hsl, h: newH };
       setHsl(newHsl);
       const hex = hslToHex(newH, newHsl.s, newHsl.l);
       setHexInput(hex.replace("#", ""));
+      isInternalChange.current = true;
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => onChange(hex));
     },

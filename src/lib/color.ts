@@ -18,7 +18,7 @@ export function hexToHsl(hex: string): { h: number; s: number; l: number } {
     else if (max === g) h = ((b - r) / d + 2) / 6;
     else h = ((r - g) / d + 4) / 6;
   }
-  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+  return { h: h * 360, s: s * 100, l: l * 100 };
 }
 
 export function hslToHex(h: number, s: number, l: number): string {
