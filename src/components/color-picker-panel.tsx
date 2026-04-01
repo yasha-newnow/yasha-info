@@ -73,7 +73,7 @@ export function ColorPickerPanel({
 
   const handleHueChange = useCallback(
     (v: number) => {
-      const newH = v * 360;
+      const newH = (1 - v) * 360; // invert: slider top=0°, bottom=360°
       const newHsl = { ...hsl, h: newH };
       setHsl(newHsl);
       const hex = hslToHex(newH, newHsl.s, newHsl.l);
@@ -97,7 +97,7 @@ export function ColorPickerPanel({
   }, [hexInput, color, onChange]);
 
   const lightnessGradient = useMemo(
-    () => `linear-gradient(to bottom, ${hslToHex(hsl.h, 100, 50)}, #000000)`,
+    () => `linear-gradient(to bottom, #FFFFFF, ${hslToHex(hsl.h, 100, 50)} 50%, #000000)`,
     [hsl.h]
   );
 
@@ -248,9 +248,9 @@ export function ColorPickerPanel({
           border={sliderBorder}
         />
 
-        {/* Hue slider */}
+        {/* Spectrum slider — gradient goes top(0°)→bottom(360°), so invert value */}
         <ColorSlider
-          value={Math.min(1, Math.max(0, hsl.h / 360))}
+          value={Math.min(1, Math.max(0, 1 - hsl.h / 360))}
           onChange={handleHueChange}
           gradient={SPECTRUM_GRADIENT}
           thumbColor={spectrumThumbColor}
