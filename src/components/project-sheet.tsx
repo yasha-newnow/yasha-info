@@ -40,7 +40,13 @@ export function ProjectSheet({ project, open, onOpenChange }: ProjectSheetProps)
 
             {/* Sticky close button */}
             <div className="sticky top-0 z-10 flex justify-end pointer-events-none px-4">
-              <Drawer.Close className="pointer-events-auto flex items-center justify-center w-10 h-10 rounded-xl bg-button-bg backdrop-blur-[var(--blur-glass)] cursor-pointer">
+              <Drawer.Close
+                className="pointer-events-auto flex items-center justify-center w-10 h-10 rounded-xl cursor-pointer"
+                style={{
+                  backgroundColor: "color-mix(in srgb, var(--card-text) 4%, transparent)",
+                  backdropFilter: "blur(10px)",
+                }}
+              >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path
                     d="M3.5 3.5L12.5 12.5M12.5 3.5L3.5 12.5"

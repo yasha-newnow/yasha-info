@@ -5,6 +5,9 @@ import { Hero } from "@/components/hero";
 import { Sidebar } from "@/components/sidebar";
 import { MobileNav } from "@/components/mobile-nav";
 import { ButtonCustomization } from "@/components/button-customization";
+import { WorksSection } from "@/components/works-section";
+import { SectionHeader } from "@/components/section-header";
+import { sections } from "@/data/navigation";
 
 export default function Home() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -24,24 +27,21 @@ export default function Home() {
 
       {/* Main Content */}
       <main ref={mainRef} className="flex flex-col flex-1 relative overflow-y-auto scroll-smooth pt-20 lg:pt-0">
-        <Hero onTypingComplete={handleTypingComplete} />
+        <div className="max-w-[1280px] mx-auto w-full min-h-full">
+          <Hero onTypingComplete={handleTypingComplete} />
 
-        {/* Mock sections for anchor navigation */}
-        <section id="works" className="min-h-screen flex flex-col p-10 pt-20">
-          <h2 className="text-5xl font-bold mb-4">Works & Bits</h2>
-          <p className="text-xl max-w-xl opacity-70">Selected projects and experiments. This is a placeholder section for testing anchor navigation.</p>
-        </section>
+          <WorksSection />
 
-        <section id="about" className="min-h-screen flex flex-col p-10 pt-20">
-          <h2 className="text-5xl font-bold mb-4">Why / How / What</h2>
-          <p className="text-xl max-w-xl opacity-70">About me, my approach, and what drives my work. This is a placeholder section for testing anchor navigation.</p>
-        </section>
+          <section id={sections[1].id} className="min-h-screen flex flex-col p-6 lg:p-10 pt-20">
+            <SectionHeader title={sections[1].title} tag={sections[1].tag} />
+            <p className="text-xl max-w-xl opacity-70">About me, my approach, and what drives my work. This is a placeholder section for testing anchor navigation.</p>
+          </section>
 
-        <section id="contact" className="min-h-screen flex flex-col p-10 pt-20">
-          <h2 className="text-5xl font-bold mb-4">Let&apos;s Talk</h2>
-          <p className="text-xl max-w-xl opacity-70">Get in touch for collaboration, consulting, or just to say hello. This is a placeholder section for testing anchor navigation.</p>
-        </section>
-
+          <section id={sections[2].id} className="min-h-screen flex flex-col p-6 lg:p-10 pt-20">
+            <SectionHeader title={sections[2].title} tag={sections[2].tag} />
+            <p className="text-xl max-w-xl opacity-70">Get in touch for collaboration, consulting, or just to say hello. This is a placeholder section for testing anchor navigation.</p>
+          </section>
+        </div>
       </main>
 
       {/* Color Switcher — bottom right */}

@@ -11,6 +11,7 @@
   --shadow-sidebar: 0px 4px 15px color-mix(in srgb, var(--foreground) 7%, transparent);
   --button-bg: color-mix(in srgb, var(--foreground) 4%, transparent);
   --card-text: #121419;
+  --shadow-card-hover: 0px 20px 40px color-mix(in srgb, var(--foreground) 7%, transparent);
 }
 
 @theme inline {
