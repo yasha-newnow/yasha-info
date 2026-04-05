@@ -2,12 +2,15 @@
 
 :root {
   --accent: #C5F640;
-  --foreground: #0A0A0A;
+  --foreground: #121419;
   --glass-overlay: rgba(0, 0, 0, 0.05);
   --shadow-s: 0px 2px 3px color-mix(in srgb, var(--foreground) 12%, transparent);
   --shadow-m: 0px 4px 10px color-mix(in srgb, var(--foreground) 12%, transparent);
   --shadow-l: 0px 4px 20px color-mix(in srgb, var(--foreground) 15%, transparent);
   --blur-glass: 10px;
+  --shadow-sidebar: 0px 4px 15px color-mix(in srgb, var(--foreground) 7%, transparent);
+  --button-bg: color-mix(in srgb, var(--foreground) 4%, transparent);
+  --card-text: #121419;
 }
 
 @theme inline {
@@ -17,6 +20,8 @@
   --font-mono: var(--font-roboto-mono);
   --font-tag: var(--font-stick-no-bills);
   --font-handwritten: var(--font-homemade-apple);
+  --color-button-bg: var(--button-bg);
+  --color-card-text: var(--card-text);
 }
 
 /* Hide scrollbar but keep scroll functionality */
@@ -30,10 +35,16 @@
 }
 
 body {
-  background: var(--accent);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
-  transition: background-color 0.5s ease, color 0.5s ease;
+  transition: color 0.5s ease;
+}
+
+/* Wrapper border-radius 40px when sheet is open */
+@layer base {
+  body:has([data-vaul-overlay]) [data-vaul-drawer-wrapper] {
+    border-radius: 40px !important;
+  }
 }
 
 /* Button Menu Secondary */

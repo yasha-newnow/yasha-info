@@ -8,7 +8,7 @@ import "./globals.css";
 const interTight = Inter_Tight({
   variable: "--font-inter-tight",
   subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const robotoMono = Roboto_Mono({
@@ -46,9 +46,11 @@ export default function RootLayout({
       lang="en"
       className={`${interTight.variable} ${robotoMono.variable} ${stickNoBills.variable} ${homemadeApple.variable} h-full antialiased`}
     >
-      <body className="min-h-full">
-        {children}
-        <DialRoot />
+      <body className="min-h-full bg-black">
+        <div data-vaul-drawer-wrapper="" className="min-h-full bg-accent transition-[border-radius,background-color] duration-500">
+          {children}
+          <DialRoot />
+        </div>
         {process.env.NODE_ENV === "development" && <Agentation className="!top-4 !right-4 !bottom-auto !left-auto" />}
       </body>
     </html>
