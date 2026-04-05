@@ -106,7 +106,7 @@ function ProjectCardDesktop({ project }: ProjectCardProps) {
                 transition: "background-color 0.3s ease-out, backdrop-filter 0.3s ease-out",
               }}
             >
-              <ExpandIcon size={20} />
+              <ExpandIcon size={24} />
             </button>
           </div>
 
@@ -198,15 +198,15 @@ function ProjectCardMobile({ project }: ProjectCardProps) {
         />
       </div>
 
-      {/* Button — top right */}
+      {/* Button — top right, idle state only */}
       <button
-        className="absolute top-6 right-6 flex items-center justify-center w-12 h-12 rounded-xl cursor-pointer"
+        className="absolute top-4 right-4 flex items-center justify-center w-12 h-12 rounded-xl cursor-pointer"
         style={{
-          backgroundColor: "color-mix(in srgb, var(--card-text) 4%, transparent)",
           backdropFilter: "blur(10px)",
+          color: "var(--card-text)",
         }}
       >
-        <ExpandIcon size={20} />
+        <ExpandIcon size={24} />
       </button>
     </article>
   );

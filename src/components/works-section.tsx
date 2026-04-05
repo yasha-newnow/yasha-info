@@ -32,6 +32,7 @@ const cardVariants = {
 
 export function WorksSection() {
   const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   return (
     <section id="works" className="flex flex-col px-0 lg:px-10 pt-20 pb-6 lg:pb-10">
@@ -49,15 +50,19 @@ export function WorksSection() {
       >
         {projects.map((project) => (
           <motion.div key={project.slug} variants={cardVariants} className="w-full">
-            <ProjectCard project={project} onClick={() => setActiveProject(project)} />
+            <ProjectCard
+              project={project}
+              onClick={() => { setActiveProject(project); setSheetOpen(true); }}
+            />
           </motion.div>
         ))}
       </motion.div>
 
       <ProjectSheet
         project={activeProject}
-        open={activeProject !== null}
-        onOpenChange={(open) => { if (!open) setActiveProject(null); }}
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+        onAnimationEnd={(isOpen) => { if (!isOpen) setActiveProject(null); }}
       />
     </section>
   );

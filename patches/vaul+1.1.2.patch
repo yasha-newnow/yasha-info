@@ -1,0 +1,44 @@
+diff --git a/node_modules/vaul/dist/index.js b/node_modules/vaul/dist/index.js
+index 7f343be..cbe2956 100644
+--- a/node_modules/vaul/dist/index.js
++++ b/node_modules/vaul/dist/index.js
+@@ -468,7 +468,7 @@ const TRANSITIONS = {
+ const VELOCITY_THRESHOLD = 0.4;
+ const CLOSE_THRESHOLD = 0.25;
+ const SCROLL_LOCK_TIMEOUT = 100;
+-const BORDER_RADIUS = 8;
++const BORDER_RADIUS = 40;
+ const NESTED_DISPLACEMENT = 16;
+ const WINDOW_TOP_OFFSET = 26;
+ const DRAG_CLASS = 'vaul-dragging';
+@@ -1110,7 +1110,7 @@ function Root({ open: openProp, onOpenChange, children, onDrag: onDragProp, onRe
+             if (wrapper && overlayRef.current && shouldScaleBackground) {
+                 // Calculate percentageDragged as a fraction (0 to 1)
+                 const scaleValue = Math.min(getScale() + percentageDragged * (1 - getScale()), 1);
+-                const borderRadiusValue = 8 - percentageDragged * 8;
++                const borderRadiusValue = 40 - percentageDragged * 40;
+                 const translateValue = Math.max(0, 14 - percentageDragged * 14);
+                 set(wrapper, {
+                     borderRadius: `${borderRadiusValue}px`,
+diff --git a/node_modules/vaul/dist/index.mjs b/node_modules/vaul/dist/index.mjs
+index 0dbbce5..fb1e7e9 100644
+--- a/node_modules/vaul/dist/index.mjs
++++ b/node_modules/vaul/dist/index.mjs
+@@ -446,7 +446,7 @@ const TRANSITIONS = {
+ const VELOCITY_THRESHOLD = 0.4;
+ const CLOSE_THRESHOLD = 0.25;
+ const SCROLL_LOCK_TIMEOUT = 100;
+-const BORDER_RADIUS = 8;
++const BORDER_RADIUS = 40;
+ const NESTED_DISPLACEMENT = 16;
+ const WINDOW_TOP_OFFSET = 26;
+ const DRAG_CLASS = 'vaul-dragging';
+@@ -1088,7 +1088,7 @@ function Root({ open: openProp, onOpenChange, children, onDrag: onDragProp, onRe
+             if (wrapper && overlayRef.current && shouldScaleBackground) {
+                 // Calculate percentageDragged as a fraction (0 to 1)
+                 const scaleValue = Math.min(getScale() + percentageDragged * (1 - getScale()), 1);
+-                const borderRadiusValue = 8 - percentageDragged * 8;
++                const borderRadiusValue = 40 - percentageDragged * 40;
+                 const translateValue = Math.max(0, 14 - percentageDragged * 14);
+                 set(wrapper, {
+                     borderRadius: `${borderRadiusValue}px`,

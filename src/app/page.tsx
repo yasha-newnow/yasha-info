@@ -32,12 +32,12 @@ export default function Home() {
 
           <WorksSection />
 
-          <section id={sections[1].id} className="min-h-screen flex flex-col p-6 lg:p-10 pt-20">
+          <section id={sections[1].id} className="min-h-screen flex flex-col px-0 pt-20 pb-6 lg:px-10 lg:pb-10">
             <SectionHeader title={sections[1].title} tag={sections[1].tag} />
             <p className="text-xl max-w-xl opacity-70">About me, my approach, and what drives my work. This is a placeholder section for testing anchor navigation.</p>
           </section>
 
-          <section id={sections[2].id} className="min-h-screen flex flex-col p-6 lg:p-10 pt-20">
+          <section id={sections[2].id} className="min-h-screen flex flex-col px-0 pt-20 pb-6 lg:px-10 lg:pb-10">
             <SectionHeader title={sections[2].title} tag={sections[2].tag} />
             <p className="text-xl max-w-xl opacity-70">Get in touch for collaboration, consulting, or just to say hello. This is a placeholder section for testing anchor navigation.</p>
           </section>

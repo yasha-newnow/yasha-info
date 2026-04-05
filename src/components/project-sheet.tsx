@@ -8,9 +8,10 @@ interface ProjectSheetProps {
   project: Project | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onAnimationEnd?: (open: boolean) => void;
 }
 
-export function ProjectSheet({ project, open, onOpenChange }: ProjectSheetProps) {
+export function ProjectSheet({ project, open, onOpenChange, onAnimationEnd }: ProjectSheetProps) {
   if (!project) return null;
 
   return (
@@ -20,12 +21,13 @@ export function ProjectSheet({ project, open, onOpenChange }: ProjectSheetProps)
       shouldScaleBackground
       setBackgroundColorOnScale={false}
       direction="bottom"
+      onAnimationEnd={onAnimationEnd}
     >
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40 transition-opacity duration-500 data-[state=closed]:opacity-0" />
+        <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
         <Drawer.Content
-          className="fixed inset-x-0 bottom-0 z-50 flex flex-col bg-white rounded-t-3xl outline-none"
-          style={{ height: "96dvh" }}
+          className="fixed inset-x-0 bottom-0 z-50 flex flex-col bg-white rounded-t-[40px] outline-none"
+          style={{ height: "97dvh" }}
         >
           {/* Accessibility — sr-only */}
           <Drawer.Title className="sr-only">{project.company}</Drawer.Title>
@@ -38,22 +40,19 @@ export function ProjectSheet({ project, open, onOpenChange }: ProjectSheetProps)
             {/* Drag handle */}
             <Drawer.Handle className="mx-auto mt-3 mb-6" />
 
-            {/* Sticky close button */}
-            <div className="sticky top-0 z-10 flex justify-end pointer-events-none px-4">
+            {/* Sticky close button — hidden on mobile */}
+            <div className="hidden lg:flex sticky top-10 z-10 justify-end pointer-events-none mr-10">
               <Drawer.Close
-                className="pointer-events-auto flex items-center justify-center w-10 h-10 rounded-xl cursor-pointer"
+                className="pointer-events-auto flex items-center justify-center w-12 h-12 rounded-xl cursor-pointer transition-colors duration-300"
                 style={{
-                  backgroundColor: "color-mix(in srgb, var(--card-text) 4%, transparent)",
                   backdropFilter: "blur(10px)",
+                  color: "var(--card-text)",
                 }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "color-mix(in srgb, var(--card-text) 4%, transparent)"}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
               >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path
-                    d="M3.5 3.5L12.5 12.5M12.5 3.5L3.5 12.5"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
+                <svg width="24" height="24" viewBox="0 -960 960 960" fill="currentColor">
+                  <path d="M256-192.35 192.35-256l224-224-224-224L256-767.65l224 224 224-224L767.65-704l-224 224 224 224L704-192.35l-224-224-224 224Z" />
                 </svg>
               </Drawer.Close>
             </div>

@@ -21,7 +21,7 @@ export function Hero({ onTypingComplete }: HeroProps) {
   }, [onTypingComplete]);
 
   return (
-    <div className="flex flex-col justify-end flex-1 min-h-full p-6 pb-24 lg:p-10 lg:pb-10">
+    <div className="flex flex-col justify-end flex-1 min-h-full px-0 py-6 pb-24 lg:p-10 lg:pb-10">
       <div className="flex flex-col gap-4">
         {/* Heading */}
         <div className="flex flex-col">

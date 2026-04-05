@@ -41,10 +41,31 @@ body {
   transition: color 0.5s ease;
 }
 
-/* Wrapper border-radius 40px when sheet is open */
+/* Section headings */
 @layer base {
-  body:has([data-vaul-overlay]) [data-vaul-drawer-wrapper] {
-    border-radius: 40px !important;
+  h2 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 56px;
+  }
+  @media (min-width: 1024px) {
+    h2 {
+      font-size: 72px;
+      line-height: 80px;
+    }
+  }
+  .section-tag {
+    font-family: var(--font-tag);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
+  }
+  @media (min-width: 1024px) {
+    .section-tag {
+      font-size: 32px;
+      line-height: 40px;
+    }
   }
 }
 
