@@ -9,7 +9,7 @@
     "lint": "eslint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "postinstall": "patch-package"
+    "postinstall": "node scripts/patch-vaul.mjs"
   },
   "dependencies": {
     "dialkit": "^1.1.0",
