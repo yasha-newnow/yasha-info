@@ -47,7 +47,7 @@ export default function RootLayout({
       className={`${interTight.variable} ${robotoMono.variable} ${stickNoBills.variable} ${homemadeApple.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-black">
-        <div data-vaul-drawer-wrapper="" className="min-h-full bg-accent transition-colors duration-350">
+        <div data-vaul-drawer-wrapper="" className="min-h-full" style={{ backgroundColor: "var(--accent)", transition: "background-color 0.5s ease" }}>
           {children}
           <DialRoot />
         </div>
