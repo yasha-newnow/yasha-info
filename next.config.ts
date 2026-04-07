@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
+import path from "path";
+import os from "os";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  distDir: path.join(os.homedir(), ".cache", "yasha-portfolio-next"),
 };
 
 export default nextConfig;

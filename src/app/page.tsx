@@ -6,6 +6,7 @@ import { Sidebar } from "@/components/sidebar";
 import { MobileNav } from "@/components/mobile-nav";
 import { ButtonCustomization } from "@/components/button-customization";
 import { WorksSection } from "@/components/works-section";
+import { AboutSection } from "@/components/about-section";
 import { SectionHeader } from "@/components/section-header";
 import { sections } from "@/data/navigation";
 
@@ -32,10 +33,7 @@ export default function Home() {
 
           <WorksSection />
 
-          <section id={sections[1].id} className="min-h-screen flex flex-col px-0 pt-20 pb-6 lg:px-10 lg:pb-10">
-            <SectionHeader title={sections[1].title} tag={sections[1].tag} />
-            <p className="text-xl max-w-xl opacity-70">About me, my approach, and what drives my work. This is a placeholder section for testing anchor navigation.</p>
-          </section>
+          <AboutSection />
 
           <section id={sections[2].id} className="min-h-screen flex flex-col px-0 pt-20 pb-6 lg:px-10 lg:pb-10">
             <SectionHeader title={sections[2].title} tag={sections[2].tag} />

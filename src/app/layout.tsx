@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter_Tight, Roboto_Mono, Stick_No_Bills, Homemade_Apple } from "next/font/google";
+import localFont from "next/font/local";
 import { DialRoot } from "dialkit";
 import "dialkit/styles.css";
 import { Agentation } from "agentation";
@@ -30,6 +31,13 @@ const homemadeApple = Homemade_Apple({
   display: "swap",
 });
 
+const drukCond = localFont({
+  src: "./fonts/DrukCond-Super-Trial.otf",
+  variable: "--font-druk-cond",
+  weight: "1000",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Yasha Petrunin — Designer",
   description:
@@ -44,7 +52,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${interTight.variable} ${robotoMono.variable} ${stickNoBills.variable} ${homemadeApple.variable} h-full antialiased`}
+      className={`${interTight.variable} ${robotoMono.variable} ${stickNoBills.variable} ${homemadeApple.variable} ${drukCond.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-black">
         <div data-vaul-drawer-wrapper="" className="min-h-full" style={{ backgroundColor: "var(--accent)", transition: "background-color 0.5s ease" }}>

@@ -61,6 +61,11 @@ export function applyTheme(accentHex: string): void {
     "--glass-overlay",
     darkMode ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.05)"
   );
+  // Glass card shadow color — inverted: light bg → white glow, dark bg → dark shadow
+  root.style.setProperty(
+    "--shadow-glass-color",
+    darkMode ? "rgba(0, 0, 0, 0.15)" : "rgba(255, 255, 255, 0.12)"
+  );
 
   // Set wrapper background directly — CSS variable changes don't trigger transitions
   const wrapper = document.querySelector("[data-vaul-drawer-wrapper]") as HTMLElement | null;

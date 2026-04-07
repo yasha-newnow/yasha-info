@@ -4,6 +4,7 @@
   --accent: #C5F640;
   --foreground: #121419;
   --glass-overlay: rgba(0, 0, 0, 0.05);
+  --shadow-glass-color: rgba(255, 255, 255, 0.12);
   --shadow-s: 0px 2px 3px color-mix(in srgb, var(--foreground) 12%, transparent);
   --shadow-m: 0px 4px 10px color-mix(in srgb, var(--foreground) 12%, transparent);
   --shadow-l: 0px 4px 20px color-mix(in srgb, var(--foreground) 15%, transparent);
@@ -21,6 +22,7 @@
   --font-mono: var(--font-roboto-mono);
   --font-tag: var(--font-stick-no-bills);
   --font-handwritten: var(--font-homemade-apple);
+  --font-heading: var(--font-druk-cond);
   --color-button-bg: var(--button-bg);
   --color-card-text: var(--card-text);
 }
@@ -44,15 +46,16 @@ body {
 /* Section headings */
 @layer base {
   h2 {
-    font-family: var(--font-sans);
-    font-weight: 700;
-    font-size: 48px;
+    font-family: var(--font-heading), var(--font-sans), system-ui, sans-serif;
+    font-weight: 1000;
+    font-size: 64px;
     line-height: 56px;
+    text-transform: uppercase;
   }
   @media (min-width: 1024px) {
     h2 {
-      font-size: 72px;
-      line-height: 80px;
+      font-size: 104px;
+      line-height: 88px;
     }
   }
   .section-tag {
@@ -140,6 +143,51 @@ body {
   transition: background-color 150ms ease-out, box-shadow 150ms ease-out, color 0.5s ease;
 }
 
+
+/* Glass card — layout only, visual surface via inline style (same reason as sidebar) */
+.glass-card {
+  border-radius: 24px;
+  padding: 24px;
+  overflow: visible;
+}
+@media (min-width: 1024px) {
+  .glass-card {
+    padding: 40px;
+  }
+}
+
+/* Button Link — dotted underline with hover transition */
+.button-link {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  text-decoration-color: color-mix(in srgb, var(--foreground) 30%, transparent);
+  transition: text-decoration-color 200ms ease-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  .button-link:hover {
+    text-decoration-color: var(--foreground);
+  }
+}
+@media (hover: none) {
+  .button-link:active {
+    text-decoration-color: var(--foreground);
+  }
+}
+
+/* Expand/Collapse — CSS grid height transition */
+.expand-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms ease-out;
+}
+.expand-collapse[data-expanded="true"] {
+  grid-template-rows: 1fr;
+}
+.expand-collapse > div {
+  overflow: hidden;
+}
 
 /* Globe spin animation */
 @keyframes globe-spin {
