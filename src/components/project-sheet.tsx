@@ -79,6 +79,7 @@ export function ProjectSheet({ project, open, onOpenChange, onAnimationEnd }: Pr
                       width={img.width}
                       height={img.height}
                       className="w-full h-auto"
+                      {...(i === 0 ? { priority: true } : { loading: "lazy" })}
                     />
                   </div>
                 ))}
