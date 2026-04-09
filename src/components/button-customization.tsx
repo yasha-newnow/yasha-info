@@ -40,15 +40,6 @@ export function ButtonCustomization() {
   const [isCustomColor, setIsCustomColor] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Sync activeColor with CSS --accent on client mount
-  useEffect(() => {
-    const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-    if (accent && accent !== activeColor) {
-      setActiveColor(accent);
-      setForeground(shouldUseDarkMode(accent) ? "#FFFFFF" : "#0A0A0A");
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   // Reset hover when level changes (prevents sticky hover after picker close)
   useEffect(() => { setIsHovered(false); }, [level]);
 
