@@ -64,7 +64,6 @@ export function Sidebar({ show = false, delay = 0, scrollContainer }: SidebarPro
             "linear-gradient(var(--glass-overlay), var(--glass-overlay)), color-mix(in srgb, var(--accent) 70%, transparent)",
           backdropFilter: "blur(var(--blur-glass))",
           boxShadow: "var(--shadow-sidebar)",
-          transition: "background 0.5s ease, box-shadow 0.5s ease",
         }}
       />
 

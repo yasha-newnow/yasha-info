@@ -11,7 +11,6 @@ function Badge({ icon, text }: { icon: ReactNode; text: string }) {
         padding: "2px 8px 2px 3px",
         backgroundColor:
           "color-mix(in srgb, var(--foreground) 10%, transparent)",
-        transition: "background-color 0.5s ease",
       }}
     >
       {icon}

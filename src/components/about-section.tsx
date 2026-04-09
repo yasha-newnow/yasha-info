@@ -21,7 +21,6 @@ const glassStyle: React.CSSProperties = {
     "linear-gradient(var(--glass-overlay), var(--glass-overlay)), color-mix(in srgb, var(--accent) 70%, transparent)",
   backdropFilter: "blur(var(--blur-glass))",
   boxShadow: "0px 4px 15px color-mix(in srgb, var(--shadow-glass-color), transparent)",
-  transition: "background 0.5s ease, box-shadow 0.5s ease",
 };
 
 const STAGGER_DELAY = 0.12;

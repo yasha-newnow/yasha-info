@@ -67,9 +67,6 @@ export function applyTheme(accentHex: string): void {
     darkMode ? "rgba(0, 0, 0, 0.15)" : "rgba(255, 255, 255, 0.12)"
   );
 
-  // Set wrapper background directly — CSS variable changes don't trigger transitions
-  const wrapper = document.querySelector("[data-vaul-drawer-wrapper]") as HTMLElement | null;
-  if (wrapper) wrapper.style.backgroundColor = accentHex;
 }
 
 /** Picker uses inverted theme: dark page → light picker, light page → dark picker */

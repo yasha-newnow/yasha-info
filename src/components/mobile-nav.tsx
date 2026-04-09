@@ -63,7 +63,7 @@ const glassStyle = {
   background:
     "linear-gradient(var(--glass-overlay), var(--glass-overlay)), color-mix(in srgb, var(--accent) 70%, transparent)",
   backdropFilter: "blur(var(--blur-glass))",
-  transition: "background 0.5s ease",
+  boxShadow: "0px 4px 15px color-mix(in srgb, var(--shadow-glass-color), transparent)",
 };
 
 type NavState = "closed" | "open" | "closing" | "shrinking";

@@ -1,5 +1,29 @@
 @import "tailwindcss";
 
+@property --accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #C5F640;
+}
+
+@property --foreground {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #121419;
+}
+
+@property --glass-overlay {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(0, 0, 0, 0.05);
+}
+
+@property --shadow-glass-color {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0.12);
+}
+
 :root {
   --accent: #C5F640;
   --foreground: #121419;
@@ -10,9 +34,9 @@
   --shadow-l: 0px 4px 20px color-mix(in srgb, var(--foreground) 15%, transparent);
   --blur-glass: 10px;
   --shadow-sidebar: 0px 4px 15px color-mix(in srgb, var(--foreground) 7%, transparent);
-  --button-bg: color-mix(in srgb, var(--foreground) 4%, transparent);
   --card-text: #121419;
   --shadow-card-hover: 0px 20px 40px color-mix(in srgb, var(--foreground) 7%, transparent);
+  transition: --accent 0.5s ease, --foreground 0.5s ease, --glass-overlay 0.5s ease, --shadow-glass-color 0.5s ease;
 }
 
 @theme inline {
@@ -23,7 +47,6 @@
   --font-tag: var(--font-stick-no-bills);
   --font-handwritten: var(--font-homemade-apple);
   --font-heading: var(--font-druk-cond);
-  --color-button-bg: var(--button-bg);
   --color-card-text: var(--card-text);
 }
 
@@ -40,7 +63,6 @@
 body {
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
-  transition: color 0.5s ease;
 }
 
 /* Section headings */
@@ -84,7 +106,7 @@ body {
   cursor: pointer;
   color: var(--foreground);
   text-decoration: none;
-  transition: background-color 150ms ease-out, box-shadow 150ms ease-out, color 0.5s ease;
+  transition: background-color 150ms ease-out, box-shadow 150ms ease-out;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -117,7 +139,7 @@ body {
   border-radius: 12px;
   cursor: pointer;
   color: var(--foreground);
-  transition: background-color 150ms ease-out, border-radius 150ms ease-out, color 0.5s ease;
+  transition: background-color 150ms ease-out, border-radius 150ms ease-out;
 }
 
 .button-menu-primary-desktop .tag-desktop {
@@ -140,7 +162,7 @@ body {
   border-radius: 12px;
   cursor: pointer;
   color: var(--foreground);
-  transition: background-color 150ms ease-out, box-shadow 150ms ease-out, color 0.5s ease;
+  transition: background-color 150ms ease-out, box-shadow 150ms ease-out;
 }
 
 
@@ -149,6 +171,7 @@ body {
   border-radius: 24px;
   padding: 24px;
   overflow: visible;
+  will-change: transform, opacity;
 }
 @media (min-width: 1024px) {
   .glass-card {

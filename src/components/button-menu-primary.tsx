@@ -32,7 +32,6 @@ function Tag({
       style={{
         backgroundColor: isSelected ? "var(--accent)" : "var(--foreground)",
         color: isSelected ? "var(--foreground)" : "var(--accent)",
-        transition: "color 0.5s ease, background-color 0.5s ease",
       }}
     >
       {text}
@@ -156,7 +155,6 @@ function DesktopNav({
                 className="font-sans font-semibold text-2xl leading-8"
                 style={{
                   color: isSelected ? "var(--accent)" : undefined,
-                  transition: "color 0.5s ease",
                 }}
               >
                 {item.label}
@@ -248,7 +246,6 @@ function MobileNav({
                 className="font-sans font-semibold text-[40px] leading-[48px]"
                 style={{
                   color: isActive ? "var(--accent)" : undefined,
-                  transition: "color 0.5s ease",
                 }}
               >
                 {item.label}
