@@ -126,7 +126,8 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
 
   // Scroll hide: nav slides up on scroll down, slides back on scroll up
   const scrollDir = useScrollDirection(scrollContainer);
-  const scrollHidden = scrollDir === "down" && state === "closed";
+  const ignoreScroll = useRef(false);
+  const scrollHidden = scrollDir === "down" && state === "closed" && !ignoreScroll.current;
   const hasAppeared = useRef(false);
   useEffect(() => { if (show) hasAppeared.current = true; }, [show]);
 
@@ -175,11 +176,12 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
       forcedActiveRef.current = href;  // 1. instant ref update (sync)
       setPendingScroll(href);
       setState("closing");              // 2. triggers render → BP reads ref
-      // Safety: clear forced state after 0.8s
+      ignoreScroll.current = true;      // 3. ignore programmatic scroll
       clearTimeout(forcedTimerRef.current);
       forcedTimerRef.current = setTimeout(() => {
         forcedActiveRef.current = null;
-      }, 800);
+        ignoreScroll.current = false;
+      }, 1500);
     },
     []
   );
@@ -223,6 +225,8 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
         <motion.button
           onClick={() => {
             if (state === "open") setState("closing");
+            ignoreScroll.current = true;
+            setTimeout(() => { ignoreScroll.current = false; }, 1500);
             scrollContainer?.current?.scrollTo({ top: 0, behavior: "smooth" });
           }}
           className="flex items-center justify-center w-10 h-10 ml-1 cursor-pointer"
