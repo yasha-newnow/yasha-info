@@ -85,7 +85,7 @@ export function AboutSection() {
   return (
     <section
       id={sections[1].id}
-      className="flex flex-col px-2 pt-20 pb-6 lg:px-10 lg:pb-10"
+      className="flex flex-col px-0 pt-20 pb-6 lg:px-10 lg:pb-10"
     >
       <SectionHeader title={sections[1].title} tag={sections[1].tag} />
 

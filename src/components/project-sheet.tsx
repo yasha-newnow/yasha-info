@@ -26,7 +26,7 @@ export function ProjectSheet({ project, open, onOpenChange, onAnimationEnd }: Pr
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
         <Drawer.Content
-          className="fixed inset-x-0 bottom-0 z-50 flex flex-col bg-white rounded-t-[40px] outline-none"
+          className="fixed inset-x-0 bottom-0 z-50 flex flex-col bg-white rounded-t-[40px] overflow-clip outline-none"
           style={{ height: "97dvh" }}
         >
           {/* Accessibility — sr-only */}

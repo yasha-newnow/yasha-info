@@ -78,7 +78,18 @@ export function Sidebar({ show = false, delay = 0, scrollContainer }: SidebarPro
         >
           <div className="flex flex-col gap-4 p-3">
             <motion.div variants={fadeInItem}>
-              <Logo size={40} />
+              <motion.button
+                onClick={() => {
+                  scrollContainer?.current?.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="cursor-pointer"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                aria-label="Scroll to top"
+              >
+                <Logo size={40} />
+              </motion.button>
             </motion.div>
             <div className="flex flex-col gap-5">
               <motion.span

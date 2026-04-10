@@ -12,6 +12,52 @@ interface MobileNavProps {
   scrollContainer?: React.RefObject<HTMLElement | null>;
 }
 
+/* ── Scroll direction hook ──────────────────────── */
+
+type ScrollDir = "up" | "down" | "top";
+
+function useScrollDirection(
+  scrollContainer?: React.RefObject<HTMLElement | null>,
+  threshold = 64
+): ScrollDir {
+  const [direction, setDirection] = useState<ScrollDir>("top");
+  const lastTop = useRef(0);
+  const downStart = useRef(0);
+  const rafId = useRef(0);
+
+  useEffect(() => {
+    const el = scrollContainer?.current;
+    if (!el) return;
+
+    function update() {
+      const top = el!.scrollTop;
+      if (top < 10) {
+        setDirection("top");
+      } else if (top > lastTop.current) {
+        if (lastTop.current <= downStart.current) downStart.current = lastTop.current;
+        if (top - downStart.current > threshold) setDirection("down");
+      } else {
+        downStart.current = top;
+        setDirection("up");
+      }
+      lastTop.current = top;
+    }
+
+    function onScroll() {
+      cancelAnimationFrame(rafId.current);
+      rafId.current = requestAnimationFrame(update);
+    }
+
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafId.current);
+    };
+  }, [scrollContainer, threshold]);
+
+  return direction;
+}
+
 /* ── Animation config ────────────────────────────── */
 
 const GROUP_DELAY = 0.25;
@@ -78,15 +124,26 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
   const forcedTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const getForcedActive = useCallback(() => forcedActiveRef.current, []);
 
+  // Scroll hide: nav slides up on scroll down, slides back on scroll up
+  const scrollDir = useScrollDirection(scrollContainer);
+  const scrollHidden = scrollDir === "down" && state === "closed";
+  const hasAppeared = useRef(false);
+  useEffect(() => { if (show) hasAppeared.current = true; }, [show]);
+
   const isExpanded = state === "open" || state === "closing";
   const showContent = state === "open";
 
   // When entering "closing" → start shrink after items mostly exited
+  // When entering "shrinking" → transition to closed after spring settles
   useEffect(() => {
     if (state === "closing") {
       shrinkTimerRef.current = setTimeout(() => {
         setState("shrinking");
       }, 400);
+    } else if (state === "shrinking") {
+      shrinkTimerRef.current = setTimeout(() => {
+        setState("closed");
+      }, 500);
     }
     return () => clearTimeout(shrinkTimerRef.current);
   }, [state]);
@@ -144,7 +201,7 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
         show
           ? {
               opacity: 1,
-              y: 0,
+              y: scrollHidden ? -80 : 0,
               filter: "blur(0px)",
               height: containerExpanded ? "calc(100dvh - 32px)" : 64,
             }
@@ -153,15 +210,28 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
       transition={{
         height: { type: "spring", stiffness: 300, damping: 30 },
         opacity: { type: "spring", visualDuration: 0.4, bounce: 0 },
-        y: { type: "spring", visualDuration: 0.4, bounce: 0 },
+        y: !hasAppeared.current
+          ? { type: "spring", visualDuration: 0.4, bounce: 0 }
+          : scrollHidden
+            ? { type: "tween", duration: 0.2, ease: [0.23, 1, 0.32, 1] }
+            : { type: "spring", stiffness: 300, damping: 25 },
         filter: { type: "spring", visualDuration: 0.4, bounce: 0 },
       }}
     >
       {/* Header row — always visible */}
       <div className="flex items-center justify-between px-2 py-3">
-        <div className="flex items-center justify-center w-10 h-10 ml-1">
+        <motion.button
+          onClick={() => {
+            if (state === "open") setState("closing");
+            scrollContainer?.current?.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          className="flex items-center justify-center w-10 h-10 ml-1 cursor-pointer"
+          whileTap={{ scale: 0.97 }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          aria-label="Scroll to top"
+        >
           <Logo size={40} />
-        </div>
+        </motion.button>
         <button
           onClick={toggle}
           className="flex items-center justify-center w-10 h-10 p-2 mr-1 cursor-pointer"
