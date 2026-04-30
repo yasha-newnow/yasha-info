@@ -43,6 +43,42 @@ const itemVariants = {
   },
 };
 
+// In-page expand: faster than cross-section reveal (0.10–0.15) to feel responsive.
+// Collapse uses reverse direction so the list "rolls back up" — bottom items leave first.
+const EXPAND_STAGGER = 0.05;
+const COLLAPSE_STAGGER = 0.03;
+
+const hiddenContainerVariants = {
+  expanded: {
+    transition: {
+      staggerChildren: EXPAND_STAGGER,
+      delayChildren: 0,
+      staggerDirection: 1,
+    },
+  },
+  collapsed: {
+    transition: {
+      staggerChildren: COLLAPSE_STAGGER,
+      staggerDirection: -1,
+    },
+  },
+};
+
+const hiddenItemVariants = {
+  expanded: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.3, ease: "easeOut" as const },
+  },
+  collapsed: {
+    opacity: 0,
+    y: 4,
+    filter: "blur(5px)",
+    transition: { duration: 0.3, ease: "easeIn" as const },
+  },
+};
+
 function SkillDots({ level }: { level: 1 | 2 | 3 }) {
   return (
     <span className="flex gap-1 shrink-0">
@@ -169,33 +205,50 @@ export function AboutSection() {
             {visibleEntries.map((entry, index) => (
               <div key={entry.title}>
                 <EntryRow entry={entry} />
-                {(index < visibleEntries.length - 1 || hiddenEntries.length > 0) && (
+                {index < visibleEntries.length - 1 && (
                   <div className="h-px bg-foreground opacity-10" />
                 )}
               </div>
             ))}
 
-            {/* Expandable entries */}
-            <div
-              className="expand-collapse"
-              data-expanded={expanded ? "true" : "false"}
-            >
-              <div>
-                {hiddenEntries.map((entry, index) => (
-                  <div key={entry.title}>
-                    <EntryRow entry={entry} />
-                    {index < hiddenEntries.length - 1 && (
-                      <div className="h-px bg-foreground opacity-10" />
-                    )}
-                  </div>
-                ))}
+            {/* Expandable entries — height collapses via CSS (.expand-collapse),
+                items fade+blur+y via Framer Motion variants, staggered. */}
+            {hiddenEntries.length > 0 && (
+              <div
+                id="work-history-extra"
+                className="expand-collapse"
+                data-expanded={expanded ? "true" : "false"}
+              >
+                <motion.div
+                  variants={hiddenContainerVariants}
+                  initial="collapsed"
+                  animate={expanded ? "expanded" : "collapsed"}
+                >
+                  {/* Boundary divider — outer motion fades 0↔1, inner div carries the
+                      static opacity-10 so the rendered alpha is 1 × 0.1 = 0.1. */}
+                  <motion.div variants={hiddenItemVariants}>
+                    <div className="h-px bg-foreground opacity-10" />
+                  </motion.div>
+                  {hiddenEntries.map((entry, index) => (
+                    <motion.div key={entry.title} variants={hiddenItemVariants}>
+                      <EntryRow entry={entry} />
+                      {index < hiddenEntries.length - 1 && (
+                        <div className="h-px bg-foreground opacity-10" />
+                      )}
+                    </motion.div>
+                  ))}
+                </motion.div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Toggle button — left aligned */}
           <div className="self-start">
-            <ButtonLink onClick={() => setExpanded(!expanded)}>
+            <ButtonLink
+              onClick={() => setExpanded(!expanded)}
+              aria-expanded={expanded}
+              aria-controls="work-history-extra"
+            >
               {expanded ? "Hide full history" : "View full work history"}
             </ButtonLink>
           </div>

@@ -1,0 +1,19 @@
+interface CheckIconProps {
+  size?: number;
+  className?: string;
+}
+
+export function CheckIcon({ size = 20, className }: CheckIconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height={size}
+      viewBox="0 -960 960 960"
+      width={size}
+      fill="currentColor"
+      className={className}
+    >
+      <path d="M383-238.35 154.35-467l61.39-61.39L383-361.13l361.26-361.26L805.65-661 383-238.35Z" />
+    </svg>
+  );
+}

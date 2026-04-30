@@ -2,10 +2,11 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Logo, ArrowUpRight, CopyIcon, PlusIcon } from "./icons";
+import { Logo, ArrowUpRight, CopyIcon, CheckIcon, PlusIcon } from "./icons";
 import { ButtonMenuPrimary } from "./button-menu-primary";
 import { ButtonMenuSecondary } from "./button-menu-secondary";
 import { LocalTime } from "./local-time";
+import { EMAIL, copyEmail } from "@/lib/copy-email";
 
 interface MobileNavProps {
   show?: boolean;
@@ -100,10 +101,6 @@ const fadeInItem = {
 };
 
 /* ── Helpers ──────────────────────────────────────── */
-
-function copyEmail() {
-  navigator.clipboard.writeText("yashapetrunin@gmail.com");
-}
 
 const glassStyle = {
   background:
@@ -310,9 +307,10 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
                     href: "#",
                   },
                   {
-                    label: "yashapetrunin@gmail.com",
+                    label: EMAIL,
                     icon: <CopyIcon size={20} />,
                     onClick: copyEmail,
+                    feedback: { label: "Copied!", icon: <CheckIcon size={20} /> },
                   },
                 ]}
                 itemVariants={fadeInItem}

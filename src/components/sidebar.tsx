@@ -1,10 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Logo, ArrowUpRight, CopyIcon } from "./icons";
+import { Logo, ArrowUpRight, CopyIcon, CheckIcon } from "./icons";
 import { ButtonMenuPrimary } from "./button-menu-primary";
 import { ButtonMenuSecondary } from "./button-menu-secondary";
 import { LocalTime } from "./local-time";
+import { EMAIL, copyEmail } from "@/lib/copy-email";
 
 interface SidebarProps {
   show?: boolean;
@@ -38,10 +39,6 @@ const fadeInItem = {
     transition: { duration: ITEM_DURATION, ease: "easeOut" as const },
   },
 };
-
-function copyEmail() {
-  navigator.clipboard.writeText("yashapetrunin@gmail.com");
-}
 
 export function Sidebar({ show = false, delay = 0, scrollContainer }: SidebarProps) {
   return (
@@ -125,7 +122,12 @@ export function Sidebar({ show = false, delay = 0, scrollContainer }: SidebarPro
             items={[
               { label: "CV", icon: <ArrowUpRight size={20} />, href: "#" },
               { label: "LinkedIn", icon: <ArrowUpRight size={20} />, href: "#" },
-              { label: "yashapetrunin@gmail.com", icon: <CopyIcon size={20} />, onClick: copyEmail },
+              {
+                label: EMAIL,
+                icon: <CopyIcon size={20} />,
+                onClick: copyEmail,
+                feedback: { label: "Copied!", icon: <CheckIcon size={20} /> },
+              },
             ]}
             itemVariants={fadeInItem}
           />
