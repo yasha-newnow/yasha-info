@@ -3,7 +3,6 @@ import { Inter_Tight, Roboto_Mono, Stick_No_Bills, Homemade_Apple } from "next/f
 import localFont from "next/font/local";
 import { DialRoot } from "dialkit";
 import "dialkit/styles.css";
-import { Agentation } from "agentation";
 import "./globals.css";
 
 const interTight = Inter_Tight({
@@ -57,9 +56,8 @@ export default function RootLayout({
       <body className="min-h-full bg-black">
         <div data-vaul-drawer-wrapper="" className="min-h-full" style={{ backgroundColor: "var(--accent)" }}>
           {children}
-          <DialRoot />
+          {process.env.NODE_ENV === "development" && <DialRoot />}
         </div>
-        {process.env.NODE_ENV === "development" && <Agentation className="!top-4 !right-4 !bottom-auto !left-auto" />}
       </body>
     </html>
   );

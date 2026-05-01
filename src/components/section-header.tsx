@@ -10,7 +10,7 @@ export function SectionHeader({ title, tag }: SectionHeaderProps) {
         {title}
       </h2>
       <div className="flex-1 h-px bg-foreground opacity-10" />
-      <span className="section-tag text-foreground shrink-0">
+      <span className="section-tag text-foreground shrink-0 hidden">
         {tag}
       </span>
     </div>

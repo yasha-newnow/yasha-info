@@ -67,6 +67,9 @@ export function applyTheme(accentHex: string): void {
     darkMode ? "rgba(0, 0, 0, 0.15)" : "rgba(255, 255, 255, 0.12)"
   );
 
+  window.dispatchEvent(
+    new CustomEvent("themechange", { detail: { isLight: !darkMode } })
+  );
 }
 
 /** Picker uses inverted theme: dark page → light picker, light page → dark picker */

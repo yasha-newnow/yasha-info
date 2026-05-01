@@ -92,6 +92,34 @@ body {
       line-height: 40px;
     }
   }
+
+  /* Hero-specific tokens (additive — does not modify existing h2/.section-tag) */
+  h2.hero-title {
+    font-family: var(--font-heading), var(--font-sans), system-ui, sans-serif;
+    font-weight: 1000;
+    font-size: 80px;
+    line-height: 72px;
+    text-transform: uppercase;
+  }
+  @media (min-width: 1024px) {
+    h2.hero-title {
+      font-size: 104px;
+      line-height: 88px;
+    }
+  }
+  .hero-description {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 32px;
+    opacity: 0.7;
+  }
+  @media (min-width: 1024px) {
+    .hero-description {
+      font-size: 32px;
+      line-height: 40px;
+    }
+  }
 }
 
 /* Button Menu Secondary */
