@@ -9,6 +9,13 @@ export interface ProjectImage {
   shadow: string;
 }
 
+export interface GalleryImage {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
 export interface Project {
   slug: string;
   company: string;
@@ -17,6 +24,7 @@ export interface Project {
   jobTitle: string;
   bullets: string[];
   images: ProjectImage[];
+  galleryImages: GalleryImage[];
   mobileImageSrc: string;
   mobileImageAlt: string;
 }
@@ -68,6 +76,14 @@ export const projects: Project[] = [
         shadow: IMAGE_SHADOW,
       },
     ],
+    galleryImages: [
+      { src: "/images/projects/preply-main.jpg", alt: "Preply SEO analysis interface", width: 839, height: 525 },
+      { src: "/images/projects/preply-sidebar.jpg", alt: "Preply sidebar navigation", width: 180, height: 578 },
+      { src: "/images/projects/preply-panels.jpg", alt: "Preply analysis panels", width: 225, height: 578 },
+      { src: "/images/projects/preply-main.jpg", alt: "Preply analysis — additional view 1", width: 839, height: 525 },
+      { src: "/images/projects/preply-main.jpg", alt: "Preply analysis — additional view 2", width: 839, height: 525 },
+      { src: "/images/projects/preply-main.jpg", alt: "Preply analysis — additional view 3", width: 839, height: 525 },
+    ],
     mobileImageSrc: "/images/projects/preply-main.jpg",
     mobileImageAlt: "Preply product interface",
   },
@@ -115,6 +131,11 @@ export const projects: Project[] = [
         shadow: IMAGE_SHADOW,
       },
     ],
+    galleryImages: [
+      { src: "/images/projects/preply-main.jpg", alt: "FinFlow dashboard", width: 839, height: 525 },
+      { src: "/images/projects/preply-sidebar.jpg", alt: "FinFlow sidebar", width: 180, height: 578 },
+      { src: "/images/projects/preply-panels.jpg", alt: "FinFlow panels", width: 225, height: 578 },
+    ],
     mobileImageSrc: "/images/projects/preply-main.jpg",
     mobileImageAlt: "FinFlow dashboard interface",
   },
@@ -161,6 +182,11 @@ export const projects: Project[] = [
         borderRadius: 20,
         shadow: IMAGE_SHADOW,
       },
+    ],
+    galleryImages: [
+      { src: "/images/projects/preply-main.jpg", alt: "Soundscape player", width: 839, height: 525 },
+      { src: "/images/projects/preply-sidebar.jpg", alt: "Soundscape sidebar", width: 180, height: 578 },
+      { src: "/images/projects/preply-panels.jpg", alt: "Soundscape panels", width: 225, height: 578 },
     ],
     mobileImageSrc: "/images/projects/preply-main.jpg",
     mobileImageAlt: "Soundscape music app",
