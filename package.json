@@ -10,7 +10,6 @@
     "postinstall": "node scripts/patch-vaul.mjs"
   },
   "dependencies": {
-    "@calcom/embed-react": "^1.5.3",
     "dialkit": "^1.1.0",
     "framer-motion": "^12.38.0",
     "motion": "^12.38.0",

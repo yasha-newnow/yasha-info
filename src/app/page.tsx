@@ -8,7 +8,8 @@ import { MobileNav } from "@/components/mobile-nav";
 import { ButtonCustomization } from "@/components/button-customization";
 import { WorksSection } from "@/components/works-section";
 import { AboutSection } from "@/components/about-section";
-import { ContactSection } from "@/components/contact-section";
+import { SectionHeader } from "@/components/section-header";
+import { sections } from "@/data/navigation";
 
 const SIDEBAR_DELAY = 3.2;
 const PICKER_DELAY = 4.2;
@@ -31,11 +32,9 @@ export default function Home() {
     }
     const main = mainRef.current;
     if (main) {
-      main.style.overflow = "visible";
+      main.style.overflow = "hidden";
       main.style.touchAction = "none";
     }
-    document.body.style.overflow = "hidden";
-    document.body.style.touchAction = "none";
     const sidebarTimer = setTimeout(
       () => setShowSidebar(true),
       SIDEBAR_DELAY * 1000,
@@ -46,8 +45,6 @@ export default function Home() {
         main.style.overflow = "";
         main.style.touchAction = "";
       }
-      document.body.style.overflow = "";
-      document.body.style.touchAction = "";
     }, PICKER_DELAY * 1000);
     return () => {
       clearTimeout(sidebarTimer);
@@ -56,8 +53,6 @@ export default function Home() {
         main.style.overflow = "";
         main.style.touchAction = "";
       }
-      document.body.style.overflow = "";
-      document.body.style.touchAction = "";
     };
   }, [reducedMotion]);
 
@@ -68,7 +63,7 @@ export default function Home() {
 
       <main
         ref={mainRef}
-        className="flex flex-col flex-1 relative overflow-y-auto overflow-x-clip scroll-smooth pt-20 lg:pt-0"
+        className="flex flex-col flex-1 relative overflow-y-auto scroll-smooth pt-20 lg:pt-0"
       >
         <div className="max-w-[1280px] mx-auto w-full min-h-full">
           <Hero />
@@ -77,7 +72,16 @@ export default function Home() {
 
           <AboutSection />
 
-          <ContactSection />
+          <section
+            id={sections[2].id}
+            className="min-h-screen flex flex-col px-0 pt-20 pb-6 lg:px-10 lg:pb-10"
+          >
+            <SectionHeader title={sections[2].title} tag={sections[2].tag} />
+            <p className="text-xl max-w-xl opacity-70">
+              Get in touch for collaboration, consulting, or just to say hello.
+              This is a placeholder section for testing anchor navigation.
+            </p>
+          </section>
         </div>
       </main>
 
