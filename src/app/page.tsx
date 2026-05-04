@@ -8,8 +8,7 @@ import { MobileNav } from "@/components/mobile-nav";
 import { ButtonCustomization } from "@/components/button-customization";
 import { WorksSection } from "@/components/works-section";
 import { AboutSection } from "@/components/about-section";
-import { SectionHeader } from "@/components/section-header";
-import { sections } from "@/data/navigation";
+import { ContactSection } from "@/components/contact-section";
 
 const SIDEBAR_DELAY = 3.2;
 const PICKER_DELAY = 4.2;
@@ -72,16 +71,7 @@ export default function Home() {
 
           <AboutSection />
 
-          <section
-            id={sections[2].id}
-            className="min-h-screen flex flex-col px-0 pt-20 pb-6 lg:px-10 lg:pb-10"
-          >
-            <SectionHeader title={sections[2].title} tag={sections[2].tag} />
-            <p className="text-xl max-w-xl opacity-70">
-              Get in touch for collaboration, consulting, or just to say hello.
-              This is a placeholder section for testing anchor navigation.
-            </p>
-          </section>
+          <ContactSection />
         </div>
       </main>
 
