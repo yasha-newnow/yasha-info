@@ -56,7 +56,7 @@ export default function Home() {
   }, [reducedMotion]);
 
   return (
-    <div className="flex flex-col lg:flex-row h-dvh px-4 lg:gap-0 relative">
+    <div className="flex flex-col lg:flex-row h-dvh lg:px-4 lg:gap-0 relative">
       <MobileNav show={showSidebar} scrollContainer={mainRef} />
       <Sidebar show={showSidebar} delay={0} scrollContainer={mainRef} />
 
@@ -64,7 +64,7 @@ export default function Home() {
         ref={mainRef}
         className="flex flex-col flex-1 relative overflow-y-auto scroll-smooth pt-20 lg:pt-0"
       >
-        <div className="max-w-[1280px] mx-auto w-full min-h-full">
+        <div className="max-w-[1280px] mx-auto w-full min-h-full px-4 lg:px-0">
           <Hero />
 
           <WorksSection />

@@ -194,7 +194,7 @@ export function AboutSection() {
         {/* Work History — NO glass card (Paper Design node 2Q-0) */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-col gap-6 mt-20"
+          className="flex flex-col gap-5 lg:gap-6 mt-10 lg:mt-16"
         >
           <h3 className="text-2xl font-semibold leading-8 text-foreground">
             Work history

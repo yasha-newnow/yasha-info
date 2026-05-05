@@ -37,7 +37,7 @@ export function ContactSection() {
       <SectionHeader title={section.title} tag={section.tag} />
 
       <motion.div
-        className="flex flex-col lg:px-2 gap-10 lg:gap-16 mt-10 lg:mt-16"
+        className="flex flex-col lg:px-2 gap-10 lg:gap-8 mt-10 lg:mt-0"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -45,7 +45,9 @@ export function ContactSection() {
       >
         <motion.div variants={itemVariants} className="flex flex-col gap-3">
           <p className="text-2xl font-semibold leading-8 text-foreground lg:text-[32px] lg:leading-[40px]">
-            Always open to interesting projects and challenges. Let&apos;s build something together.
+            Always open to interesting projects and challenges.
+            <br />
+            Let&apos;s build something together.
           </p>
           <p className="text-base leading-6 text-foreground opacity-70">
             Schedule a quick, 15 minute intro to see if we&apos;re good fit.
@@ -58,7 +60,7 @@ export function ContactSection() {
         <motion.div
           ref={calRef}
           variants={itemVariants}
-          className="w-full max-w-[1100px] mx-auto min-h-[640px] lg:min-h-[680px]"
+          className="w-full min-h-[640px] lg:min-h-[680px]"
         >
           {calInView && <CalInline />}
         </motion.div>

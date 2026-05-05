@@ -3,16 +3,20 @@
 import Cal, { getCalApi } from "@calcom/embed-react";
 import { useEffect } from "react";
 
-// month_view (calendar grid + slots panel) needs ~840px of iframe width to
-// render without Cal's own internal h-scrollbar. Section width = viewport −
-// sidebar(~290) − padding(80). Below this viewport, fall back to column_view.
+// Layout zones:
+// - viewport < 1024 (mobile/tablet): no sidebar, month_view + Cal's
+//   useSlotsViewOnSmallScreen handles compact rendering natively.
+// - viewport 1024–1279 (narrow desktop with sidebar): section is too narrow
+//   (~700–800px) for month_view → column_view (compact column picker).
+// - viewport >= 1280 (wide desktop): section is wide enough for full month_view.
+const SIDEBAR_BREAKPOINT = 1024;
 const MONTH_VIEW_MIN_VIEWPORT = 1280;
 
 function getLayout(): "month_view" | "column_view" {
   if (typeof window === "undefined") return "month_view";
-  return window.innerWidth >= MONTH_VIEW_MIN_VIEWPORT
-    ? "month_view"
-    : "column_view";
+  const w = window.innerWidth;
+  if (w >= SIDEBAR_BREAKPOINT && w < MONTH_VIEW_MIN_VIEWPORT) return "column_view";
+  return "month_view";
 }
 
 export function CalInline() {

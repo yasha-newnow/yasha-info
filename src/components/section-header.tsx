@@ -5,7 +5,7 @@ interface SectionHeaderProps {
 
 export function SectionHeader({ title, tag }: SectionHeaderProps) {
   return (
-    <div className="flex items-baseline gap-4 mb-10 lg:px-2">
+    <div className="flex items-baseline gap-4 mb-10 lg:mb-16 lg:px-2">
       <h2 className="text-foreground shrink-0">
         {title}
       </h2>
