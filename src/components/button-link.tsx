@@ -10,7 +10,7 @@ export function ButtonLink({ onClick, children, ...aria }: ButtonLinkProps) {
     <button
       type="button"
       onClick={onClick}
-      className="button-link text-foreground text-base font-medium leading-6 cursor-pointer bg-transparent border-none p-0"
+      className="button-link body--medium text-foreground cursor-pointer bg-transparent border-none p-0"
       {...aria}
     >
       {children}

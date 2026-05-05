@@ -72,13 +72,13 @@ function ProjectCardDesktop({ project }: ProjectCardProps) {
                   className="rounded-xl"
                 />
                 <div className="flex flex-col gap-1">
-                  <h3 className="font-sans text-[32px] leading-[40px] font-semibold text-card-text pb-1">
+                  <h3 className="title-lg text-card-text pb-1">
                     {project.company}
                   </h3>
-                  <p className="font-sans text-base leading-6 font-medium text-card-text">
+                  <p className="body--medium text-card-text">
                     {project.jobTitle}
                   </p>
-                  <span className="font-tag text-xs leading-4 font-medium uppercase tracking-[0.03em] opacity-70 text-card-text">
+                  <span className="caption text-secondary text-card-text">
                     {project.date}
                   </span>
                 </div>
@@ -88,8 +88,8 @@ function ProjectCardDesktop({ project }: ProjectCardProps) {
               <ul className="flex flex-col opacity-60">
                 {project.bullets.map((bullet) => (
                   <li key={bullet} className="flex items-baseline gap-1">
-                    <span className="font-sans text-base leading-6 text-card-text">•</span>
-                    <span className="font-sans text-sm leading-6 text-card-text">{bullet}</span>
+                    <span className="body text-card-text">•</span>
+                    <span className="body-sm text-card-text">{bullet}</span>
                   </li>
                 ))}
               </ul>
@@ -178,10 +178,10 @@ function ProjectCardMobile({ project }: ProjectCardProps) {
           className="rounded-xl"
         />
         <div className="flex flex-col gap-1">
-          <p className="font-sans text-base leading-6 font-medium text-card-text">
+          <p className="body--medium text-card-text">
             {project.jobTitle}
           </p>
-          <span className="font-tag text-xs leading-4 font-medium uppercase tracking-[0.03em] opacity-70 text-card-text">
+          <span className="caption text-secondary text-card-text">
             {project.date}
           </span>
         </div>

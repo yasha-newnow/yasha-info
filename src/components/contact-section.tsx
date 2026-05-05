@@ -44,12 +44,12 @@ export function ContactSection() {
         viewport={{ once: true, margin: "-100px" }}
       >
         <motion.div variants={itemVariants} className="flex flex-col gap-3">
-          <p className="text-2xl font-semibold leading-8 text-foreground lg:text-[32px] lg:leading-[40px]">
+          <p className="title-lg text-bold text-foreground">
             Always open to interesting projects and challenges.
             <br />
             Let&apos;s build something together.
           </p>
-          <p className="text-base leading-6 text-foreground opacity-70">
+          <p className="body text-secondary text-foreground">
             Schedule a quick, 15 minute intro to see if we&apos;re good fit.
           </p>
         </motion.div>

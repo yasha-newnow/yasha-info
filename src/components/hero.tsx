@@ -105,7 +105,7 @@ export function Hero({
               </span>
             ))}
           </h2>
-          <p className="hero-description">{DESCRIPTION}</p>
+          <p className="title-md text-secondary">{DESCRIPTION}</p>
         </div>
       </div>
     );
@@ -183,7 +183,7 @@ export function Hero({
         </motion.h2>
 
         <motion.p
-          className="hero-description"
+          className="title-md text-secondary"
           initial="hidden"
           animate="show"
           variants={{

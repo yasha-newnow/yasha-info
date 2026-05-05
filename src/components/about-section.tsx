@@ -98,14 +98,14 @@ function EntryRow({ entry }: { entry: WorkHistoryEntry }) {
   return (
     <div className="flex flex-col lg:flex-row lg:items-baseline gap-1 lg:gap-4 py-4">
       <div className="flex-1 flex flex-col gap-0.5">
-        <span className="text-base font-medium leading-6 text-foreground">
+        <span className="body--medium text-foreground">
           {entry.title}
         </span>
-        <span className="text-sm leading-6 text-foreground opacity-70">
+        <span className="body-sm text-secondary text-foreground">
           {entry.description}
         </span>
       </div>
-      <span className="font-tag text-base font-semibold leading-5 text-foreground shrink-0">
+      <span className="tag text-foreground shrink-0">
         {entry.period}
       </span>
     </div>
@@ -143,7 +143,7 @@ export function AboutSection() {
             <div className="w-[132px] h-[56px] shrink-0 flex items-center">
               <WhatIcon className="text-foreground" />
             </div>
-            <p className="flex-1 min-w-[240px] text-base leading-6 text-foreground">{bio[0]}</p>
+            <p className="flex-1 min-w-[240px] body text-foreground">{bio[0]}</p>
           </motion.div>
 
           {/* Card 2: HOW + Skills two columns */}
@@ -157,7 +157,7 @@ export function AboutSection() {
               <div className="w-[132px] h-[56px] shrink-0 flex items-center">
                 <HowIcon className="text-foreground" />
               </div>
-              <p className="flex-1 min-w-[240px] text-base leading-6 text-foreground">{howText}</p>
+              <p className="flex-1 min-w-[240px] body text-foreground">{howText}</p>
             </div>
 
             {/* Right column: Skills with dots and dividers */}
@@ -165,7 +165,7 @@ export function AboutSection() {
               {skills.map((skill, index) => (
                 <Fragment key={skill.name}>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm leading-6 text-foreground">
+                    <span className="body-sm text-foreground">
                       {skill.name}
                     </span>
                     <SkillDots level={skill.level} />
@@ -187,7 +187,7 @@ export function AboutSection() {
             <div className="w-[132px] h-[56px] shrink-0 flex items-center">
               <WhyIcon className="text-foreground" />
             </div>
-            <p className="flex-1 min-w-[240px] text-base leading-6 text-foreground">{bio[1]}</p>
+            <p className="flex-1 min-w-[240px] body text-foreground">{bio[1]}</p>
           </motion.div>
         </div>
 
@@ -196,7 +196,7 @@ export function AboutSection() {
           variants={itemVariants}
           className="flex flex-col gap-5 lg:gap-6 mt-10 lg:mt-16"
         >
-          <h3 className="text-2xl font-semibold leading-8 text-foreground">
+          <h3 className="title-md text-bold text-foreground">
             Work history
           </h3>
 

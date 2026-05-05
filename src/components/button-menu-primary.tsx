@@ -28,7 +28,7 @@ function Tag({
 
   return (
     <span
-      className="inline-flex items-start rounded px-1 pt-0.5 font-tag font-semibold text-[16px] leading-[20px] uppercase whitespace-nowrap"
+      className="tag inline-flex items-start rounded px-1 pt-0.5 whitespace-nowrap"
       style={{
         backgroundColor: isSelected ? "var(--accent)" : "var(--foreground)",
         color: isSelected ? "var(--foreground)" : "var(--accent)",
@@ -152,7 +152,7 @@ function DesktopNav({
               onMouseLeave={() => setHoveredIndex(null)}
             >
               <span
-                className="font-sans font-semibold text-2xl leading-8"
+                className="title-md text-bold"
                 style={{
                   color: isSelected ? "var(--accent)" : undefined,
                 }}
@@ -243,7 +243,7 @@ function MobileNav({
               onPointerLeave={() => setPressedIndex(null)}
             >
               <span
-                className="font-sans font-semibold text-[40px] leading-[48px]"
+                className="title-xl"
                 style={{
                   color: isActive ? "var(--accent)" : undefined,
                 }}

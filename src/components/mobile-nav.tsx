@@ -263,7 +263,7 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
             >
               <div className="flex flex-col gap-5 px-3">
                 <motion.span
-                  className="font-handwritten text-[28px] leading-8 font-normal"
+                  className="handwritten"
                   variants={fadeInItem}
                 >
                   Yasha Petrunin

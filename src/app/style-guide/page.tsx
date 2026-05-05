@@ -18,7 +18,7 @@ const FONTS = [
   {
     name: "Druk Cond Super",
     cssVar: "--font-heading",
-    role: "section H2 (display)",
+    role: "section H2 + hero (display)",
     weights: "1000",
     sample: "WORKS & BITS",
     fontFamily: "var(--font-heading)",
@@ -39,21 +39,14 @@ const FONTS = [
     sample: "Yasha Petrunin",
     fontFamily: "var(--font-handwritten)",
   },
-  {
-    name: "Roboto Mono",
-    cssVar: "--font-mono",
-    role: "monospace (currently unused)",
-    weights: "400",
-    sample: "const greeting = 'hello';",
-    fontFamily: "var(--font-mono)",
-  },
 ];
 
 const MAX_WIDTHS = [
-  { value: 1280, where: "src/app/page.tsx:31 — main wrapper" },
-  { value: 1200, where: "src/components/project-sheet.tsx:61 — sheet content" },
+  { value: 1280, where: "src/app/page.tsx:68 — main wrapper" },
+  { value: 1200, where: "src/components/project-sheet.tsx:42 — sheet content" },
   { value: 1200, where: "src/components/project-card.tsx:26 — card outer" },
-  { value: 1003, where: "src/components/hero.tsx:77 — hero description" },
+  { value: 800, where: "src/components/hero.tsx:96, 137 — hero column" },
+  { value: 456, where: "src/components/hero.tsx:97, 142 — hero ASCII" },
 ];
 
 export default function StyleGuidePage() {
@@ -83,7 +76,7 @@ export default function StyleGuidePage() {
         {/* Fonts */}
         <Section
           title="Fonts"
-          description="5 font families wired through globals.css @theme variables."
+          description="4 font families wired through globals.css @theme variables."
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {FONTS.map((f) => (

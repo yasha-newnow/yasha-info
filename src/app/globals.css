@@ -43,7 +43,6 @@
   --color-accent: var(--accent);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter-tight);
-  --font-mono: var(--font-roboto-mono);
   --font-tag: var(--font-stick-no-bills);
   --font-handwritten: var(--font-homemade-apple);
   --font-heading: var(--font-druk-cond);
@@ -76,8 +75,8 @@ body {
   }
   @media (min-width: 1024px) {
     h2 {
-      font-size: 104px;
-      line-height: 88px;
+      font-size: 88px;
+      line-height: 76px;
     }
   }
   .section-tag {
@@ -107,18 +106,89 @@ body {
       line-height: 88px;
     }
   }
-  .hero-description {
+  /* TITLE — Inter Tight Semibold, no transform */
+  .title-xl {
     font-family: var(--font-sans), system-ui, sans-serif;
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 32px;
-    opacity: 0.7;
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 48px;
+  }
+  .title-lg {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 36px;
   }
   @media (min-width: 1024px) {
-    .hero-description {
+    .title-lg {
       font-size: 32px;
       line-height: 40px;
     }
+  }
+  .title-md {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+  }
+  @media (min-width: 1024px) {
+    .title-md {
+      font-size: 24px;
+      line-height: 32px;
+    }
+  }
+
+  /* BODY — Inter Tight, w400 default; --medium modifier for w500 */
+  .body {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .body--medium {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .body-sm {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  /* TAG — Stick No Bills, uppercase */
+  .tag {
+    font-family: var(--font-tag);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    text-transform: uppercase;
+  }
+  .caption {
+    font-family: var(--font-tag);
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  /* DECORATIVE — Homemade Apple */
+  .handwritten {
+    font-family: var(--font-handwritten);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 32px;
+  }
+
+  /* MODIFIERS — universal, apply on top of any text class */
+  .text-bold {
+    font-weight: 600;
+  }
+  .text-secondary {
+    opacity: 0.6;
   }
 }
 

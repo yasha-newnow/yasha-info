@@ -96,7 +96,7 @@ export function ButtonMenuSecondary({ items, itemVariants }: ButtonMenuSecondary
           />
         ) : (
           <>
-            <span className="text-base font-medium leading-6">{item.label}</span>
+            <span className="body--medium">{item.label}</span>
             {item.icon}
           </>
         );
@@ -157,7 +157,7 @@ function SwapContent({
 }) {
   return (
     <>
-      <span className="grid items-center text-base font-medium leading-6">
+      <span className="grid items-center body--medium">
         <span
           className="button-menu-item-swap-layer"
           data-hidden={isFeedback}

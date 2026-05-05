@@ -6,7 +6,7 @@ import { AnimatedClock, AnimatedGlobe } from "./icons";
 function Badge({ icon, text }: { icon: ReactNode; text: string }) {
   return (
     <span
-      className="inline-flex items-center gap-1 rounded-full font-tag font-medium text-[12px] uppercase tracking-[0.03em] opacity-70"
+      className="caption text-secondary inline-flex items-center gap-1 rounded-full"
       style={{
         padding: "2px 8px 2px 3px",
         backgroundColor:

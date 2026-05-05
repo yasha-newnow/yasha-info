@@ -43,7 +43,7 @@ export function ProjectSheet({ project, open, onOpenChange, onAnimationEnd }: Pr
               {/* Bullets */}
               <ul className="flex flex-col gap-1 mb-8">
                 {project.bullets.map((bullet) => (
-                  <li key={bullet} className="flex items-baseline gap-2 font-sans text-base text-card-text">
+                  <li key={bullet} className="flex items-baseline gap-2 body text-card-text">
                     <span className="opacity-40">·</span>
                     <span>{bullet}</span>
                   </li>
