@@ -10,8 +10,10 @@ import { WorksSection } from "@/components/works-section";
 import { AboutSection } from "@/components/about-section";
 import { ContactSection } from "@/components/contact-section";
 
-const SIDEBAR_DELAY = 3.2;
-const PICKER_DELAY = 4.2;
+// Shifted by 0.3s along with the rest of entrance timings to accommodate the
+// 300ms fade-in lead delay on the shader (see hero.tsx FADE_IN_DELAY_MS).
+const SIDEBAR_DELAY = 3.5;
+const PICKER_DELAY = 4.5;
 const PICKER_DURATION = 0.25;
 const PICKER_SLIDE_X = 6;
 const PICKER_SLIDE_Y = 6;

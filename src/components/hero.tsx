@@ -67,9 +67,12 @@ export const DEFAULT_ENTRANCE_TUNING: EntranceTuning = {
   duration: 1.2,
   initialScale: 1.6,
   easing: "iosDrawer",
-  shaderDelay: 1.5,
-  titleDelay: 1.7,
-  descriptionDelay: 2.6,
+  // Shifted by 0.3s to accommodate the 300ms fade-in lead delay so all
+  // entrance animations (shader scale, title, description, sidebar, color
+  // picker in page.tsx) remain in sync relative to the shader appearing.
+  shaderDelay: 1.8,
+  titleDelay: 2.0,
+  descriptionDelay: 2.9,
 };
 
 interface HeroProps {
@@ -104,10 +107,16 @@ export function Hero({
     // so its growth doesn't push siblings). CSS transform on a canvas parent
     // creates a desktop compositor layer that snap-rasterizes at animation
     // end — layout properties bypass that pathway entirely.
+    //
+    // Two animation phases run within the same RAF:
+    //  1. Fade-in + blur-in (0..150ms): opacity 0→1, blur 8px→0. Avoids the
+    //     jarring "shader pops in fully visible" feel. Mirrors the blur-fade
+    //     pattern used for title chars (4px) and description words (6px).
+    //  2. Scale + translate (after shaderDelay): shrinks from 1.6× and slides
+    //     to layout position with the iosDrawer easing.
     wrapper.style.position = "relative";
     wrapper.style.left = `${dx}px`;
     wrapper.style.top = `${dy}px`;
-    wrapper.style.opacity = "1";
 
     const startSize = baseSize * initialScale;
     const startOffset = (baseSize - startSize) / 2;
@@ -117,6 +126,11 @@ export function Hero({
     shader.style.left = `${startOffset}px`;
     shader.style.top = `${startOffset}px`;
 
+    const FADE_IN_DELAY_MS = 300;
+    const FADE_IN_MS = 350;
+    const INITIAL_BLUR_PX = 8;
+    const fadeEasing = makeCubicBezier(ENTRANCE_EASINGS.easeOutStrong);
+
     const easing = makeCubicBezier(ENTRANCE_EASINGS[entranceTuning.easing]);
     const delayMs = entranceTuning.shaderDelay * 1000;
     const durationMs = entranceTuning.duration * 1000;
@@ -125,6 +139,19 @@ export function Hero({
     let raf = 0;
     const tick = (now: number) => {
       const elapsed = now - mountTime;
+
+      // Phase 1: fade-in + blur-in (after lead delay so user has time to
+      // notice the shader appearing rather than missing it during page-load
+      // visual settle)
+      let fadeProgress = 0;
+      if (elapsed >= FADE_IN_DELAY_MS) {
+        fadeProgress = Math.min(1, (elapsed - FADE_IN_DELAY_MS) / FADE_IN_MS);
+      }
+      const fadeEased = fadeEasing(fadeProgress);
+      wrapper.style.opacity = String(fadeEased);
+      wrapper.style.filter = `blur(${INITIAL_BLUR_PX * (1 - fadeEased)}px)`;
+
+      // Phase 2: scale + translate
       let progress = 0;
       if (elapsed >= delayMs) {
         progress = Math.min(1, (elapsed - delayMs) / durationMs);
@@ -144,7 +171,7 @@ export function Hero({
       shader.style.left = `${offset}px`;
       shader.style.top = `${offset}px`;
 
-      if (progress < 1) {
+      if (fadeProgress < 1 || progress < 1) {
         raf = requestAnimationFrame(tick);
       }
     };
@@ -199,7 +226,7 @@ export function Hero({
       <div
         ref={wrapperRef}
         className="w-full max-w-[456px] aspect-square"
-        style={{ position: "relative", opacity: 0 }}
+        style={{ position: "relative", opacity: 0, filter: "blur(8px)" }}
       >
         <div
           ref={shaderRef}
