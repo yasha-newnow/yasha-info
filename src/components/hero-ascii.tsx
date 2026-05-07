@@ -204,13 +204,27 @@ export function HeroAscii({
     let w = 0, h = 0;
 
     const resize = () => {
-      w = Math.max(1, wrap.clientWidth);
-      h = Math.max(1, wrap.clientHeight);
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      canvas.style.width = w + "px";
-      canvas.style.height = h + "px";
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const wNow = Math.max(1, wrap.clientWidth);
+      const hNow = Math.max(1, wrap.clientHeight);
+      // Conditional: assigning to canvas.width/height ALWAYS clears the bitmap
+      // (Canvas 2D spec). When ResizeObserver fires every frame during an
+      // external entrance animation that resizes the wrap, an unconditional
+      // re-assignment here blanks the bitmap right after tick() rendered it
+      // — visible as "shader disappears mid-animation". Skip the assignment
+      // when the canvas already has the right physical dimensions.
+      if (canvas.width !== wNow * dpr || canvas.height !== hNow * dpr) {
+        w = wNow;
+        h = hNow;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        canvas.style.width = w + "px";
+        canvas.style.height = h + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      } else {
+        // Even if canvas size unchanged, sync local w/h closure vars (cheap).
+        w = wNow;
+        h = hNow;
+      }
     };
 
     const ro = new ResizeObserver(resize);
@@ -224,6 +238,26 @@ export function HeroAscii({
     const start = performance.now();
 
     const tick = (now: number) => {
+      // Synchronously sync canvas physical size to current wrap dimensions
+      // before any rendering. ResizeObserver alone fires async after layout
+      // commit — when an external animation (e.g. the Hero entrance scaling
+      // wrap.width/height every frame) resizes wrap rapidly, the observer
+      // fires AFTER this tick has already drawn at the previous size, then
+      // assigns canvas.width which clears the bitmap. Result: blank frames
+      // mid-animation. Doing the resize here, in the same RAF as drawing,
+      // guarantees every painted frame is sized correctly.
+      const wNow = Math.max(1, wrap.clientWidth);
+      const hNow = Math.max(1, wrap.clientHeight);
+      if (canvas.width !== wNow * dpr || canvas.height !== hNow * dpr) {
+        w = wNow;
+        h = hNow;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        canvas.style.width = w + "px";
+        canvas.style.height = h + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
       const tu = tuningRef.current;
       const t = Math.min(1, (now - start) / tu.durationMs);
       const targetCols = tu.colsStart + (tu.colsEnd - tu.colsStart) * easeInOutCubic(t);

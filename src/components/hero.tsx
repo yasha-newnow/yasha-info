@@ -82,28 +82,49 @@ export function Hero({
   entranceTuning = DEFAULT_ENTRANCE_TUNING,
 }: HeroProps) {
   const reducedMotion = useReducedMotion();
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const shaderRef = useRef<HTMLDivElement>(null);
   const didAnimateRef = useRef(false);
 
   useLayoutEffect(() => {
     if (reducedMotion || didAnimateRef.current) return;
-    const el = shaderRef.current;
-    if (!el) return;
+    const wrapper = wrapperRef.current;
+    const shader = shaderRef.current;
+    if (!wrapper || !shader) return;
     didAnimateRef.current = true;
 
-    const r = el.getBoundingClientRect();
-    const dx = window.innerWidth / 2 - (r.left + r.width / 2);
-    const dy = window.innerHeight / 2 - (r.top + r.height / 2);
+    const wRect = wrapper.getBoundingClientRect();
+    const baseSize = wRect.width;
+    const dx = window.innerWidth / 2 - (wRect.left + wRect.width / 2);
+    const dy = window.innerHeight / 2 - (wRect.top + wRect.height / 2);
+    const initialScale = entranceTuning.initialScale;
 
-    // Animate `left`/`top` (layout properties) instead of `transform`.
-    // CSS transform animations on a parent of <canvas> create a compositor
-    // layer that gets de-composed at animation end → re-rasterization snap
-    // (the desktop-only glyph density jump). Layout properties never trigger
-    // compositor layer creation, so the entire snap pathway is bypassed.
-    el.style.position = "relative";
-    el.style.left = `${dx}px`;
-    el.style.top = `${dy}px`;
-    el.style.opacity = "1";
+    // Replicate the original "scale 1.6 → 1.0 + translate from viewport center"
+    // entrance using **layout properties only** — no CSS transform anywhere.
+    //
+    //  - Outer wrapper (in flex flow): animates `left`/`top` (translate from
+    //    viewport center → layout position). `position: relative` keeps the
+    //    layout slot reserved without affecting siblings.
+    //  - Inner shader: animates `width`/`height` and `left`/`top` (scale from
+    //    1.6×, centered in the wrapper). `position: absolute` so its size
+    //    growth doesn't push surrounding layout — it overflows visually,
+    //    matching the old CSS transform character.
+    //
+    // Smooth animation depends on HeroAscii's tick() syncing canvas physical
+    // size to wrap.clientWidth in the same RAF — see the matching change in
+    // hero-ascii.tsx tick().
+    wrapper.style.position = "relative";
+    wrapper.style.left = `${dx}px`;
+    wrapper.style.top = `${dy}px`;
+    wrapper.style.opacity = "1";
+
+    const startSize = baseSize * initialScale;
+    const startOffset = (baseSize - startSize) / 2;
+    shader.style.position = "absolute";
+    shader.style.width = `${startSize}px`;
+    shader.style.height = `${startSize}px`;
+    shader.style.left = `${startOffset}px`;
+    shader.style.top = `${startOffset}px`;
 
     const easing = makeCubicBezier(ENTRANCE_EASINGS[entranceTuning.easing]);
     const delayMs = entranceTuning.shaderDelay * 1000;
@@ -118,8 +139,20 @@ export function Hero({
         progress = Math.min(1, (elapsed - delayMs) / durationMs);
       }
       const eased = easing(progress);
-      el.style.left = `${dx * (1 - eased)}px`;
-      el.style.top = `${dy * (1 - eased)}px`;
+
+      // Translate the wrapper toward its layout position
+      wrapper.style.left = `${dx * (1 - eased)}px`;
+      wrapper.style.top = `${dy * (1 - eased)}px`;
+
+      // Scale the shader by animating its physical width/height
+      const currentScale = initialScale + (1 - initialScale) * eased;
+      const size = baseSize * currentScale;
+      const offset = (baseSize - size) / 2;
+      shader.style.width = `${size}px`;
+      shader.style.height = `${size}px`;
+      shader.style.left = `${offset}px`;
+      shader.style.top = `${offset}px`;
+
       if (progress < 1) {
         raf = requestAnimationFrame(tick);
       }
@@ -173,11 +206,22 @@ export function Hero({
   return (
     <div className="flex flex-col items-start justify-center gap-10 lg:gap-20 py-30 lg:p-10 max-w-[800px] min-h-full">
       <div
-        ref={shaderRef}
+        ref={wrapperRef}
         className="w-full max-w-[456px] aspect-square"
-        style={{ opacity: 0 }}
+        style={{ position: "relative", opacity: 0 }}
       >
-        <HeroAscii className="w-full h-full" />
+        <div
+          ref={shaderRef}
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            left: 0,
+            top: 0,
+          }}
+        >
+          <HeroAscii className="w-full h-full" />
+        </div>
       </div>
 
       <div className="flex flex-col gap-6 lg:gap-10">
