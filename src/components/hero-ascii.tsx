@@ -231,9 +231,8 @@ export function HeroAscii({
       const cols = Math.max(1, Math.floor(w / cell));
       const rows = Math.max(1, Math.floor(h / cell));
 
-      ctx.clearRect(0, 0, w, h);
-
       if (video.readyState >= 2 && video.videoWidth > 0) {
+        ctx.clearRect(0, 0, w, h);
         sample.width = cols;
         sample.height = rows;
 

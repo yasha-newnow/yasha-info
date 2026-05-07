@@ -1,8 +1,33 @@
 "use client";
 
 import { Fragment, useLayoutEffect, useRef } from "react";
-import { motion, useAnimation, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { HeroAscii } from "./hero-ascii";
+
+// Cubic-bezier evaluator (Newton-Raphson) — mirrors browser CSS easing for
+// `[p1x, p1y, p2x, p2y]`. Used to animate layout properties ourselves so we
+// can drive them off transform pipeline (which causes the desktop snap).
+function makeCubicBezier(coords: [number, number, number, number]): (t: number) => number {
+  const [p1x, p1y, p2x, p2y] = coords;
+  const ax = 1 - 3 * p2x + 3 * p1x;
+  const bx = 3 * p2x - 6 * p1x;
+  const cx = 3 * p1x;
+  const ay = 1 - 3 * p2y + 3 * p1y;
+  const by = 3 * p2y - 6 * p1y;
+  const cy = 3 * p1y;
+  return (t: number) => {
+    if (t <= 0) return 0;
+    if (t >= 1) return 1;
+    let x = t;
+    for (let i = 0; i < 6; i++) {
+      const xCur = ((ax * x + bx) * x + cx) * x;
+      const dxCur = (3 * ax * x + 2 * bx) * x + cx;
+      if (Math.abs(dxCur) < 1e-6) break;
+      x = x - (xCur - t) / dxCur;
+    }
+    return ((ay * x + by) * x + cy) * x;
+  };
+}
 
 const TITLE_LINES = ["I'm Yasha,", "Product Designer."];
 const DESCRIPTION =
@@ -58,7 +83,6 @@ export function Hero({
 }: HeroProps) {
   const reducedMotion = useReducedMotion();
   const shaderRef = useRef<HTMLDivElement>(null);
-  const shaderControls = useAnimation();
   const didAnimateRef = useRef(false);
 
   useLayoutEffect(() => {
@@ -71,25 +95,38 @@ export function Hero({
     const dx = window.innerWidth / 2 - (r.left + r.width / 2);
     const dy = window.innerHeight / 2 - (r.top + r.height / 2);
 
-    shaderControls.set({
-      x: dx,
-      y: dy,
-      scale: entranceTuning.initialScale,
-      opacity: 1,
-    });
-    requestAnimationFrame(() => {
-      shaderControls.start({
-        x: 0,
-        y: 0,
-        scale: 1,
-        transition: {
-          duration: entranceTuning.duration,
-          ease: ENTRANCE_EASINGS[entranceTuning.easing],
-          delay: entranceTuning.shaderDelay,
-        },
-      });
-    });
-  }, [reducedMotion, shaderControls, entranceTuning]);
+    // Animate `left`/`top` (layout properties) instead of `transform`.
+    // CSS transform animations on a parent of <canvas> create a compositor
+    // layer that gets de-composed at animation end → re-rasterization snap
+    // (the desktop-only glyph density jump). Layout properties never trigger
+    // compositor layer creation, so the entire snap pathway is bypassed.
+    el.style.position = "relative";
+    el.style.left = `${dx}px`;
+    el.style.top = `${dy}px`;
+    el.style.opacity = "1";
+
+    const easing = makeCubicBezier(ENTRANCE_EASINGS[entranceTuning.easing]);
+    const delayMs = entranceTuning.shaderDelay * 1000;
+    const durationMs = entranceTuning.duration * 1000;
+    const mountTime = performance.now();
+
+    let raf = 0;
+    const tick = (now: number) => {
+      const elapsed = now - mountTime;
+      let progress = 0;
+      if (elapsed >= delayMs) {
+        progress = Math.min(1, (elapsed - delayMs) / durationMs);
+      }
+      const eased = easing(progress);
+      el.style.left = `${dx * (1 - eased)}px`;
+      el.style.top = `${dy * (1 - eased)}px`;
+      if (progress < 1) {
+        raf = requestAnimationFrame(tick);
+      }
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [reducedMotion, entranceTuning]);
 
   if (reducedMotion) {
     return (
@@ -135,15 +172,13 @@ export function Hero({
 
   return (
     <div className="flex flex-col items-start justify-center gap-10 lg:gap-20 py-30 lg:p-10 max-w-[800px] min-h-full">
-      <motion.div
+      <div
         ref={shaderRef}
-        animate={shaderControls}
-        initial={false}
-        className="w-full max-w-[456px] aspect-square will-change-transform"
-        style={{ transformOrigin: "center", opacity: 0 }}
+        className="w-full max-w-[456px] aspect-square"
+        style={{ opacity: 0 }}
       >
         <HeroAscii className="w-full h-full" />
-      </motion.div>
+      </div>
 
       <div className="flex flex-col gap-6 lg:gap-10">
         <motion.h2
