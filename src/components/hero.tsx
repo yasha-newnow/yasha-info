@@ -99,20 +99,11 @@ export function Hero({
     const dy = window.innerHeight / 2 - (wRect.top + wRect.height / 2);
     const initialScale = entranceTuning.initialScale;
 
-    // Replicate the original "scale 1.6 → 1.0 + translate from viewport center"
-    // entrance using **layout properties only** — no CSS transform anywhere.
-    //
-    //  - Outer wrapper (in flex flow): animates `left`/`top` (translate from
-    //    viewport center → layout position). `position: relative` keeps the
-    //    layout slot reserved without affecting siblings.
-    //  - Inner shader: animates `width`/`height` and `left`/`top` (scale from
-    //    1.6×, centered in the wrapper). `position: absolute` so its size
-    //    growth doesn't push surrounding layout — it overflows visually,
-    //    matching the old CSS transform character.
-    //
-    // Smooth animation depends on HeroAscii's tick() syncing canvas physical
-    // size to wrap.clientWidth in the same RAF — see the matching change in
-    // hero-ascii.tsx tick().
+    // Layout-property entrance (no CSS transform anywhere): wrapper translates
+    // via left/top, inner shader scales via width/height (position: absolute
+    // so its growth doesn't push siblings). CSS transform on a canvas parent
+    // creates a desktop compositor layer that snap-rasterizes at animation
+    // end — layout properties bypass that pathway entirely.
     wrapper.style.position = "relative";
     wrapper.style.left = `${dx}px`;
     wrapper.style.top = `${dy}px`;

@@ -238,25 +238,13 @@ export function HeroAscii({
     const start = performance.now();
 
     const tick = (now: number) => {
-      // Synchronously sync canvas physical size to current wrap dimensions
-      // before any rendering. ResizeObserver alone fires async after layout
-      // commit — when an external animation (e.g. the Hero entrance scaling
-      // wrap.width/height every frame) resizes wrap rapidly, the observer
-      // fires AFTER this tick has already drawn at the previous size, then
-      // assigns canvas.width which clears the bitmap. Result: blank frames
-      // mid-animation. Doing the resize here, in the same RAF as drawing,
-      // guarantees every painted frame is sized correctly.
-      const wNow = Math.max(1, wrap.clientWidth);
-      const hNow = Math.max(1, wrap.clientHeight);
-      if (canvas.width !== wNow * dpr || canvas.height !== hNow * dpr) {
-        w = wNow;
-        h = hNow;
-        canvas.width = w * dpr;
-        canvas.height = h * dpr;
-        canvas.style.width = w + "px";
-        canvas.style.height = h + "px";
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      }
+      // Sync canvas physical size to current wrap dimensions in the same RAF
+      // as drawing. ResizeObserver alone fires async after layout commit —
+      // when an external animation resizes wrap each frame, the observer can
+      // run AFTER tick rendered at stale dimensions and re-blank the canvas
+      // via canvas.width assignment. resize() is conditional (no-op when size
+      // already correct) so this call is cheap when nothing changed.
+      resize();
 
       const tu = tuningRef.current;
       const t = Math.min(1, (now - start) / tu.durationMs);
