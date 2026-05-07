@@ -1,4 +1,4 @@
-export interface ProjectImage {
+export interface CardImage {
   src: string;
   alt: string;
   width: number;
@@ -9,29 +9,22 @@ export interface ProjectImage {
   shadow: string;
 }
 
-export interface GalleryImage {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-}
-
-export interface Project {
+export interface CaseCard {
   slug: string;
   company: string;
   logoSrc: string;
   date: string;
   jobTitle: string;
   bullets: string[];
-  images: ProjectImage[];
-  galleryImages: GalleryImage[];
+  images: CardImage[];
   mobileImageSrc: string;
   mobileImageAlt: string;
+  caseSlug: string | null;
 }
 
 const IMAGE_SHADOW = "0px 15px 30px #00000012";
 
-export const projects: Project[] = [
+export const caseCards: CaseCard[] = [
   {
     slug: "preply",
     company: "Preply",
@@ -76,16 +69,9 @@ export const projects: Project[] = [
         shadow: IMAGE_SHADOW,
       },
     ],
-    galleryImages: [
-      { src: "/images/projects/preply-main.jpg", alt: "Preply SEO analysis interface", width: 839, height: 525 },
-      { src: "/images/projects/preply-sidebar.jpg", alt: "Preply sidebar navigation", width: 180, height: 578 },
-      { src: "/images/projects/preply-panels.jpg", alt: "Preply analysis panels", width: 225, height: 578 },
-      { src: "/images/projects/preply-main.jpg", alt: "Preply analysis — additional view 1", width: 839, height: 525 },
-      { src: "/images/projects/preply-main.jpg", alt: "Preply analysis — additional view 2", width: 839, height: 525 },
-      { src: "/images/projects/preply-main.jpg", alt: "Preply analysis — additional view 3", width: 839, height: 525 },
-    ],
     mobileImageSrc: "/images/projects/preply-main.jpg",
     mobileImageAlt: "Preply product interface",
+    caseSlug: "preply",
   },
   {
     slug: "finflow",
@@ -131,13 +117,9 @@ export const projects: Project[] = [
         shadow: IMAGE_SHADOW,
       },
     ],
-    galleryImages: [
-      { src: "/images/projects/preply-main.jpg", alt: "FinFlow dashboard", width: 839, height: 525 },
-      { src: "/images/projects/preply-sidebar.jpg", alt: "FinFlow sidebar", width: 180, height: 578 },
-      { src: "/images/projects/preply-panels.jpg", alt: "FinFlow panels", width: 225, height: 578 },
-    ],
     mobileImageSrc: "/images/projects/preply-main.jpg",
     mobileImageAlt: "FinFlow dashboard interface",
+    caseSlug: "finflow",
   },
   {
     slug: "soundscape",
@@ -183,12 +165,8 @@ export const projects: Project[] = [
         shadow: IMAGE_SHADOW,
       },
     ],
-    galleryImages: [
-      { src: "/images/projects/preply-main.jpg", alt: "Soundscape player", width: 839, height: 525 },
-      { src: "/images/projects/preply-sidebar.jpg", alt: "Soundscape sidebar", width: 180, height: 578 },
-      { src: "/images/projects/preply-panels.jpg", alt: "Soundscape panels", width: 225, height: 578 },
-    ],
     mobileImageSrc: "/images/projects/preply-main.jpg",
     mobileImageAlt: "Soundscape music app",
+    caseSlug: "soundscape",
   },
 ];

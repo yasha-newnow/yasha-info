@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { projects, type Project } from "@/data/projects";
+import { preload } from "react-dom";
+import { caseCards } from "@/data/case-cards";
+import { getCaseStudyBySlug, type CaseStudy } from "@/data/case-studies";
 import { sections } from "@/data/navigation";
 import { ProjectCard } from "./project-card";
 import { SectionHeader } from "./section-header";
@@ -30,8 +32,12 @@ const cardVariants = {
   },
 };
 
+function prefetchHero(src: string) {
+  preload(src, { as: "image" });
+}
+
 export function WorksSection() {
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [activeStudy, setActiveStudy] = useState<CaseStudy | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
 
   return (
@@ -48,21 +54,32 @@ export function WorksSection() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
       >
-        {projects.map((project) => (
-          <motion.div key={project.slug} variants={cardVariants} className="w-full">
-            <ProjectCard
-              project={project}
-              onClick={() => { setActiveProject(project); setSheetOpen(true); }}
-            />
-          </motion.div>
-        ))}
+        {caseCards.map((card) => {
+          const study = getCaseStudyBySlug(card.caseSlug);
+          return (
+            <motion.div key={card.slug} variants={cardVariants} className="w-full">
+              <ProjectCard
+                card={card}
+                onClick={
+                  study
+                    ? () => {
+                        setActiveStudy(study);
+                        setSheetOpen(true);
+                      }
+                    : undefined
+                }
+                onPrefetch={study ? () => prefetchHero(study.heroImage.src) : undefined}
+              />
+            </motion.div>
+          );
+        })}
       </motion.div>
 
       <ProjectSheet
-        project={activeProject}
+        caseStudy={activeStudy}
         open={sheetOpen}
         onOpenChange={setSheetOpen}
-        onAnimationEnd={(isOpen) => { if (!isOpen) setActiveProject(null); }}
+        onAnimationEnd={(isOpen) => { if (!isOpen) setActiveStudy(null); }}
       />
     </section>
   );

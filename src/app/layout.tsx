@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter_Tight, Stick_No_Bills, Homemade_Apple } from "next/font/google";
 import localFont from "next/font/local";
-import { DialRoot } from "dialkit";
 import "dialkit/styles.css";
 import "./globals.css";
 
@@ -50,8 +49,10 @@ export default function RootLayout({
       <body className="min-h-full bg-black">
         <div data-vaul-drawer-wrapper="" className="min-h-full" style={{ backgroundColor: "var(--accent)" }}>
           {children}
-          {process.env.NODE_ENV === "development" && <DialRoot />}
         </div>
+        {/* DialKit + Agentation are mounted INSIDE Drawer.Content (project-sheet.tsx)
+            so Vaul's outside-click detection doesn't close the drawer when interacting
+            with dev tools. Trade-off: dev tools visible only when drawer is open. */}
       </body>
     </html>
   );

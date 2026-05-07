@@ -4,11 +4,12 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ExpandIcon } from "./icons";
-import type { Project, ProjectImage } from "@/data/projects";
+import type { CaseCard, CardImage as CardImageData } from "@/data/case-cards";
 
 interface ProjectCardProps {
-  project: Project;
+  card: CaseCard;
   onClick?: () => void;
+  onPrefetch?: () => void;
 }
 
 const springTransition = {
@@ -19,7 +20,7 @@ const springTransition = {
 
 /* ─── Desktop Card ─── */
 
-function ProjectCardDesktop({ project }: ProjectCardProps) {
+function ProjectCardDesktop({ card, onPrefetch }: ProjectCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -55,7 +56,7 @@ function ProjectCardDesktop({ project }: ProjectCardProps) {
             paddingRight: 0,
           }}
           transition={springTransition}
-          onMouseEnter={() => setIsHovered(true)}
+          onMouseEnter={() => { setIsHovered(true); onPrefetch?.(); }}
           onMouseLeave={() => setIsHovered(false)}
         >
           {/* Left column — content */}
@@ -65,28 +66,28 @@ function ProjectCardDesktop({ project }: ProjectCardProps) {
               {/* Company section: logo + info */}
               <div className="flex flex-col gap-3">
                 <Image
-                  src={project.logoSrc}
-                  alt={`${project.company} logo`}
+                  src={card.logoSrc}
+                  alt={`${card.company} logo`}
                   width={40}
                   height={40}
                   className="rounded-xl"
                 />
                 <div className="flex flex-col gap-1">
                   <h3 className="title-lg text-card-text pb-1">
-                    {project.company}
+                    {card.company}
                   </h3>
                   <p className="body--medium text-card-text">
-                    {project.jobTitle}
+                    {card.jobTitle}
                   </p>
                   <span className="caption text-secondary text-card-text">
-                    {project.date}
+                    {card.date}
                   </span>
                 </div>
               </div>
 
               {/* Bullet list */}
               <ul className="flex flex-col opacity-60">
-                {project.bullets.map((bullet) => (
+                {card.bullets.map((bullet) => (
                   <li key={bullet} className="flex items-baseline gap-1">
                     <span className="body text-card-text">•</span>
                     <span className="body-sm text-card-text">{bullet}</span>
@@ -112,7 +113,7 @@ function ProjectCardDesktop({ project }: ProjectCardProps) {
 
           {/* Right column — images */}
           <div className="flex-1 relative rounded-xl overflow-visible flex items-center justify-center">
-            {project.images.map((img, i) => (
+            {card.images.map((img, i) => (
               <CardImage key={i} image={img} isHovered={isHovered} />
             ))}
           </div>
@@ -122,7 +123,7 @@ function ProjectCardDesktop({ project }: ProjectCardProps) {
   );
 }
 
-function CardImage({ image, isHovered }: { image: ProjectImage; isHovered: boolean }) {
+function CardImage({ image, isHovered }: { image: CardImageData; isHovered: boolean }) {
   const state = isHovered ? image.hover : image.idle;
 
   return (
@@ -157,7 +158,7 @@ function CardImage({ image, isHovered }: { image: ProjectImage; isHovered: boole
 
 /* ─── Mobile Card ─── */
 
-function ProjectCardMobile({ project }: ProjectCardProps) {
+function ProjectCardMobile({ card }: ProjectCardProps) {
   return (
     <article
       className="relative flex flex-col gap-3 w-full rounded-3xl bg-white overflow-clip"
@@ -171,18 +172,18 @@ function ProjectCardMobile({ project }: ProjectCardProps) {
       {/* Header: logo + title + date */}
       <div className="flex flex-col gap-3">
         <Image
-          src={project.logoSrc}
-          alt={`${project.company} logo`}
+          src={card.logoSrc}
+          alt={`${card.company} logo`}
           width={40}
           height={40}
           className="rounded-xl"
         />
         <div className="flex flex-col gap-1">
           <p className="body--medium text-card-text">
-            {project.jobTitle}
+            {card.jobTitle}
           </p>
           <span className="caption text-secondary text-card-text">
-            {project.date}
+            {card.date}
           </span>
         </div>
       </div>
@@ -190,8 +191,8 @@ function ProjectCardMobile({ project }: ProjectCardProps) {
       {/* Image container — fills remaining space */}
       <div className="flex-1 relative rounded-xl overflow-hidden">
         <Image
-          src={project.mobileImageSrc}
-          alt={project.mobileImageAlt}
+          src={card.mobileImageSrc}
+          alt={card.mobileImageAlt}
           fill
           className="object-cover"
           sizes="(max-width: 1024px) 100vw"
@@ -214,14 +215,15 @@ function ProjectCardMobile({ project }: ProjectCardProps) {
 
 /* ─── Responsive Wrapper ─── */
 
-export function ProjectCard({ project, onClick }: ProjectCardProps) {
+export function ProjectCard({ card, onClick, onPrefetch }: ProjectCardProps) {
+  const cursor = onClick ? "cursor-pointer" : "cursor-default";
   return (
     <>
-      <div className="hidden lg:block cursor-pointer" onClick={onClick}>
-        <ProjectCardDesktop project={project} />
+      <div className={`hidden lg:block ${cursor}`} onClick={onClick}>
+        <ProjectCardDesktop card={card} onPrefetch={onPrefetch} />
       </div>
-      <div className="lg:hidden cursor-pointer" onClick={onClick}>
-        <ProjectCardMobile project={project} />
+      <div className={`lg:hidden ${cursor}`} onClick={onClick}>
+        <ProjectCardMobile card={card} />
       </div>
     </>
   );
