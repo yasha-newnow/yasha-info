@@ -204,13 +204,27 @@ export function HeroAscii({
     let w = 0, h = 0;
 
     const resize = () => {
-      w = Math.max(1, wrap.clientWidth);
-      h = Math.max(1, wrap.clientHeight);
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      canvas.style.width = w + "px";
-      canvas.style.height = h + "px";
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const wNow = Math.max(1, wrap.clientWidth);
+      const hNow = Math.max(1, wrap.clientHeight);
+      // Conditional: assigning to canvas.width/height ALWAYS clears the bitmap
+      // (Canvas 2D spec). When ResizeObserver fires every frame during an
+      // external entrance animation that resizes the wrap, an unconditional
+      // re-assignment here blanks the bitmap right after tick() rendered it
+      // — visible as "shader disappears mid-animation". Skip the assignment
+      // when the canvas already has the right physical dimensions.
+      if (canvas.width !== wNow * dpr || canvas.height !== hNow * dpr) {
+        w = wNow;
+        h = hNow;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        canvas.style.width = w + "px";
+        canvas.style.height = h + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      } else {
+        // Even if canvas size unchanged, sync local w/h closure vars (cheap).
+        w = wNow;
+        h = hNow;
+      }
     };
 
     const ro = new ResizeObserver(resize);
@@ -224,6 +238,14 @@ export function HeroAscii({
     const start = performance.now();
 
     const tick = (now: number) => {
+      // Sync canvas physical size to current wrap dimensions in the same RAF
+      // as drawing. ResizeObserver alone fires async after layout commit —
+      // when an external animation resizes wrap each frame, the observer can
+      // run AFTER tick rendered at stale dimensions and re-blank the canvas
+      // via canvas.width assignment. resize() is conditional (no-op when size
+      // already correct) so this call is cheap when nothing changed.
+      resize();
+
       const tu = tuningRef.current;
       const t = Math.min(1, (now - start) / tu.durationMs);
       const targetCols = tu.colsStart + (tu.colsEnd - tu.colsStart) * easeInOutCubic(t);
@@ -231,9 +253,8 @@ export function HeroAscii({
       const cols = Math.max(1, Math.floor(w / cell));
       const rows = Math.max(1, Math.floor(h / cell));
 
-      ctx.clearRect(0, 0, w, h);
-
       if (video.readyState >= 2 && video.videoWidth > 0) {
+        ctx.clearRect(0, 0, w, h);
         sample.width = cols;
         sample.height = rows;
 

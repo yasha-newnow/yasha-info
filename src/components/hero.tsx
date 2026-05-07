@@ -1,8 +1,33 @@
 "use client";
 
 import { Fragment, useLayoutEffect, useRef } from "react";
-import { motion, useAnimation, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { HeroAscii } from "./hero-ascii";
+
+// Cubic-bezier evaluator (Newton-Raphson) — mirrors browser CSS easing for
+// `[p1x, p1y, p2x, p2y]`. Used to animate layout properties ourselves so we
+// can drive them off transform pipeline (which causes the desktop snap).
+function makeCubicBezier(coords: [number, number, number, number]): (t: number) => number {
+  const [p1x, p1y, p2x, p2y] = coords;
+  const ax = 1 - 3 * p2x + 3 * p1x;
+  const bx = 3 * p2x - 6 * p1x;
+  const cx = 3 * p1x;
+  const ay = 1 - 3 * p2y + 3 * p1y;
+  const by = 3 * p2y - 6 * p1y;
+  const cy = 3 * p1y;
+  return (t: number) => {
+    if (t <= 0) return 0;
+    if (t >= 1) return 1;
+    let x = t;
+    for (let i = 0; i < 6; i++) {
+      const xCur = ((ax * x + bx) * x + cx) * x;
+      const dxCur = (3 * ax * x + 2 * bx) * x + cx;
+      if (Math.abs(dxCur) < 1e-6) break;
+      x = x - (xCur - t) / dxCur;
+    }
+    return ((ay * x + by) * x + cy) * x;
+  };
+}
 
 const TITLE_LINES = ["I'm Yasha,", "Product Designer."];
 const DESCRIPTION =
@@ -42,9 +67,12 @@ export const DEFAULT_ENTRANCE_TUNING: EntranceTuning = {
   duration: 1.2,
   initialScale: 1.6,
   easing: "iosDrawer",
-  shaderDelay: 1.5,
-  titleDelay: 1.7,
-  descriptionDelay: 2.6,
+  // Shifted by 0.3s to accommodate the 300ms fade-in lead delay so all
+  // entrance animations (shader scale, title, description, sidebar, color
+  // picker in page.tsx) remain in sync relative to the shader appearing.
+  shaderDelay: 1.8,
+  titleDelay: 2.0,
+  descriptionDelay: 2.9,
 };
 
 interface HeroProps {
@@ -57,39 +85,99 @@ export function Hero({
   entranceTuning = DEFAULT_ENTRANCE_TUNING,
 }: HeroProps) {
   const reducedMotion = useReducedMotion();
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const shaderRef = useRef<HTMLDivElement>(null);
-  const shaderControls = useAnimation();
   const didAnimateRef = useRef(false);
 
   useLayoutEffect(() => {
     if (reducedMotion || didAnimateRef.current) return;
-    const el = shaderRef.current;
-    if (!el) return;
+    const wrapper = wrapperRef.current;
+    const shader = shaderRef.current;
+    if (!wrapper || !shader) return;
     didAnimateRef.current = true;
 
-    const r = el.getBoundingClientRect();
-    const dx = window.innerWidth / 2 - (r.left + r.width / 2);
-    const dy = window.innerHeight / 2 - (r.top + r.height / 2);
+    const wRect = wrapper.getBoundingClientRect();
+    const baseSize = wRect.width;
+    const dx = window.innerWidth / 2 - (wRect.left + wRect.width / 2);
+    const dy = window.innerHeight / 2 - (wRect.top + wRect.height / 2);
+    const initialScale = entranceTuning.initialScale;
 
-    shaderControls.set({
-      x: dx,
-      y: dy,
-      scale: entranceTuning.initialScale,
-      opacity: 1,
-    });
-    requestAnimationFrame(() => {
-      shaderControls.start({
-        x: 0,
-        y: 0,
-        scale: 1,
-        transition: {
-          duration: entranceTuning.duration,
-          ease: ENTRANCE_EASINGS[entranceTuning.easing],
-          delay: entranceTuning.shaderDelay,
-        },
-      });
-    });
-  }, [reducedMotion, shaderControls, entranceTuning]);
+    // Layout-property entrance (no CSS transform anywhere): wrapper translates
+    // via left/top, inner shader scales via width/height (position: absolute
+    // so its growth doesn't push siblings). CSS transform on a canvas parent
+    // creates a desktop compositor layer that snap-rasterizes at animation
+    // end — layout properties bypass that pathway entirely.
+    //
+    // Two animation phases run within the same RAF:
+    //  1. Fade-in + blur-in (0..150ms): opacity 0→1, blur 8px→0. Avoids the
+    //     jarring "shader pops in fully visible" feel. Mirrors the blur-fade
+    //     pattern used for title chars (4px) and description words (6px).
+    //  2. Scale + translate (after shaderDelay): shrinks from 1.6× and slides
+    //     to layout position with the iosDrawer easing.
+    wrapper.style.position = "relative";
+    wrapper.style.left = `${dx}px`;
+    wrapper.style.top = `${dy}px`;
+
+    const startSize = baseSize * initialScale;
+    const startOffset = (baseSize - startSize) / 2;
+    shader.style.position = "absolute";
+    shader.style.width = `${startSize}px`;
+    shader.style.height = `${startSize}px`;
+    shader.style.left = `${startOffset}px`;
+    shader.style.top = `${startOffset}px`;
+
+    const FADE_IN_DELAY_MS = 300;
+    const FADE_IN_MS = 350;
+    const INITIAL_BLUR_PX = 8;
+    const fadeEasing = makeCubicBezier(ENTRANCE_EASINGS.easeOutStrong);
+
+    const easing = makeCubicBezier(ENTRANCE_EASINGS[entranceTuning.easing]);
+    const delayMs = entranceTuning.shaderDelay * 1000;
+    const durationMs = entranceTuning.duration * 1000;
+    const mountTime = performance.now();
+
+    let raf = 0;
+    const tick = (now: number) => {
+      const elapsed = now - mountTime;
+
+      // Phase 1: fade-in + blur-in (after lead delay so user has time to
+      // notice the shader appearing rather than missing it during page-load
+      // visual settle)
+      let fadeProgress = 0;
+      if (elapsed >= FADE_IN_DELAY_MS) {
+        fadeProgress = Math.min(1, (elapsed - FADE_IN_DELAY_MS) / FADE_IN_MS);
+      }
+      const fadeEased = fadeEasing(fadeProgress);
+      wrapper.style.opacity = String(fadeEased);
+      wrapper.style.filter = `blur(${INITIAL_BLUR_PX * (1 - fadeEased)}px)`;
+
+      // Phase 2: scale + translate
+      let progress = 0;
+      if (elapsed >= delayMs) {
+        progress = Math.min(1, (elapsed - delayMs) / durationMs);
+      }
+      const eased = easing(progress);
+
+      // Translate the wrapper toward its layout position
+      wrapper.style.left = `${dx * (1 - eased)}px`;
+      wrapper.style.top = `${dy * (1 - eased)}px`;
+
+      // Scale the shader by animating its physical width/height
+      const currentScale = initialScale + (1 - initialScale) * eased;
+      const size = baseSize * currentScale;
+      const offset = (baseSize - size) / 2;
+      shader.style.width = `${size}px`;
+      shader.style.height = `${size}px`;
+      shader.style.left = `${offset}px`;
+      shader.style.top = `${offset}px`;
+
+      if (fadeProgress < 1 || progress < 1) {
+        raf = requestAnimationFrame(tick);
+      }
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [reducedMotion, entranceTuning]);
 
   if (reducedMotion) {
     return (
@@ -135,15 +223,24 @@ export function Hero({
 
   return (
     <div className="flex flex-col items-start justify-center gap-10 lg:gap-20 py-30 lg:p-10 max-w-[800px] min-h-full">
-      <motion.div
-        ref={shaderRef}
-        animate={shaderControls}
-        initial={false}
-        className="w-full max-w-[456px] aspect-square will-change-transform"
-        style={{ transformOrigin: "center", opacity: 0 }}
+      <div
+        ref={wrapperRef}
+        className="w-full max-w-[456px] aspect-square"
+        style={{ position: "relative", opacity: 0, filter: "blur(8px)" }}
       >
-        <HeroAscii className="w-full h-full" />
-      </motion.div>
+        <div
+          ref={shaderRef}
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            left: 0,
+            top: 0,
+          }}
+        >
+          <HeroAscii className="w-full h-full" />
+        </div>
+      </div>
 
       <div className="flex flex-col gap-6 lg:gap-10">
         <motion.h2
