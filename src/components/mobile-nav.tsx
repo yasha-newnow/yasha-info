@@ -19,12 +19,23 @@ type ScrollDir = "up" | "down" | "top";
 
 function useScrollDirection(
   scrollContainer?: React.RefObject<HTMLElement | null>,
-  threshold = 64
-): ScrollDir {
+  { downThreshold = 64, upThreshold = 30 }: { downThreshold?: number; upThreshold?: number } = {}
+): readonly [ScrollDir, () => void] {
   const [direction, setDirection] = useState<ScrollDir>("top");
   const lastTop = useRef(0);
   const downStart = useRef(0);
+  const upStart = useRef(0);
   const rafId = useRef(0);
+
+  const reset = useCallback(() => {
+    const el = scrollContainer?.current;
+    if (!el) return;
+    const top = el.scrollTop;
+    lastTop.current = top;
+    downStart.current = top;
+    upStart.current = top;
+    // Preserve current `direction` — only re-arm baselines for future gestures.
+  }, [scrollContainer]);
 
   useEffect(() => {
     const el = scrollContainer?.current;
@@ -34,12 +45,16 @@ function useScrollDirection(
       const top = el!.scrollTop;
       if (top < 10) {
         setDirection("top");
+        downStart.current = top;
+        upStart.current = top;
       } else if (top > lastTop.current) {
         if (lastTop.current <= downStart.current) downStart.current = lastTop.current;
-        if (top - downStart.current > threshold) setDirection("down");
-      } else {
+        upStart.current = top;
+        if (top - downStart.current > downThreshold) setDirection("down");
+      } else if (top < lastTop.current) {
+        if (lastTop.current >= upStart.current) upStart.current = lastTop.current;
         downStart.current = top;
-        setDirection("up");
+        if (upStart.current - top > upThreshold) setDirection("up");
       }
       lastTop.current = top;
     }
@@ -54,9 +69,9 @@ function useScrollDirection(
       el.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(rafId.current);
     };
-  }, [scrollContainer, threshold]);
+  }, [scrollContainer, downThreshold, upThreshold]);
 
-  return direction;
+  return [direction, reset] as const;
 }
 
 /* ── Animation config ────────────────────────────── */
@@ -122,9 +137,9 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
   const getForcedActive = useCallback(() => forcedActiveRef.current, []);
 
   // Scroll hide: nav slides up on scroll down, slides back on scroll up
-  const scrollDir = useScrollDirection(scrollContainer);
-  const ignoreScroll = useRef(false);
-  const scrollHidden = scrollDir === "down" && state === "closed" && !ignoreScroll.current;
+  const [scrollDir, resetScrollDir] = useScrollDirection(scrollContainer);
+  const [ignoreScroll, setIgnoreScroll] = useState(false);
+  const scrollHidden = scrollDir === "down" && state === "closed" && !ignoreScroll;
   const hasAppeared = useRef(false);
   useEffect(() => { if (show) hasAppeared.current = true; }, [show]);
 
@@ -173,14 +188,15 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
       forcedActiveRef.current = href;  // 1. instant ref update (sync)
       setPendingScroll(href);
       setState("closing");              // 2. triggers render → BP reads ref
-      ignoreScroll.current = true;      // 3. ignore programmatic scroll
+      setIgnoreScroll(true);            // 3. ignore programmatic scroll
       clearTimeout(forcedTimerRef.current);
       forcedTimerRef.current = setTimeout(() => {
         forcedActiveRef.current = null;
-        ignoreScroll.current = false;
+        setIgnoreScroll(false);
+        resetScrollDir();
       }, 1500);
     },
-    []
+    [resetScrollDir]
   );
 
   // Cleanup timers on unmount
@@ -222,8 +238,11 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
         <motion.button
           onClick={() => {
             if (state === "open") setState("closing");
-            ignoreScroll.current = true;
-            setTimeout(() => { ignoreScroll.current = false; }, 1500);
+            setIgnoreScroll(true);
+            setTimeout(() => {
+              setIgnoreScroll(false);
+              resetScrollDir();
+            }, 1500);
             scrollContainer?.current?.scrollTo({ top: 0, behavior: "smooth" });
           }}
           className="flex items-center justify-center w-10 h-10 ml-1 cursor-pointer"
