@@ -108,7 +108,7 @@ export function ProjectSheet({
                       {caseStudy.viewSiteUrl ? <ViewSiteButton href={caseStudy.viewSiteUrl} /> : null}
                     </div>
 
-                    <div className="h-px bg-foreground/10 w-full" />
+                    <div className="h-px bg-card-text/10 w-full" />
                   </div>
 
                   <div className="flex flex-col-reverse lg:flex-row gap-8 lg:gap-11">
@@ -159,7 +159,7 @@ export function ProjectSheet({
           <div className="hidden lg:block absolute top-10 right-10 z-20">
             <Drawer.Close
               aria-label="Close"
-              className="flex items-center justify-center w-12 h-12 rounded-xl cursor-pointer transition-colors duration-300 hover:bg-foreground/5"
+              className="flex items-center justify-center w-12 h-12 rounded-xl cursor-pointer transition-colors duration-300 hover:bg-card-text/5"
               style={{ backdropFilter: "blur(10px)", color: "var(--card-text)" }}
             >
               <svg aria-hidden="true" width="24" height="24" viewBox="0 -960 960 960" fill="currentColor">
@@ -197,7 +197,8 @@ function ViewSiteButton({ href }: { href: string }) {
         target="_blank"
         rel="noopener noreferrer"
         data-vaul-no-drag
-        className="hidden lg:flex items-center gap-2 px-3 py-3 rounded-lg transition-colors duration-150 hover:bg-foreground/10 active:bg-foreground/15"
+        className="hidden lg:flex items-center gap-2 px-3 py-3 rounded-lg transition-colors duration-150 hover:bg-card-text/10 active:bg-card-text/15"
+        style={{ color: "var(--card-text)" }}
       >
         <span className="body--medium text-card-text">View site</span>
         <ArrowUpRight size={20} />
@@ -210,7 +211,7 @@ function ViewSiteButton({ href }: { href: string }) {
         rel="noopener noreferrer"
         aria-label="View site"
         data-vaul-no-drag
-        className="lg:hidden flex items-center justify-center size-12 rounded-xl transition-colors duration-150 active:bg-foreground/10"
+        className="lg:hidden flex items-center justify-center size-12 rounded-xl transition-colors duration-150 active:bg-card-text/10"
         style={{ backdropFilter: "blur(10px)", color: "var(--card-text)" }}
       >
         <ArrowUpRight size={20} />
@@ -241,7 +242,7 @@ function MetaBlock({ role, timeframe, scope, platform }: MetaBlockProps) {
         <div
           key={label}
           className={`flex flex-col gap-0.5 py-3 ${
-            i === 0 ? "pt-0" : "border-t-2 border-dotted border-foreground/10"
+            i === 0 ? "pt-0" : "border-t-2 border-dotted border-card-text/10"
           } ${i === items.length - 1 ? "pb-0" : ""}`}
         >
           <dt className="caption text-card-text text-secondary">{label}</dt>
@@ -277,7 +278,7 @@ function SectionBlock({
         variants={itemVariants}
         className="w-full lg:max-w-[800px] lg:mx-auto flex flex-col gap-10 lg:gap-16"
       >
-        <div className="h-px bg-foreground/10 w-full" />
+        <div className="h-px bg-card-text/10 w-full" />
         <div className="flex flex-col gap-6">
           <h3 className="title-md text-bold text-card-text">{section.title}</h3>
           <p className="body text-card-text">{section.description}</p>

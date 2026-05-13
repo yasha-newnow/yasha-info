@@ -38,7 +38,7 @@ function ProjectCardDesktop({ card, onPrefetch }: ProjectCardProps) {
             rounded-3xl bg-white overflow-hidden          "
           style={{
             color: "var(--card-text)",
-            outline: "1px solid color-mix(in srgb, var(--foreground) 5%, transparent)",
+            outline: "1px solid color-mix(in srgb, var(--card-text) 5%, transparent)",
             boxShadow: isHovered
               ? "0px 20px 40px rgba(18, 20, 25, 0.07)"
               : "0px 20px 40px transparent",
@@ -166,7 +166,7 @@ function ProjectCardMobile({ card }: ProjectCardProps) {
         padding: "24px 24px 0 24px",
         height: 600,
         color: "var(--card-text)",
-        outline: "1px solid color-mix(in srgb, var(--foreground) 5%, transparent)",
+        outline: "1px solid color-mix(in srgb, var(--card-text) 5%, transparent)",
       }}
     >
       {/* Header: logo + title + date */}

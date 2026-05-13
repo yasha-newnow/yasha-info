@@ -43,13 +43,18 @@ export function ColorPickerPanel({
   const rafRef = useRef(0);
   const isInternalChange = useRef(false);
 
-  // Sync HSL only from EXTERNAL color changes (presets), not from slider round-trips
+  // Sync HSL only from EXTERNAL color changes (presets), not from slider round-trips.
+  // When the incoming color is achromatic (e.g., #FFFFFF / #000000), hexToHsl returns
+  // {h:0, s:0, l:*}. Preserve previous h/s to avoid losing hue info on round-trip.
   useEffect(() => {
     if (isInternalChange.current) {
       isInternalChange.current = false;
       return;
     }
-    setHsl(hexToHsl(color));
+    setHsl((prev) => {
+      const parsed = hexToHsl(color);
+      return parsed.s === 0 ? { h: prev.h, s: prev.s, l: parsed.l } : parsed;
+    });
     setHexInput(color.replace("#", ""));
   }, [color]);
 
@@ -74,9 +79,12 @@ export function ColorPickerPanel({
   const handleHueChange = useCallback(
     (v: number) => {
       const newH = (1 - v) * 360; // invert: slider top=0°, bottom=360°
-      const newHsl = { ...hsl, h: newH };
+      // Recovery valve: if state somehow has s=0 (corrupt from achromatic round-trip),
+      // dragging hue means user wants color — bump saturation back to 100.
+      const newS = hsl.s === 0 ? 100 : hsl.s;
+      const newHsl = { h: newH, s: newS, l: hsl.l };
       setHsl(newHsl);
-      const hex = hslToHex(newH, newHsl.s, newHsl.l);
+      const hex = hslToHex(newH, newS, newHsl.l);
       setHexInput(hex.replace("#", ""));
       isInternalChange.current = true;
       cancelAnimationFrame(rafRef.current);
@@ -89,8 +97,18 @@ export function ColorPickerPanel({
     const clean = hexInput.replace("#", "");
     if (/^[0-9A-Fa-f]{6}$/.test(clean)) {
       const hex = `#${clean.toUpperCase()}`;
-      setHsl(hexToHsl(hex));
-      onChange(hex);
+      setHsl((prev) => {
+        const parsed = hexToHsl(hex);
+        return parsed.s === 0 ? { h: prev.h, s: prev.s, l: parsed.l } : parsed;
+      });
+      // Guard: only mark internal change if hex actually differs from current color prop.
+      // Otherwise parent's setState bails out (same primitive), the sync effect doesn't
+      // fire, and the flag stays pinned to true — which would silently swallow the next
+      // legitimate external change (e.g., preset click).
+      if (hex !== color) {
+        isInternalChange.current = true;
+        onChange(hex);
+      }
     } else {
       setHexInput(color.replace("#", ""));
     }
