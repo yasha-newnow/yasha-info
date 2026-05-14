@@ -181,7 +181,7 @@ export function Hero({
 
   if (reducedMotion) {
     return (
-      <div className="flex flex-col items-start justify-center gap-10 lg:gap-20 py-30 lg:p-10 max-w-[800px] min-h-full">
+      <div className="flex flex-col items-start justify-center gap-10 lg:gap-20 py-30 lg:py-10 lg:px-12 max-w-[800px] min-h-full">
         <div className="w-full max-w-[456px] aspect-square">
           <HeroAscii className="w-full h-full" />
         </div>
@@ -222,7 +222,7 @@ export function Hero({
   const lastWordIndex = descriptionWords.length - 1;
 
   return (
-    <div className="flex flex-col items-start justify-center gap-10 lg:gap-20 py-30 lg:p-10 max-w-[800px] min-h-full">
+    <div className="flex flex-col items-start justify-center gap-10 lg:gap-20 py-30 lg:py-10 lg:px-12 max-w-[800px] min-h-full">
       <div
         ref={wrapperRef}
         className="w-full max-w-[456px] aspect-square"
