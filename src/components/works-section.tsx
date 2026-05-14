@@ -41,14 +41,14 @@ export function WorksSection() {
   const [sheetOpen, setSheetOpen] = useState(false);
 
   return (
-    <section id="works" className="flex flex-col px-0 lg:px-10 pt-20 pb-6 lg:pb-10 scroll-mt-[88px] lg:scroll-mt-0">
+    <section id="works" className="flex flex-col px-0 lg:px-10 pt-10 lg:pt-20 pb-10 scroll-mt-[88px] lg:scroll-mt-0">
       <div>
         <SectionHeader title={sections[0].title} tag={sections[0].tag} />
       </div>
 
       {/* Cards list */}
       <motion.div
-        className="flex flex-col gap-8"
+        className="flex flex-col gap-6 lg:gap-8"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"

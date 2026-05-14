@@ -121,7 +121,7 @@ export function AboutSection() {
   return (
     <section
       id={sections[1].id}
-      className="flex flex-col px-0 pt-20 pb-6 lg:px-10 lg:pb-10 scroll-mt-[88px] lg:scroll-mt-0"
+      className="flex flex-col px-0 pt-10 lg:pt-20 pb-10 lg:px-10 scroll-mt-[88px] lg:scroll-mt-0"
     >
       <SectionHeader title={sections[1].title} tag={sections[1].tag} />
 
@@ -194,7 +194,7 @@ export function AboutSection() {
         {/* Work History — NO glass card (Paper Design node 2Q-0) */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-col gap-5 lg:gap-6 mt-10 lg:mt-16"
+          className="flex flex-col gap-2 mt-10 lg:mt-16"
         >
           <h3 className="title-md text-bold text-foreground">
             Work history

@@ -47,6 +47,11 @@ storybook-static
 # IDE / agent state
 .cursor/
 
+# Internal case-study research notes / interview transcripts (raw input
+# for case-studies.ts content). Kept local; production case content lives
+# in src/data/case-studies.ts.
+.cases/
+
 # local artifacts
 /Users/
 /tmp/

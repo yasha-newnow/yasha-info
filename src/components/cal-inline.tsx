@@ -29,6 +29,14 @@ export function CalInline() {
         theme: "light",
         hideEventTypeDetails: false,
         layout,
+        cssVarsPerTheme: {
+          light: {
+            "cal-text": "#121419",
+            "cal-text-emphasis": "#121419",
+            "cal-bg-inverted": "#121419",
+          },
+          dark: {},
+        },
       });
     })();
   }, [layout]);

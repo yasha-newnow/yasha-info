@@ -32,12 +32,12 @@ export function ContactSection() {
   return (
     <section
       id={section.id}
-      className="flex flex-col px-0 pt-20 pb-6 lg:px-10 lg:pb-10 scroll-mt-[88px] lg:scroll-mt-0"
+      className="flex flex-col px-0 pt-10 lg:pt-20 pb-6 lg:px-10 lg:pb-10 scroll-mt-[88px] lg:scroll-mt-0"
     >
       <SectionHeader title={section.title} tag={section.tag} />
 
       <motion.div
-        className="flex flex-col lg:px-2 gap-10 lg:gap-8 mt-10 lg:mt-0"
+        className="flex flex-col lg:px-2 gap-10 lg:gap-8 mt-0 lg:mt-0"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
