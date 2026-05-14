@@ -20,22 +20,27 @@ type ScrollDir = "up" | "down" | "top";
 function useScrollDirection(
   scrollContainer?: React.RefObject<HTMLElement | null>,
   { downThreshold = 64, upThreshold = 30 }: { downThreshold?: number; upThreshold?: number } = {}
-): readonly [ScrollDir, () => void] {
+): readonly [ScrollDir, (opts?: { setTo?: ScrollDir }) => void] {
   const [direction, setDirection] = useState<ScrollDir>("top");
   const lastTop = useRef(0);
   const downStart = useRef(0);
   const upStart = useRef(0);
   const rafId = useRef(0);
 
-  const reset = useCallback(() => {
-    const el = scrollContainer?.current;
-    if (!el) return;
-    const top = el.scrollTop;
-    lastTop.current = top;
-    downStart.current = top;
-    upStart.current = top;
-    // Preserve current `direction` — only re-arm baselines for future gestures.
-  }, [scrollContainer]);
+  const reset = useCallback(
+    (opts?: { setTo?: ScrollDir }) => {
+      const el = scrollContainer?.current;
+      if (!el) return;
+      const top = el.scrollTop;
+      lastTop.current = top;
+      downStart.current = top;
+      upStart.current = top;
+      // Default: preserve current `direction` — only re-arm baselines for future gestures.
+      // Optionally force direction (used after programmatic scroll to prevent immediate hide).
+      if (opts?.setTo) setDirection(opts.setTo);
+    },
+    [scrollContainer]
+  );
 
   useEffect(() => {
     const el = scrollContainer?.current;
@@ -134,6 +139,7 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
   const forcedActiveRef = useRef<string | null>(null);
   const shrinkTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const forcedTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const finishRef = useRef<(() => void) | null>(null);
   const getForcedActive = useCallback(() => forcedActiveRef.current, []);
 
   // Scroll hide: nav slides up on scroll down, slides back on scroll up
@@ -190,22 +196,62 @@ export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
       setState("closing");              // 2. triggers render → BP reads ref
       setIgnoreScroll(true);            // 3. ignore programmatic scroll
       clearTimeout(forcedTimerRef.current);
-      forcedTimerRef.current = setTimeout(() => {
-        forcedActiveRef.current = null;
-        setIgnoreScroll(false);
-        resetScrollDir();
-      }, 1500);
+
+      const container = scrollContainer?.current;
+      if (!container) {
+        // No container — fallback to old fixed-timer behavior
+        forcedTimerRef.current = setTimeout(() => {
+          forcedActiveRef.current = null;
+          setIgnoreScroll(false);
+          resetScrollDir();
+        }, 1500);
+        return;
+      }
+
+      // Disarm any previous in-flight scrollend listener so rapid double-tap
+      // doesn't release ignoreScroll mid-second-scroll.
+      if (finishRef.current) {
+        container.removeEventListener("scrollend", finishRef.current);
+        finishRef.current = null;
+      }
+
+      const finish = () => {
+        if (finishRef.current !== finish) return;  // disarmed by newer tap
+        finishRef.current = null;
+        container.removeEventListener("scrollend", finish);
+        clearTimeout(forcedTimerRef.current);
+        // 300ms grace — let scroll-direction tracker recompute its baselines
+        // after settle before resuming hide-on-down behavior.
+        forcedTimerRef.current = setTimeout(() => {
+          forcedActiveRef.current = null;
+          setIgnoreScroll(false);
+          // Force direction to "up" so nav stays visible after programmatic
+          // scroll — even though we just moved down, user did NOT initiate
+          // a down-gesture, so we shouldn't auto-hide. Nav will hide on next
+          // real user down-scroll (after downThreshold=64px).
+          resetScrollDir({ setTo: "up" });
+        }, 300);
+      };
+      finishRef.current = finish;
+      container.addEventListener("scrollend", finish);
+      // Fallback: 5s cap in case scrollend doesn't fire (older browser, or
+      // scroll already at target — no scroll event → no scrollend).
+      forcedTimerRef.current = setTimeout(finish, 5000);
     },
-    [resetScrollDir]
+    [resetScrollDir, scrollContainer]
   );
 
-  // Cleanup timers on unmount
+  // Cleanup timers + scrollend listener on unmount
   useEffect(() => {
     return () => {
       clearTimeout(shrinkTimerRef.current);
       clearTimeout(forcedTimerRef.current);
+      if (finishRef.current && scrollContainer?.current) {
+        scrollContainer.current.removeEventListener("scrollend", finishRef.current);
+        finishRef.current = null;
+      }
     };
-  }, []);
+  }, [scrollContainer]);
 
   return (
     <motion.div

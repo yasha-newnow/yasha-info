@@ -32,7 +32,7 @@ export function ContactSection() {
   return (
     <section
       id={section.id}
-      className="flex flex-col px-0 pt-20 pb-6 lg:px-10 lg:pb-10"
+      className="flex flex-col px-0 pt-20 pb-6 lg:px-10 lg:pb-10 scroll-mt-[88px] lg:scroll-mt-0"
     >
       <SectionHeader title={section.title} tag={section.tag} />
 

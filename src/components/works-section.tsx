@@ -41,7 +41,7 @@ export function WorksSection() {
   const [sheetOpen, setSheetOpen] = useState(false);
 
   return (
-    <section id="works" className="flex flex-col px-0 lg:px-10 pt-20 pb-6 lg:pb-10">
+    <section id="works" className="flex flex-col px-0 lg:px-10 pt-20 pb-6 lg:pb-10 scroll-mt-[88px] lg:scroll-mt-0">
       <div>
         <SectionHeader title={sections[0].title} tag={sections[0].tag} />
       </div>
