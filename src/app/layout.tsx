@@ -3,6 +3,16 @@ import { Inter_Tight, Stick_No_Bills, Homemade_Apple } from "next/font/google";
 import localFont from "next/font/local";
 import "dialkit/styles.css";
 import "./globals.css";
+import { EditModeProvider } from "@/lib/edit-mode/use-edit-mode";
+import { EditToggleButton } from "@/components/edit-mode/edit-toggle-button";
+import { EditSidePanel } from "@/components/edit-mode/edit-side-panel";
+import { ContentProvider } from "@/lib/edit-mode/content-context";
+import { loadAllContent } from "@/data/server-load";
+
+// Read content JSON fresh on every request so dev-time edits propagate
+// without restarting the server. Layout owns the data provider so dev tools
+// (EditSidePanel, EditToggleButton) can read/mutate content from any route.
+export const dynamic = "force-dynamic";
 
 const interTight = Inter_Tight({
   variable: "--font-inter-tight",
@@ -36,20 +46,27 @@ export const metadata: Metadata = {
     "Designer and educator with two decades of experience specialized in designing products, digital experiences, and building overpowered teams obsessed with craft.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const content = await loadAllContent();
   return (
     <html
       lang="en"
       className={`${interTight.variable} ${stickNoBills.variable} ${homemadeApple.variable} ${drukCond.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-black">
-        <div data-vaul-drawer-wrapper="" className="min-h-full" style={{ backgroundColor: "var(--accent)" }}>
-          {children}
-        </div>
+        <ContentProvider initial={content}>
+          <EditModeProvider>
+            <div data-vaul-drawer-wrapper="" className="min-h-full" style={{ backgroundColor: "var(--accent)" }}>
+              {children}
+            </div>
+            <EditToggleButton />
+            <EditSidePanel />
+          </EditModeProvider>
+        </ContentProvider>
         {/* DialKit + Agentation are mounted INSIDE Drawer.Content (project-sheet.tsx)
             so Vaul's outside-click detection doesn't close the drawer when interacting
             with dev tools. Trade-off: dev tools visible only when drawer is open. */}

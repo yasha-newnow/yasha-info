@@ -3,17 +3,14 @@
 import { Fragment, useState } from "react";
 import { motion } from "framer-motion";
 import { sections } from "@/data/navigation";
-import {
-  bio,
-  howText,
-  skills,
-  workHistory,
-  COLLAPSED_COUNT,
-  type WorkHistoryEntry,
-} from "@/data/about";
+import { useAbout } from "@/lib/edit-mode/content-context";
+import type { WorkHistoryEntry } from "@/data/schemas";
 import { SectionHeader } from "./section-header";
+
+const COLLAPSED_COUNT = 4;
 import { ButtonLink } from "./button-link";
 import { WhatIcon, HowIcon, WhyIcon } from "./icons/about-icons";
+import { Editable } from "./edit-mode/editable";
 
 // Glass surface — inline style, same as sidebar (Tailwind v4 compiles var() statically in CSS classes)
 const glassStyle: React.CSSProperties = {
@@ -94,25 +91,27 @@ function SkillDots({ level }: { level: 1 | 2 | 3 }) {
   );
 }
 
-function EntryRow({ entry }: { entry: WorkHistoryEntry }) {
+function EntryRow({ entry, index }: { entry: WorkHistoryEntry; index: number }) {
+  const idBase = `about.workHistory.${index}`;
   return (
     <div className="flex flex-col lg:flex-row lg:items-baseline gap-1 lg:gap-4 py-4">
       <div className="flex-1 flex flex-col gap-0.5">
-        <span className="body--medium text-foreground">
-          {entry.title}
+        <span className="body text-medium text-foreground">
+          <Editable id={`${idBase}.title`} value={entry.title} />
         </span>
         <span className="body-sm text-secondary text-foreground">
-          {entry.description}
+          <Editable id={`${idBase}.description`} value={entry.description} multiline label="Work history description" />
         </span>
       </div>
       <span className="tag text-foreground shrink-0">
-        {entry.period}
+        <Editable id={`${idBase}.period`} value={entry.period} />
       </span>
     </div>
   );
 }
 
 export function AboutSection() {
+  const { bio, howText, skills, workHistory } = useAbout();
   const [expanded, setExpanded] = useState(false);
 
   const visibleEntries = workHistory.slice(0, COLLAPSED_COUNT);
@@ -143,7 +142,9 @@ export function AboutSection() {
             <div className="w-[132px] h-[56px] shrink-0 flex items-center">
               <WhatIcon className="text-foreground" />
             </div>
-            <p className="flex-1 min-w-[240px] body text-foreground">{bio[0]}</p>
+            <p className="flex-1 min-w-[240px] body text-foreground">
+              <Editable id="about.bio.0" value={bio[0]} multiline label="What — bio paragraph" />
+            </p>
           </motion.div>
 
           {/* Card 2: HOW + Skills two columns */}
@@ -157,16 +158,18 @@ export function AboutSection() {
               <div className="w-[132px] h-[56px] shrink-0 flex items-center">
                 <HowIcon className="text-foreground" />
               </div>
-              <p className="flex-1 min-w-[240px] body text-foreground">{howText}</p>
+              <p className="flex-1 min-w-[240px] body text-foreground">
+                <Editable id="about.howText" value={howText} multiline label="How — methodology" />
+              </p>
             </div>
 
             {/* Right column: Skills with dots and dividers */}
             <div className="flex-1 flex flex-col gap-4">
               {skills.map((skill, index) => (
-                <Fragment key={skill.name}>
+                <Fragment key={`${index}-${skill.name}`}>
                   <div className="flex items-center justify-between">
                     <span className="body-sm text-foreground">
-                      {skill.name}
+                      <Editable id={`about.skills.${index}.name`} value={skill.name} />
                     </span>
                     <SkillDots level={skill.level} />
                   </div>
@@ -187,7 +190,9 @@ export function AboutSection() {
             <div className="w-[132px] h-[56px] shrink-0 flex items-center">
               <WhyIcon className="text-foreground" />
             </div>
-            <p className="flex-1 min-w-[240px] body text-foreground">{bio[1]}</p>
+            <p className="flex-1 min-w-[240px] body text-foreground">
+              <Editable id="about.bio.1" value={bio[1]} multiline label="Why — motivation" />
+            </p>
           </motion.div>
         </div>
 
@@ -204,7 +209,7 @@ export function AboutSection() {
             {/* Always visible entries */}
             {visibleEntries.map((entry, index) => (
               <div key={entry.title}>
-                <EntryRow entry={entry} />
+                <EntryRow entry={entry} index={index} />
                 {index < visibleEntries.length - 1 && (
                   <div className="h-px bg-foreground opacity-10" />
                 )}
@@ -231,7 +236,7 @@ export function AboutSection() {
                   </motion.div>
                   {hiddenEntries.map((entry, index) => (
                     <motion.div key={entry.title} variants={hiddenItemVariants}>
-                      <EntryRow entry={entry} />
+                      <EntryRow entry={entry} index={COLLAPSED_COUNT + index} />
                       {index < hiddenEntries.length - 1 && (
                         <div className="h-px bg-foreground opacity-10" />
                       )}

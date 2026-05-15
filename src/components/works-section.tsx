@@ -3,8 +3,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { preload } from "react-dom";
-import { caseCards } from "@/data/case-cards";
-import { getCaseStudyBySlug, type CaseStudy } from "@/data/case-studies";
+import {
+  useCaseCards,
+  useCaseStudies,
+  useCaseStudyBySlug,
+} from "@/lib/edit-mode/content-context";
 import { sections } from "@/data/navigation";
 import { ProjectCard } from "./project-card";
 import { SectionHeader } from "./section-header";
@@ -37,8 +40,14 @@ function prefetchHero(src: string) {
 }
 
 export function WorksSection() {
-  const [activeStudy, setActiveStudy] = useState<CaseStudy | null>(null);
+  const caseCards = useCaseCards();
+  const caseStudies = useCaseStudies();
+  const [activeSlug, setActiveSlug] = useState<string | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const activeStudy = useCaseStudyBySlug(activeSlug);
+
+  const studyBySlug = (slug: string | null) =>
+    slug ? (caseStudies.find((s) => s.slug === slug) ?? null) : null;
 
   return (
     <section id="works" className="flex flex-col px-0 lg:px-10 pt-10 lg:pt-20 pb-10 scroll-mt-[88px] lg:scroll-mt-0">
@@ -54,16 +63,17 @@ export function WorksSection() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
       >
-        {caseCards.map((card) => {
-          const study = getCaseStudyBySlug(card.caseSlug);
+        {caseCards.map((card, cardIndex) => {
+          const study = studyBySlug(card.caseSlug);
           return (
             <motion.div key={card.slug} variants={cardVariants} className="w-full">
               <ProjectCard
                 card={card}
+                cardIndex={cardIndex}
                 onClick={
                   study
                     ? () => {
-                        setActiveStudy(study);
+                        setActiveSlug(study.slug);
                         setSheetOpen(true);
                       }
                     : undefined
@@ -79,7 +89,7 @@ export function WorksSection() {
         caseStudy={activeStudy}
         open={sheetOpen}
         onOpenChange={setSheetOpen}
-        onAnimationEnd={(isOpen) => { if (!isOpen) setActiveStudy(null); }}
+        onAnimationEnd={(isOpen) => { if (!isOpen) setActiveSlug(null); }}
       />
     </section>
   );

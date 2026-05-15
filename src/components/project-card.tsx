@@ -4,10 +4,12 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ExpandIcon } from "./icons";
-import type { CaseCard, CardImage as CardImageData } from "@/data/case-cards";
+import type { CaseCard, CardImage as CardImageData } from "@/data/schemas";
+import { Editable } from "./edit-mode/editable";
 
 interface ProjectCardProps {
   card: CaseCard;
+  cardIndex: number;
   onClick?: () => void;
   onPrefetch?: () => void;
 }
@@ -20,8 +22,9 @@ const springTransition = {
 
 /* ─── Desktop Card ─── */
 
-function ProjectCardDesktop({ card, onPrefetch }: ProjectCardProps) {
+function ProjectCardDesktop({ card, cardIndex, onPrefetch }: ProjectCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const idBase = `caseCards.${cardIndex}`;
 
   return (
     <div className="@container w-full max-w-[1200px]">
@@ -74,23 +77,25 @@ function ProjectCardDesktop({ card, onPrefetch }: ProjectCardProps) {
                 />
                 <div className="flex flex-col gap-1">
                   <h3 className="title-lg text-card-text pb-1">
-                    {card.company}
+                    <Editable id={`${idBase}.company`} value={card.company} />
                   </h3>
-                  <p className="body--medium text-card-text">
-                    {card.jobTitle}
+                  <p className="body text-medium text-card-text">
+                    <Editable id={`${idBase}.jobTitle`} value={card.jobTitle} />
                   </p>
                   <span className="caption text-secondary text-card-text">
-                    {card.date}
+                    <Editable id={`${idBase}.date`} value={card.date} />
                   </span>
                 </div>
               </div>
 
               {/* Bullet list */}
               <ul className="flex flex-col opacity-60">
-                {card.bullets.map((bullet) => (
-                  <li key={bullet} className="flex items-baseline gap-1">
+                {card.bullets.map((bullet, bulletIndex) => (
+                  <li key={`${bulletIndex}-${bullet}`} className="flex items-baseline gap-1">
                     <span className="body text-card-text">•</span>
-                    <span className="body-sm text-card-text">{bullet}</span>
+                    <span className="body-sm text-card-text">
+                      <Editable id={`${idBase}.bullets.${bulletIndex}`} value={bullet} />
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -158,7 +163,8 @@ function CardImage({ image, isHovered }: { image: CardImageData; isHovered: bool
 
 /* ─── Mobile Card ─── */
 
-function ProjectCardMobile({ card }: ProjectCardProps) {
+function ProjectCardMobile({ card, cardIndex }: ProjectCardProps) {
+  const idBase = `caseCards.${cardIndex}`;
   return (
     <article
       className="relative flex flex-col gap-3 w-full rounded-3xl bg-white overflow-clip"
@@ -179,11 +185,11 @@ function ProjectCardMobile({ card }: ProjectCardProps) {
           className="rounded-xl"
         />
         <div className="flex flex-col gap-1">
-          <p className="body--medium text-card-text">
-            {card.jobTitle}
+          <p className="body text-medium text-card-text">
+            <Editable id={`${idBase}.jobTitle`} value={card.jobTitle} />
           </p>
           <span className="caption text-secondary text-card-text">
-            {card.date}
+            <Editable id={`${idBase}.date`} value={card.date} />
           </span>
         </div>
       </div>
@@ -215,15 +221,15 @@ function ProjectCardMobile({ card }: ProjectCardProps) {
 
 /* ─── Responsive Wrapper ─── */
 
-export function ProjectCard({ card, onClick, onPrefetch }: ProjectCardProps) {
+export function ProjectCard({ card, cardIndex, onClick, onPrefetch }: ProjectCardProps) {
   const cursor = onClick ? "cursor-pointer" : "cursor-default";
   return (
     <>
       <div className={`hidden lg:block ${cursor}`} onClick={onClick}>
-        <ProjectCardDesktop card={card} onPrefetch={onPrefetch} />
+        <ProjectCardDesktop card={card} cardIndex={cardIndex} onPrefetch={onPrefetch} />
       </div>
       <div className={`lg:hidden ${cursor}`} onClick={onClick}>
-        <ProjectCardMobile card={card} />
+        <ProjectCardMobile card={card} cardIndex={cardIndex} />
       </div>
     </>
   );

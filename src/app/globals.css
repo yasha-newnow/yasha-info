@@ -138,24 +138,20 @@ body {
     }
   }
 
-  /* BODY — Inter Tight, w400 default; --medium modifier for w500 */
+  /* BODY — Inter Tight; compose with .text-medium / .text-bold for accents */
   .body {
     font-family: var(--font-sans), system-ui, sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
-  }
-  .body--medium {
-    font-family: var(--font-sans), system-ui, sans-serif;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 24px;
+    letter-spacing: 0.03em;
   }
   .body-sm {
     font-family: var(--font-sans), system-ui, sans-serif;
     font-weight: 400;
     font-size: 14px;
     line-height: 24px;
+    letter-spacing: 0.03em;
   }
 
   /* TAG — Stick No Bills, uppercase */
@@ -172,7 +168,7 @@ body {
     font-size: 12px;
     line-height: 16px;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.05em;
   }
 
   /* DECORATIVE — Homemade Apple */
@@ -184,6 +180,9 @@ body {
   }
 
   /* MODIFIERS — universal, apply on top of any text class */
+  .text-medium {
+    font-weight: 500;
+  }
   .text-bold {
     font-weight: 600;
   }

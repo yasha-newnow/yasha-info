@@ -10,7 +10,10 @@ import { preload } from "react-dom";
 import { DialRoot, useDialKit } from "dialkit";
 import { Agentation } from "agentation";
 import { ArrowUpRight } from "./icons";
-import type { CaseStudy, CaseSection, GalleryImage } from "@/data/case-studies";
+import type { CaseStudy, CaseSection, GalleryImage } from "@/data/schemas";
+import { useCaseStudies } from "@/lib/edit-mode/content-context";
+import { Editable } from "./edit-mode/editable";
+import { parseBold } from "@/lib/edit-mode/markdown-bold";
 
 const ITEM_DURATION = 0.35;
 const STAGGER = 0.12;
@@ -46,7 +49,11 @@ export function ProjectSheet({
   const scrollRef = useRef<HTMLDivElement>(null);
   const gallerySnapOptions = useGallerySnapDial();
 
+  const allCaseStudies = useCaseStudies();
   if (!caseStudy) return null;
+
+  const csIndex = allCaseStudies.findIndex((c) => c.slug === caseStudy.slug);
+  const csIdBase = `caseStudies.${csIndex}`;
 
   return (
     <Drawer.Root
@@ -101,7 +108,7 @@ export function ProjectSheet({
                           className="size-10 rounded-xl shrink-0"
                         />
                         <h3 className="title-lg text-card-text truncate">
-                          {caseStudy.company}
+                          <Editable id={`${csIdBase}.company`} value={caseStudy.company} />
                         </h3>
                       </div>
 
@@ -113,13 +120,22 @@ export function ProjectSheet({
 
                   <div className="flex flex-col-reverse lg:flex-row gap-8 lg:gap-11">
                     <MetaBlock
+                      idBase={csIdBase}
                       role={caseStudy.role}
                       timeframe={caseStudy.timeframe}
                       scope={caseStudy.scope}
                       platform={caseStudy.platform}
                     />
                     <p className="title-md text-bold text-card-text flex-1">
-                      {caseStudy.description}
+                      <Editable
+                        id={`${csIdBase}.description`}
+                        value={caseStudy.description}
+                        multiline
+                        richText
+                        label="Case study description"
+                      >
+                        {parseBold(caseStudy.description, "text-medium")}
+                      </Editable>
                     </p>
                   </div>
                 </motion.header>
@@ -144,7 +160,13 @@ export function ProjectSheet({
 
               {/* ── Sections: scroll-triggered ─── */}
               {caseStudy.sections.map((section, i) => (
-                <SectionBlock key={i} section={section} scrollRoot={scrollRef} gallerySnapOptions={gallerySnapOptions} />
+                <SectionBlock
+                  key={i}
+                  section={section}
+                  idBase={`${csIdBase}.sections.${i}`}
+                  scrollRoot={scrollRef}
+                  gallerySnapOptions={gallerySnapOptions}
+                />
               ))}
             </div>
           </div>
@@ -200,7 +222,7 @@ function ViewSiteButton({ href }: { href: string }) {
         className="hidden lg:flex items-center gap-2 px-3 py-3 rounded-lg transition-colors duration-150 hover:bg-card-text/10 active:bg-card-text/15"
         style={{ color: "var(--card-text)" }}
       >
-        <span className="body--medium text-card-text">View site</span>
+        <span className="body text-medium text-card-text">View site</span>
         <ArrowUpRight size={20} />
       </a>
 
@@ -223,22 +245,23 @@ function ViewSiteButton({ href }: { href: string }) {
 /* ─── Meta block ─── */
 
 interface MetaBlockProps {
+  idBase: string;
   role: string;
   timeframe: string;
   scope: string;
   platform: string;
 }
 
-function MetaBlock({ role, timeframe, scope, platform }: MetaBlockProps) {
-  const items: Array<[string, string]> = [
-    ["Role", role],
-    ["Timeframe", timeframe],
-    ["Scope", scope],
-    ["Platform", platform],
+function MetaBlock({ idBase, role, timeframe, scope, platform }: MetaBlockProps) {
+  const items: Array<[string, string, string]> = [
+    ["Role", role, "role"],
+    ["Timeframe", timeframe, "timeframe"],
+    ["Scope", scope, "scope"],
+    ["Platform", platform, "platform"],
   ];
   return (
     <dl className="flex flex-col w-full lg:w-[200px] lg:shrink-0">
-      {items.map(([label, value], i) => (
+      {items.map(([label, value, fieldKey], i) => (
         <div
           key={label}
           className={`flex flex-col gap-0.5 py-3 ${
@@ -246,7 +269,9 @@ function MetaBlock({ role, timeframe, scope, platform }: MetaBlockProps) {
           } ${i === items.length - 1 ? "pb-0" : ""}`}
         >
           <dt className="caption text-card-text text-secondary">{label}</dt>
-          <dd className="body--medium text-card-text">{value}</dd>
+          <dd className="body text-medium text-card-text">
+            <Editable id={`${idBase}.${fieldKey}`} value={value} />
+          </dd>
         </div>
       ))}
     </dl>
@@ -257,10 +282,12 @@ function MetaBlock({ role, timeframe, scope, platform }: MetaBlockProps) {
 
 function SectionBlock({
   section,
+  idBase,
   scrollRoot,
   gallerySnapOptions,
 }: {
   section: CaseSection;
+  idBase: string;
   scrollRoot: React.RefObject<HTMLDivElement | null>;
   gallerySnapOptions: GallerySnapOptions;
 }) {
@@ -280,8 +307,20 @@ function SectionBlock({
       >
         <div className="h-px bg-card-text/10 w-full" />
         <div className="flex flex-col gap-6">
-          <h3 className="title-md text-bold text-card-text">{section.title}</h3>
-          <p className="body text-card-text">{section.description}</p>
+          <h3 className="title-md text-bold text-card-text">
+            <Editable id={`${idBase}.title`} value={section.title} />
+          </h3>
+          <p className="body text-card-text">
+            <Editable
+              id={`${idBase}.description`}
+              value={section.description}
+              multiline
+              richText
+              label="Section description"
+            >
+              {parseBold(section.description, "text-medium")}
+            </Editable>
+          </p>
         </div>
       </motion.div>
 
