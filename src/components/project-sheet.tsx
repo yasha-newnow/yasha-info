@@ -126,7 +126,7 @@ export function ProjectSheet({
                       scope={caseStudy.scope}
                       platform={caseStudy.platform}
                     />
-                    <p className="title-md text-bold text-card-text flex-1">
+                    <p className="title-md text-bold text-card-text flex-1 whitespace-pre-wrap">
                       <Editable
                         id={`${csIdBase}.description`}
                         value={caseStudy.description}
@@ -310,7 +310,7 @@ function SectionBlock({
           <h3 className="title-md text-bold text-card-text">
             <Editable id={`${idBase}.title`} value={section.title} />
           </h3>
-          <p className="body text-card-text">
+          <p className="body text-card-text whitespace-pre-wrap">
             <Editable
               id={`${idBase}.description`}
               value={section.description}
