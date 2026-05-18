@@ -99,7 +99,7 @@ function EntryRow({ entry, index }: { entry: WorkHistoryEntry; index: number }) 
         <span className="body text-medium text-foreground">
           <Editable id={`${idBase}.title`} value={entry.title} />
         </span>
-        <span className="body-sm text-secondary text-foreground">
+        <span className="body-sm text-secondary text-foreground whitespace-pre-wrap">
           <Editable id={`${idBase}.description`} value={entry.description} multiline label="Work history description" />
         </span>
       </div>
@@ -142,7 +142,7 @@ export function AboutSection() {
             <div className="w-[132px] h-[56px] shrink-0 flex items-center">
               <WhatIcon className="text-foreground" />
             </div>
-            <p className="flex-1 min-w-[240px] body text-foreground">
+            <p className="flex-1 min-w-[240px] body text-foreground whitespace-pre-wrap">
               <Editable id="about.bio.0" value={bio[0]} multiline label="What — bio paragraph" />
             </p>
           </motion.div>
@@ -158,7 +158,7 @@ export function AboutSection() {
               <div className="w-[132px] h-[56px] shrink-0 flex items-center">
                 <HowIcon className="text-foreground" />
               </div>
-              <p className="flex-1 min-w-[240px] body text-foreground">
+              <p className="flex-1 min-w-[240px] body text-foreground whitespace-pre-wrap">
                 <Editable id="about.howText" value={howText} multiline label="How — methodology" />
               </p>
             </div>
@@ -190,7 +190,7 @@ export function AboutSection() {
             <div className="w-[132px] h-[56px] shrink-0 flex items-center">
               <WhyIcon className="text-foreground" />
             </div>
-            <p className="flex-1 min-w-[240px] body text-foreground">
+            <p className="flex-1 min-w-[240px] body text-foreground whitespace-pre-wrap">
               <Editable id="about.bio.1" value={bio[1]} multiline label="Why — motivation" />
             </p>
           </motion.div>
