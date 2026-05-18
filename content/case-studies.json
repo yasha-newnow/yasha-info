@@ -88,6 +88,78 @@
               "height": 1780
             }
           ]
+        },
+        {
+          "title": "Market Research",
+          "description": "Market Research launched in September 2023 as a new section in the platform — helping business leaders identify new markets, benchmark on KPIs, and size markets by sector and geography. Built to eventually replace the legacy Web Category Analysis surface, which had stalled on retention.\n\nFast 0-to-1 launch. We reused legacy data pipelines but rebuilt the UX from scratch — a new section with multiple pages (Overview, Segmentation, Players, Geography, Demographics) shipped as a paid add-on. I owned design end-to-end.\n\nThe design bet: surface preset answers for each business question instead of asking users to assemble them from filters and pickers. Players became the most-used surface in the section, and the new **Quadrant widget drew 2X the interaction rate vs the legacy one.** One Quadrant spotted in a blog article drove an $80K deal back from Wolverine.\n\n**38% of accounts purchased the new add-on within 6 months; 63% of users visited Players page within day one, 58.8% returned 3+ times within a month; 4-week retention +18% vs legacy section.**",
+          "images": [
+            {
+              "src": "/images/projects/preply-main.jpg",
+              "alt": "Detail view 1",
+              "width": 3000,
+              "height": 2000
+            },
+            {
+              "src": "/images/projects/preply-sidebar.jpg",
+              "alt": "Detail view 2",
+              "width": 1500,
+              "height": 2000
+            },
+            {
+              "src": "/images/projects/portrait-test.png",
+              "alt": "Portrait test",
+              "width": 1018,
+              "height": 1780
+            },
+            {
+              "src": "/images/projects/preply-panels.jpg",
+              "alt": "Detail view 3",
+              "width": 3000,
+              "height": 4000
+            },
+            {
+              "src": "/images/projects/portrait-test.png",
+              "alt": "Portrait test (last)",
+              "width": 1018,
+              "height": 1780
+            }
+          ]
+        },
+        {
+          "title": "Demand Analysis",
+          "description": "Demand Analysis launched in February 2024 as a second new section in the platform, alongside Market Research. Focused on forward-looking demand signals — projecting where audience attention was moving, not just describing where it had been. \n\nI owned design end-to-end across Search Trends (the lead surface), period-over-period (PoP) mode, and the keyword list engine that powered the section. \n\nWorking closely with PM and VP, we shaped the section's product strategy — and made the core bet on the keyword list generation mechanic. Previously a fully manual process — users uploaded CSVs or added keywords one by one. We rebuilt it so users could auto-generate an entire list from a single seed keyword, which then could be edited and saved. \n\n**Search Trends MAU: +70% vs old Traffic by Country page (by month 4); Save events on generated lists: +34%; Edit events on generated lists: +42%**",
+          "images": [
+            {
+              "src": "/images/projects/preply-main.jpg",
+              "alt": "Detail view 1",
+              "width": 3000,
+              "height": 2000
+            },
+            {
+              "src": "/images/projects/preply-sidebar.jpg",
+              "alt": "Detail view 2",
+              "width": 1500,
+              "height": 2000
+            },
+            {
+              "src": "/images/projects/portrait-test.png",
+              "alt": "Portrait test",
+              "width": 1018,
+              "height": 1780
+            },
+            {
+              "src": "/images/projects/preply-panels.jpg",
+              "alt": "Detail view 3",
+              "width": 3000,
+              "height": 4000
+            },
+            {
+              "src": "/images/projects/portrait-test.png",
+              "alt": "Portrait test (last)",
+              "width": 1018,
+              "height": 1780
+            }
+          ]
         }
       ]
     },
