@@ -1,6 +1,97 @@
 {
   "caseStudies": [
     {
+      "slug": "guesty",
+      "company": "Guesty",
+      "logoSrc": "/images/logos/guesty.svg",
+      "description": "Placeholder — case overview to be added.",
+      "role": "Sr. Product Designer",
+      "timeframe": "2025",
+      "scope": "Placeholder — scope to be added",
+      "platform": "Web",
+      "viewSiteUrl": null,
+      "heroImage": {
+        "src": "/images/projects/preply-main.jpg",
+        "alt": "Project hero image",
+        "width": 3000,
+        "height": 2000
+      },
+      "sections": [
+        {
+          "title": "Notifications Revamp",
+          "description": "Placeholder — copy to be added.",
+          "images": [
+            {
+              "src": "/images/projects/preply-main.jpg",
+              "alt": "Detail view 1",
+              "width": 3000,
+              "height": 2000
+            },
+            {
+              "src": "/images/projects/preply-sidebar.jpg",
+              "alt": "Detail view 2",
+              "width": 1500,
+              "height": 2000
+            },
+            {
+              "src": "/images/projects/portrait-test.png",
+              "alt": "Portrait test",
+              "width": 1018,
+              "height": 1780
+            },
+            {
+              "src": "/images/projects/preply-panels.jpg",
+              "alt": "Detail view 3",
+              "width": 3000,
+              "height": 4000
+            },
+            {
+              "src": "/images/projects/portrait-test.png",
+              "alt": "Portrait test (last)",
+              "width": 1018,
+              "height": 1780
+            }
+          ]
+        },
+        {
+          "title": "Mid-stay relocation",
+          "description": "Placeholder — copy to be added.",
+          "images": [
+            {
+              "src": "/images/projects/preply-main.jpg",
+              "alt": "Detail view 1",
+              "width": 3000,
+              "height": 2000
+            },
+            {
+              "src": "/images/projects/preply-sidebar.jpg",
+              "alt": "Detail view 2",
+              "width": 1500,
+              "height": 2000
+            },
+            {
+              "src": "/images/projects/portrait-test.png",
+              "alt": "Portrait test",
+              "width": 1018,
+              "height": 1780
+            },
+            {
+              "src": "/images/projects/preply-panels.jpg",
+              "alt": "Detail view 3",
+              "width": 3000,
+              "height": 4000
+            },
+            {
+              "src": "/images/projects/portrait-test.png",
+              "alt": "Portrait test (last)",
+              "width": 1018,
+              "height": 1780
+            }
+          ]
+        }
+      ]
+    },
+    {
       "slug": "similarweb",
       "company": "SimilarWeb",
       "logoSrc": "/images/logos/similarweb.svg",
@@ -225,387 +316,6 @@
               "alt": "Dark mode treatment of the simplified Total Funds view",
               "width": 3840,
               "height": 2400
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "slug": "preply",
-      "company": "Preply",
-      "logoSrc": "/images/logos/preply.svg",
-      "description": "We built Control Tower because no existing tool gave us what we actually needed — a single place to see how the studio is doing. Not just project status, but the full picture: who's stretched, what's profitable, where there's room to take on more. It's an internal tool, built for how we work, pulling everything into one AI-native surface so decisions about capacity, hiring, and client work happen based on real numbers instead of gut feel.",
-      "role": "Principal Designer",
-      "timeframe": "2021 — 2024",
-      "scope": "UI/UX Design, Design System, Product Strategy, Team Leadership",
-      "platform": "Web",
-      "viewSiteUrl": "https://preply.com",
-      "heroImage": {
-        "src": "/images/projects/preply-main.jpg",
-        "alt": "Project hero image",
-        "width": 3000,
-        "height": 2000
-      },
-      "sections": [
-        {
-          "title": "Market Research & Demand Analysis",
-          "description": "We built Control Tower because no existing tool gave us what we actually needed — a single place to see how the studio is doing. Not just project status, but the full picture: who's stretched, what's profitable, where there's room to take on more. It's an internal tool, built for how we work, pulling everything into one AI-native surface so decisions about capacity, hiring, and client work happen based on real numbers instead of gut feel.",
-          "images": [
-            {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780
-            },
-            {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780
-            }
-          ]
-        },
-        {
-          "title": "Website Segments",
-          "description": "We built Control Tower because no existing tool gave us what we actually needed — a single place to see how the studio is doing. Not just project status, but the full picture: who's stretched, what's profitable, where there's room to take on more. It's an internal tool, built for how we work, pulling everything into one AI-native surface so decisions about capacity, hiring, and client work happen based on real numbers instead of gut feel.",
-          "images": [
-            {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780
-            },
-            {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780
-            }
-          ]
-        },
-        {
-          "title": "Website Segments",
-          "description": "We built Control Tower because no existing tool gave us what we actually needed — a single place to see how the studio is doing. Not just project status, but the full picture: who's stretched, what's profitable, where there's room to take on more. It's an internal tool, built for how we work, pulling everything into one AI-native surface so decisions about capacity, hiring, and client work happen based on real numbers instead of gut feel.",
-          "images": [
-            {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780
-            },
-            {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "slug": "finflow",
-      "company": "FinFlow",
-      "logoSrc": "/images/logos/finflow.svg",
-      "description": "We built Control Tower because no existing tool gave us what we actually needed — a single place to see how the studio is doing. Not just project status, but the full picture: who's stretched, what's profitable, where there's room to take on more. It's an internal tool, built for how we work, pulling everything into one AI-native surface so decisions about capacity, hiring, and client work happen based on real numbers instead of gut feel.",
-      "role": "Sr. Product Designer",
-      "timeframe": "2019 — 2021",
-      "scope": "Product Design, Design System, User Research",
-      "platform": "Web, iOS",
-      "viewSiteUrl": null,
-      "heroImage": {
-        "src": "/images/projects/preply-main.jpg",
-        "alt": "Project hero image",
-        "width": 3000,
-        "height": 2000
-      },
-      "sections": [
-        {
-          "title": "Market Research & Demand Analysis",
-          "description": "We built Control Tower because no existing tool gave us what we actually needed — a single place to see how the studio is doing. Not just project status, but the full picture: who's stretched, what's profitable, where there's room to take on more. It's an internal tool, built for how we work, pulling everything into one AI-native surface so decisions about capacity, hiring, and client work happen based on real numbers instead of gut feel.",
-          "images": [
-            {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780
-            },
-            {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780
-            }
-          ]
-        },
-        {
-          "title": "Website Segments",
-          "description": "We built Control Tower because no existing tool gave us what we actually needed — a single place to see how the studio is doing. Not just project status, but the full picture: who's stretched, what's profitable, where there's room to take on more. It's an internal tool, built for how we work, pulling everything into one AI-native surface so decisions about capacity, hiring, and client work happen based on real numbers instead of gut feel.",
-          "images": [
-            {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780
-            },
-            {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780
-            }
-          ]
-        },
-        {
-          "title": "Website Segments",
-          "description": "We built Control Tower because no existing tool gave us what we actually needed — a single place to see how the studio is doing. Not just project status, but the full picture: who's stretched, what's profitable, where there's room to take on more. It's an internal tool, built for how we work, pulling everything into one AI-native surface so decisions about capacity, hiring, and client work happen based on real numbers instead of gut feel.",
-          "images": [
-            {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780
-            },
-            {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "slug": "soundscape",
-      "company": "Soundscape",
-      "logoSrc": "/images/logos/soundscape.svg",
-      "description": "We built Control Tower because no existing tool gave us what we actually needed — a single place to see how the studio is doing. Not just project status, but the full picture: who's stretched, what's profitable, where there's room to take on more. It's an internal tool, built for how we work, pulling everything into one AI-native surface so decisions about capacity, hiring, and client work happen based on real numbers instead of gut feel.",
-      "role": "Product Designer",
-      "timeframe": "2017 — 2019",
-      "scope": "Product Design, Onboarding, Social Features",
-      "platform": "iOS, Android",
-      "viewSiteUrl": "https://soundscape.example.com",
-      "heroImage": {
-        "src": "/images/projects/preply-main.jpg",
-        "alt": "Project hero image",
-        "width": 3000,
-        "height": 2000
-      },
-      "sections": [
-        {
-          "title": "Market Research & Demand Analysis",
-          "description": "We built Control Tower because no existing tool gave us what we actually needed — a single place to see how the studio is doing. Not just project status, but the full picture: who's stretched, what's profitable, where there's room to take on more. It's an internal tool, built for how we work, pulling everything into one AI-native surface so decisions about capacity, hiring, and client work happen based on real numbers instead of gut feel.",
-          "images": [
-            {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780
-            },
-            {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780
-            }
-          ]
-        },
-        {
-          "title": "Website Segments",
-          "description": "We built Control Tower because no existing tool gave us what we actually needed — a single place to see how the studio is doing. Not just project status, but the full picture: who's stretched, what's profitable, where there's room to take on more. It's an internal tool, built for how we work, pulling everything into one AI-native surface so decisions about capacity, hiring, and client work happen based on real numbers instead of gut feel.",
-          "images": [
-            {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780
-            },
-            {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780
-            }
-          ]
-        },
-        {
-          "title": "Website Segments",
-          "description": "We built Control Tower because no existing tool gave us what we actually needed — a single place to see how the studio is doing. Not just project status, but the full picture: who's stretched, what's profitable, where there's room to take on more. It's an internal tool, built for how we work, pulling everything into one AI-native surface so decisions about capacity, hiring, and client work happen based on real numbers instead of gut feel.",
-          "images": [
-            {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780
-            },
-            {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780
             }
           ]
         }
