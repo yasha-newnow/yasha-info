@@ -4,9 +4,9 @@
       "slug": "guesty",
       "company": "Guesty",
       "logoSrc": "/images/logos/guesty.svg",
-      "description": "Placeholder — case overview to be added.",
+      "description": "At Guesty, I worked across two product groups. In Business & Financials, I owned design for Additional Fees — from creation flow to how they surface across the platform — and co-led Mid-stay Relocation alongside Inesa Muchnik. In the Cross-platform team, I led the Notifications system rebuild and the Login & Registration flow revamp.\nAlongside product work, I ran hiring interviews, mentored teammates, and regularly contributed to the design system.",
       "role": "Sr. Product Designer",
-      "timeframe": "2025",
+      "timeframe": "2024 — 2025",
       "scope": "Placeholder — scope to be added",
       "platform": "Web",
       "viewSiteUrl": null,
@@ -19,7 +19,7 @@
       "sections": [
         {
           "title": "Notifications Revamp",
-          "description": "Placeholder — copy to be added.",
+          "description": "Notifications were a silent operational risk. Everything landed in one flat, messy list — a reservation cancellation tomorrow next to one two weeks out, alongside payment failures, channel sync errors, and routine confirmations. Customers had built Zapier integrations to route around it. 75 PFRs from 113 accounts, 19 interviews, a 50-ticket CS audit — the problem was real and overdue.\n\nA strategic call early on: build on a third-party notification platform instead of from scratch — accepting its API constraints in exchange for cutting time-to-market roughly in half, and treating this as Phase 1 of a 5-phase roadmap (customizable triggers, collaborative lifecycle, notifications SDK).\n\nI led the project end-to-end — reshaping information architecture, auditing ~50 event types, benchmarking references, and designing the new system in alignment with the PM and key stakeholders: a severity taxonomy (Critical / Important / Updates), permission-aware preferences with cost-aware delivery defaults, and a scalable layout with Phase 2 designs prepped.\n\n**Detailed metrics available upon request.**",
           "images": [
             {
               "src": "/images/projects/preply-main.jpg",
@@ -54,8 +54,8 @@
           ]
         },
         {
-          "title": "Mid-stay relocation",
-          "description": "Placeholder — copy to be added.",
+          "title": "Mid-stay Relocation",
+          "description": "Moving a guest between units mid-stay required a five-step workaround — dummy listings, shortened reservations, manual reconciliation, broken automations, a new confirmation code — a recurring operational tax with no clean path through the system.\n\nA 0→1 feature spanning eight teams — one of the largest cross-team initiatives in Guesty's history. I co-led design with Inesa Muchnik, owning the core relocation flow: rate recalculation, owner revenue split, and in-modal pricing choice — all while keeping a single reservation ID intact across owner statements, channel sync, folio, and calendar.\n\nThe hard part wasn't the UI — mid-stay relocation served two distinct sets of jobs: operational (which property, which dates, how revenue splits) and financial (full folio breakdown with before-and-after across fees, taxes, line items). We split the modal accordingly — Timeline and Folio breakdown — so each user gets exactly what they need in their context.\n\n**Detailed metrics available upon request.**",
           "images": [
             {
               "src": "/images/projects/preply-main.jpg",
@@ -95,9 +95,9 @@
       "slug": "similarweb",
       "company": "SimilarWeb",
       "logoSrc": "/images/logos/similarweb.svg",
-      "description": "I spent three years at SimilarWeb working across Core Platform Products — the navigation redesign, the Website Segments builder, and two new pods launched from scratch (Market Research and Demand Analysis). Across all of them, I worked closely with PMs and key stakeholders to shape product strategy and define design \ndirection.\n\nAlongside this, I pushed for system-level consistency, championed UX, set clearer cross-designer process, ran Figma sessions for engineers, and hired and mentored designers across teams.",
+      "description": "I spent three years at SimilarWeb working across Core Platform Products — the navigation redesign, the Website Segments builder, and two new pods launched from scratch (Market Research and Demand Analysis). Across all of them, I worked closely with PMs and key stakeholders to shape product strategy and define design \ndirection.\nAlongside this, I pushed for system-level consistency, championed UX, set clearer cross-designer process, ran Figma sessions for engineers, and hired and mentored designers across teams.",
       "role": "Sr. Product Designer",
-      "timeframe": "2021 – 2024",
+      "timeframe": "2021 — 2024",
       "scope": "Product Strategy, Information Architecture,  Stakeholder Alignment, 0⇢1 Product Launch",
       "platform": "Web",
       "viewSiteUrl": "https://www.similarweb.com",
@@ -109,8 +109,8 @@
       },
       "sections": [
         {
-          "title": "Sidebar redesign",
-          "description": "Six months after the previous redesign, the navigation was still broken: unaligned IA across product sections, users losing filters, inputs and context between pages, inconsistent visual hierarchy and patterns.\n\nBottom-up initiative. Started as a 1.5-hour design exercise, became a cross-team push we sold to stakeholders ourselves. I led discovery through delivery across 5 designers, 2 team leads, PMs, FE/BE, and UX writer.\n\nThe Acquisition homepage was the structural blocker. Its owners defended it until a 0.6% engagement number settled the argument. Removing it unlocked simplified IA across the entire platform.\n\n**Nav time 1.3 min → 42 sec (-53%); MAU increased by 2-3X on buried pages; Median pageviews per session 4.5 → 5 (+10%).**\n\n",
+          "title": "Navigation redesign",
+          "description": "Six months after the previous redesign, the sidebar navigation was still broken: unaligned IA across product sections, users losing filters, inputs and context between pages, inconsistent visual hierarchy and patterns.\n\nBottom-up initiative. Started as a 1.5-hour design exercise, became a cross-team push we sold to stakeholders ourselves. I led discovery through delivery across 5 designers, 2 team leads, PMs, FE/BE, and UX writer.\n\nThe Acquisition homepage was the structural blocker. Its owners defended it until a 0.6% engagement number settled the argument. Removing it unlocked simplified IA across the entire platform.\n\n**Nav time 1.3 min → 42 sec (-53%); MAU increased by 2-3X on buried pages; Median pageviews per session 4.5 → 5 (+10%).**\n\n",
           "images": [
             {
               "src": "/images/projects/preply-main.jpg",
@@ -260,7 +260,7 @@
       "logoSrc": "/images/logos/sber.svg",
       "description": "Sber spun up an internal PFM (Personal Financial Management) startup to address Russia's savings and financial education problem — 43% with no savings, 82% not planning expenses, 98% not investing. The Tribe began with five product teams and grew to twelve over three years. I owned design for the Total Funds product group, which started as one team and grew into three during my tenure.",
       "role": "Lead Designer",
-      "timeframe": "2019 – 2021",
+      "timeframe": "2019 — 2021",
       "scope": "Product Strategy, Design Thinking, Information Architecture, Stakeholder Alignment",
       "platform": "iOS, Android",
       "viewSiteUrl": "https://www.sberbank.ru",
