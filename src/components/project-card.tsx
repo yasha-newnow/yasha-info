@@ -147,8 +147,10 @@ function ProjectCardDesktop({
             </button>
           </div>
 
-          {/* Right column — images */}
-          <div className="flex-1 relative rounded-xl overflow-hidden flex items-center justify-center">
+          {/* Right column — images. `overflow-visible` so the fanned card
+              images (translated/rotated by springs) extend beyond the column
+              bounds — same intent on desktop and mobile. */}
+          <div className="flex-1 relative rounded-xl flex items-center justify-center">
             {card.images.map((img, i) => (
               <CardImage
                 key={i}
@@ -283,8 +285,9 @@ function ProjectCardMobile({
         </div>
       </div>
 
-      {/* Image container — fills remaining space */}
-      <div className="flex-1 relative rounded-xl overflow-hidden">
+      {/* Image container — fills remaining space. `overflow-visible` matches
+          the desktop variant (image container doesn't clip). */}
+      <div className="flex-1 relative rounded-xl">
         <Image
           src={card.mobileImageSrc}
           alt={card.mobileImageAlt}

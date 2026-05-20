@@ -38,6 +38,22 @@ type StackConsts = {
   /** Scroll-pixels per card transition. = card_h + INTER_GAP. Viewport-
    *  independent so behavior is consistent across screen sizes. */
   SPACING_PX: number;
+  /** Cards-area height inside the pinned container. Pinned container's
+   *  total height is computed from CARD_H + paddings — replaces the
+   *  earlier `h-[100svh]` which produced variable empty space below the
+   *  card. Use clamp-max on desktop (the responsive card may render
+   *  shorter on narrow widths — leftover stays ≤56px inside cards-area,
+   *  not in the section-to-ABOUT gap). */
+  CARD_H: number;
+  /** SectionHeader h2 rendered height (responsive font-size). Measured:
+   *  76 desktop / 56 mobile. Used in pinned_h calc. */
+  H2_HEIGHT: number;
+  /** SectionHeader's mb-N (40 mobile / 64 desktop) for pinned-container
+   *  height accounting. SectionHeader markup unchanged. */
+  TITLE_MB: number;
+  /** Extra flex-gap on pinned-container (gap-4=16 mobile / gap-0 desktop)
+   *  so total title↔card distance = mb + gap = 56 mobile / 64 desktop. */
+  PINNED_FLEX_GAP: number;
 };
 
 const DESKTOP: StackConsts = {
@@ -45,6 +61,10 @@ const DESKTOP: StackConsts = {
   MAX_VISIBLE: 5,
   MIN_SCALE: 0.7,
   SPACING_PX: 850, // card_h ≈ 752 + INTER_GAP 100
+  CARD_H: 752, // ProjectCardDesktop clamp-max
+  H2_HEIGHT: 76,
+  TITLE_MB: 64, // SectionHeader's lg:mb-16
+  PINNED_FLEX_GAP: 0, // desktop: no extra gap (mb-16 alone = 64)
 };
 
 const MOBILE: StackConsts = {
@@ -52,6 +72,10 @@ const MOBILE: StackConsts = {
   MAX_VISIBLE: 5,
   MIN_SCALE: 0.74,
   SPACING_PX: 700, // card_h ≈ 600 + INTER_GAP 100
+  CARD_H: 600, // ProjectCardMobile fixed
+  H2_HEIGHT: 56,
+  TITLE_MB: 40, // SectionHeader's mb-10
+  PINNED_FLEX_GAP: 16, // mobile: gap-4 brings total title↔card to 56
 };
 
 /* Tapered vertical offsets: gaps between consecutive cards shrink with depth
@@ -318,13 +342,31 @@ function WorksStack({
   sheet: React.ReactNode;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
+  const count = caseCards.length;
+
+  // Section's scroll-runway = SPACING_PX*(N-1) [list→fan animation]
+  // + HOLD_PX [final frozen-fan period].
+  const scrollRunway = consts.SPACING_PX * (count - 1) + HOLD_PX;
+
+  // Pinned-container height = pt + h2 + mb + flex-gap + CARD_H + pb.
+  // Replaces the earlier `h-[100svh] lg:h-[100dvh]` so the bottom-void
+  // between last card and ABOUT is bounded by CARD_H (px-based, not vh).
+  const PINNED_PT = 56;
+  const PINNED_PB = 80;
+  const pinnedH =
+    PINNED_PT + consts.H2_HEIGHT + consts.TITLE_MB +
+    consts.PINNED_FLEX_GAP + consts.CARD_H + PINNED_PB;
+
+  // useScroll offset = ["start start", `end ${pinnedH}px`] — p=1 aligns with
+  // the EXACT scrollTop where sticky un-pins (= section.bottom − pinnedH).
+  // Default `end end` would give p=1 at section.bottom − vh, leaving
+  // (vh − pinnedH) px of "ghost runway" past p=1 on viewports where
+  // vh > pinnedH (mobile), inflating the visible gap to ABOUT.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     container: scrollContainer,
-    offset: ["start start", "end end"],
+    offset: ["start start", `end ${pinnedH}px`],
   });
-
-  const count = caseCards.length;
 
   // Expose true progress for QA/diagnostics on the section itself (which
   // also carries `data-card-count` — matching existing test selectors that
@@ -334,40 +376,35 @@ function WorksStack({
     if (sectionRef.current) sectionRef.current.dataset.p = v.toFixed(3);
   });
 
-  // Section's scroll-runway = SPACING_PX*(N-1) [for the list→fan animation]
-  // + HOLD_PX [final frozen-fan period] + one viewport-height of slack so the
-  // pinned container has room to settle visually. NB: the sticky child uses
-  // `100svh` (mobile) / `100dvh` (desktop) for its own height; the section's
-  // height combines a pixel runway with one full viewport.
-  const scrollRunway = consts.SPACING_PX * (count - 1) + HOLD_PX;
-
   return (
     <section
       id="works"
       ref={sectionRef}
       data-card-count={count}
       className="relative px-0 lg:px-10 scroll-mt-[88px] lg:scroll-mt-0"
-      style={{ height: `calc(${scrollRunway}px + 100svh)` }}
+      style={{ height: `${scrollRunway + pinnedH}px` }}
     >
       {/* ONE pinned container — title + cards in a single block.
           • Sticky `top-[-80px] lg:top-0` keeps the visual pin at viewport y=0
             on both: mobile `<main>` has pt-20 (80px), so −80 compensates;
             desktop main has lg:pt-0 so top:0 pins at y=0.
-          • h-[100svh] lg:h-[100dvh] = exactly one viewport tall.
-          • flex flex-col pt-[56px] = title at y≈56 from viewport top.
-          • Gap between title and cards = SectionHeader's own `mb-16` = 64px
-            (shared component, applies in this layout as well). NO additional
-            flex-gap — total gap stays at 64px as user requested.
+          • Explicit pinnedH (px) replaces `h-[100svh]` so the bottom-void is
+            bounded by CARD_H, not viewport height (predictable on all sizes).
+          • flex flex-col pt-[56px] pb-[80px] gap-4 lg:gap-0 = title at y≈56
+            from viewport top, 56/64 px gap to first card (mobile/desktop),
+            80px buffer below the last card before section bottom.
           • NO overflow-hidden — cards extending below the pinned area on tall
             viewports stay rendered (consistent on desktop and mobile). */}
       <div
-        className="sticky top-[-80px] lg:top-0 h-[100svh] lg:h-[100dvh] flex flex-col pt-[56px]"
-        style={{ background: "var(--accent)" }}
+        className="sticky top-[-80px] lg:top-0 flex flex-col pt-[56px] pb-[80px] gap-4 lg:gap-0"
+        style={{ height: `${pinnedH}px`, background: "var(--accent)" }}
       >
         <SectionHeader title={sections[0].title} tag={sections[0].tag} />
 
-        {/* Cards-area — absolute-positioned cards anchored at top:0. */}
-        <div className="relative flex-1">
+        {/* Cards-area — absolute-positioned cards anchored at top:0.
+            flex-1 fills the remaining pinned-container space = exactly CARD_H
+            (since pinnedH already accounts for it). */}
+        <div className="relative w-full flex-1">
           {caseCards.map((card, i) => (
             <StackedCard
               key={card.slug}
