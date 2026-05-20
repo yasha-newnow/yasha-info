@@ -214,6 +214,292 @@
       "mobileImageSrc": "/images/projects/preply-main.jpg",
       "mobileImageAlt": "Sber Total Funds app",
       "caseSlug": "sber"
+    },
+    {
+      "slug": "test-4",
+      "company": "Test Project 4",
+      "logoSrc": "/images/logos/guesty.svg",
+      "date": "2025",
+      "jobTitle": "Sr. Product Designer",
+      "bullets": [
+        "Notifications Revamp",
+        "Mid-stay relocation",
+        "Additional Fees"
+      ],
+      "images": [
+        {
+          "src": "/images/projects/preply-main.jpg",
+          "alt": "Guesty project preview",
+          "width": 839,
+          "height": 525,
+          "idle": {
+            "rotate": -3.08,
+            "x": "26px",
+            "y": "calc(-50% + 28px)"
+          },
+          "hover": {
+            "rotate": -4.56,
+            "x": "0px",
+            "y": "calc(-50% + 28px)"
+          },
+          "borderRadius": 8,
+          "shadow": "0px 15px 30px #00000012"
+        },
+        {
+          "src": "/images/projects/preply-sidebar.jpg",
+          "alt": "Guesty project detail",
+          "width": 180,
+          "height": 578,
+          "idle": {
+            "rotate": 3.93,
+            "x": "calc(-50% + 176px)",
+            "y": "calc(-50% - 3px)"
+          },
+          "hover": {
+            "rotate": 4.79,
+            "x": "calc(-50% + 184px)",
+            "y": "calc(-50% - 12px)"
+          },
+          "borderRadius": 16,
+          "shadow": "0px 15px 30px #00000012"
+        },
+        {
+          "src": "/images/projects/preply-panels.jpg",
+          "alt": "Guesty project panels",
+          "width": 225,
+          "height": 578,
+          "idle": {
+            "rotate": 8.64,
+            "x": "calc(-50% + 345px)",
+            "y": "calc(-50% - 17px)"
+          },
+          "hover": {
+            "rotate": 10.11,
+            "x": "calc(-50% + 365px)",
+            "y": "calc(-50% - 34px)"
+          },
+          "borderRadius": 20,
+          "shadow": "0px 15px 30px #00000012"
+        }
+      ],
+      "mobileImageSrc": "/images/projects/preply-main.jpg",
+      "mobileImageAlt": "Guesty product interface",
+      "caseSlug": null
+    },
+    {
+      "slug": "test-5",
+      "company": "Test Project 5",
+      "logoSrc": "/images/logos/similarweb.svg",
+      "date": "2021 — 2024",
+      "jobTitle": "Sr. Product Designer",
+      "bullets": [
+        "Core Navigation Redesign",
+        "",
+        "Market Research",
+        "Demand analysis"
+      ],
+      "images": [
+        {
+          "src": "/images/projects/preply-main.jpg",
+          "alt": "SimilarWeb sidebar redesign",
+          "width": 839,
+          "height": 525,
+          "idle": {
+            "rotate": -3.08,
+            "x": "26px",
+            "y": "calc(-50% + 28px)"
+          },
+          "hover": {
+            "rotate": -4.56,
+            "x": "0px",
+            "y": "calc(-50% + 28px)"
+          },
+          "borderRadius": 8,
+          "shadow": "0px 15px 30px #00000012"
+        },
+        {
+          "src": "/images/projects/preply-sidebar.jpg",
+          "alt": "SimilarWeb navigation detail",
+          "width": 180,
+          "height": 578,
+          "idle": {
+            "rotate": 3.93,
+            "x": "calc(-50% + 176px)",
+            "y": "calc(-50% - 3px)"
+          },
+          "hover": {
+            "rotate": 4.79,
+            "x": "calc(-50% + 184px)",
+            "y": "calc(-50% - 12px)"
+          },
+          "borderRadius": 16,
+          "shadow": "0px 15px 30px #00000012"
+        },
+        {
+          "src": "/images/projects/preply-panels.jpg",
+          "alt": "SimilarWeb platform panels",
+          "width": 225,
+          "height": 578,
+          "idle": {
+            "rotate": 8.64,
+            "x": "calc(-50% + 345px)",
+            "y": "calc(-50% - 17px)"
+          },
+          "hover": {
+            "rotate": 10.11,
+            "x": "calc(-50% + 365px)",
+            "y": "calc(-50% - 34px)"
+          },
+          "borderRadius": 20,
+          "shadow": "0px 15px 30px #00000012"
+        }
+      ],
+      "mobileImageSrc": "/images/projects/preply-main.jpg",
+      "mobileImageAlt": "SimilarWeb platform interface",
+      "caseSlug": null
+    },
+    {
+      "slug": "test-6",
+      "company": "Test Project 6",
+      "logoSrc": "/images/logos/sber.svg",
+      "date": "2019 — 2021",
+      "jobTitle": "Lead Designer",
+      "bullets": [
+        "Total Funds rebuild",
+        "Donut + haptic interactions",
+        "Financial Cushion behavioral design",
+        "Post-launch simplicity pivot"
+      ],
+      "images": [
+        {
+          "src": "/images/projects/preply-main.jpg",
+          "alt": "Sber Total Funds dashboard",
+          "width": 839,
+          "height": 525,
+          "idle": {
+            "rotate": -3.08,
+            "x": "26px",
+            "y": "calc(-50% + 28px)"
+          },
+          "hover": {
+            "rotate": -4.56,
+            "x": "0px",
+            "y": "calc(-50% + 28px)"
+          },
+          "borderRadius": 8,
+          "shadow": "0px 15px 30px #00000012"
+        },
+        {
+          "src": "/images/projects/preply-sidebar.jpg",
+          "alt": "Sber Total Funds detail",
+          "width": 180,
+          "height": 578,
+          "idle": {
+            "rotate": 3.93,
+            "x": "calc(-50% + 176px)",
+            "y": "calc(-50% - 3px)"
+          },
+          "hover": {
+            "rotate": 4.79,
+            "x": "calc(-50% + 184px)",
+            "y": "calc(-50% - 12px)"
+          },
+          "borderRadius": 16,
+          "shadow": "0px 15px 30px #00000012"
+        },
+        {
+          "src": "/images/projects/preply-panels.jpg",
+          "alt": "Sber Total Funds variants",
+          "width": 225,
+          "height": 578,
+          "idle": {
+            "rotate": 8.64,
+            "x": "calc(-50% + 345px)",
+            "y": "calc(-50% - 17px)"
+          },
+          "hover": {
+            "rotate": 10.11,
+            "x": "calc(-50% + 365px)",
+            "y": "calc(-50% - 34px)"
+          },
+          "borderRadius": 20,
+          "shadow": "0px 15px 30px #00000012"
+        }
+      ],
+      "mobileImageSrc": "/images/projects/preply-main.jpg",
+      "mobileImageAlt": "Sber Total Funds app",
+      "caseSlug": null
+    },
+    {
+      "slug": "test-7",
+      "company": "Test Project 7",
+      "logoSrc": "/images/logos/guesty.svg",
+      "date": "2025",
+      "jobTitle": "Sr. Product Designer",
+      "bullets": [
+        "Notifications Revamp",
+        "Mid-stay relocation",
+        "Additional Fees"
+      ],
+      "images": [
+        {
+          "src": "/images/projects/preply-main.jpg",
+          "alt": "Guesty project preview",
+          "width": 839,
+          "height": 525,
+          "idle": {
+            "rotate": -3.08,
+            "x": "26px",
+            "y": "calc(-50% + 28px)"
+          },
+          "hover": {
+            "rotate": -4.56,
+            "x": "0px",
+            "y": "calc(-50% + 28px)"
+          },
+          "borderRadius": 8,
+          "shadow": "0px 15px 30px #00000012"
+        },
+        {
+          "src": "/images/projects/preply-sidebar.jpg",
+          "alt": "Guesty project detail",
+          "width": 180,
+          "height": 578,
+          "idle": {
+            "rotate": 3.93,
+            "x": "calc(-50% + 176px)",
+            "y": "calc(-50% - 3px)"
+          },
+          "hover": {
+            "rotate": 4.79,
+            "x": "calc(-50% + 184px)",
+            "y": "calc(-50% - 12px)"
+          },
+          "borderRadius": 16,
+          "shadow": "0px 15px 30px #00000012"
+        },
+        {
+          "src": "/images/projects/preply-panels.jpg",
+          "alt": "Guesty project panels",
+          "width": 225,
+          "height": 578,
+          "idle": {
+            "rotate": 8.64,
+            "x": "calc(-50% + 345px)",
+            "y": "calc(-50% - 17px)"
+          },
+          "hover": {
+            "rotate": 10.11,
+            "x": "calc(-50% + 365px)",
+            "y": "calc(-50% - 34px)"
+          },
+          "borderRadius": 20,
+          "shadow": "0px 15px 30px #00000012"
+        }
+      ],
+      "mobileImageSrc": "/images/projects/preply-main.jpg",
+      "mobileImageAlt": "Guesty product interface",
+      "caseSlug": null
     }
   ]
 }

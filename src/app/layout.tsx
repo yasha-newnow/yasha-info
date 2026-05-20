@@ -8,6 +8,7 @@ import { EditToggleButton } from "@/components/edit-mode/edit-toggle-button";
 import { EditSidePanel } from "@/components/edit-mode/edit-side-panel";
 import { ContentProvider } from "@/lib/edit-mode/content-context";
 import { loadAllContent } from "@/data/server-load";
+import { Agentation } from "agentation";
 
 // Read content JSON fresh on every request so dev-time edits propagate
 // without restarting the server. Layout owns the data provider so dev tools
@@ -67,9 +68,14 @@ export default async function RootLayout({
             <EditSidePanel />
           </EditModeProvider>
         </ContentProvider>
-        {/* DialKit + Agentation are mounted INSIDE Drawer.Content (project-sheet.tsx)
-            so Vaul's outside-click detection doesn't close the drawer when interacting
-            with dev tools. Trade-off: dev tools visible only when drawer is open. */}
+        {/* Agentation — AI-comment overlay for annotating concrete UI elements.
+            Dev-only. Mounted at the body root so it's visible on every page
+            (main as well as inside drawers). Trade-off: clicking it while a
+            Vaul drawer is open may register as outside-click and close it —
+            acceptable because the typical use is annotating the main UI.
+            DialKit stays inside Drawer.Content (project-sheet.tsx) and is
+            currently commented out there. */}
+        {process.env.NODE_ENV === "development" && <Agentation />}
       </body>
     </html>
   );
