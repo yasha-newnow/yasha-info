@@ -12,6 +12,20 @@ interface ProjectCardProps {
   cardIndex: number;
   onClick?: () => void;
   onPrefetch?: () => void;
+  /**
+   * "interactive" (default): full hover + image springs.
+   * "background": stacked behind the front card — hover/spring machinery
+   * disabled.
+   */
+  variant?: "interactive" | "background";
+  /**
+   * True when the card is rendered inside the scroll-stack. Gates the
+   * depth-driven frost: the card's own content is blurred via
+   * `--card-content-filter` and veiled by a white `--card-tint` overlay as it
+   * recedes (front/active card = none → sharp). Default false = plain opaque
+   * card (static list / reduced-motion / edit unchanged).
+   */
+  stacked?: boolean;
 }
 
 const springTransition = {
@@ -22,7 +36,14 @@ const springTransition = {
 
 /* ─── Desktop Card ─── */
 
-function ProjectCardDesktop({ card, cardIndex, onPrefetch }: ProjectCardProps) {
+function ProjectCardDesktop({
+  card,
+  cardIndex,
+  onPrefetch,
+  variant = "interactive",
+  stacked = false,
+}: ProjectCardProps) {
+  const interactive = variant !== "background";
   const [isHovered, setIsHovered] = useState(false);
   const idBase = `caseCards.${cardIndex}`;
 
@@ -36,9 +57,7 @@ function ProjectCardDesktop({ card, cardIndex, onPrefetch }: ProjectCardProps) {
         }}
       >
         <motion.article
-          className="
-            absolute flex flex-row gap-4
-            rounded-3xl bg-white overflow-hidden          "
+          className="absolute rounded-3xl overflow-hidden bg-white"
           style={{
             color: "var(--card-text)",
             outline: "1px solid color-mix(in srgb, var(--card-text) 5%, transparent)",
@@ -59,9 +78,21 @@ function ProjectCardDesktop({ card, cardIndex, onPrefetch }: ProjectCardProps) {
             paddingRight: 0,
           }}
           transition={springTransition}
-          onMouseEnter={() => { setIsHovered(true); onPrefetch?.(); }}
-          onMouseLeave={() => setIsHovered(false)}
+          onMouseEnter={
+            interactive
+              ? () => { setIsHovered(true); onPrefetch?.(); }
+              : undefined
+          }
+          onMouseLeave={interactive ? () => setIsHovered(false) : undefined}
         >
+          {/* In the scroll-stack, a receded card blurs its OWN content via
+              --card-content-filter (front/active = none → sharp). The
+              <article> frame/outline is never filtered → stays crisp. */}
+          <div
+            data-card-content
+            className="flex flex-row gap-4 w-full h-full"
+            style={{ filter: "var(--card-content-filter, none)" }}
+          >
           {/* Left column — content */}
           <div className="flex flex-col justify-between w-[200px] shrink-0">
             {/* Top: company section + bullets */}
@@ -116,33 +147,88 @@ function ProjectCardDesktop({ card, cardIndex, onPrefetch }: ProjectCardProps) {
             </button>
           </div>
 
-          {/* Right column — images */}
-          <div className="flex-1 relative rounded-xl overflow-visible flex items-center justify-center">
+          {/* Right column — images. `overflow-visible` so the fanned card
+              images (translated/rotated by springs) extend beyond the column
+              bounds — same intent on desktop and mobile. */}
+          <div className="flex-1 relative rounded-xl flex items-center justify-center">
             {card.images.map((img, i) => (
-              <CardImage key={i} image={img} isHovered={isHovered} />
+              <CardImage
+                key={i}
+                image={img}
+                isHovered={isHovered}
+                animated={interactive}
+              />
             ))}
           </div>
+          </div>
+          {/* Frost veil — over the blurred content, under the rounded clip.
+              --card-tint is 0 for the front/active card (invisible) and ramps
+              up as the card recedes, so blurred content reads as glass. */}
+          {stacked && (
+            <div
+              aria-hidden
+              className="absolute inset-0 rounded-3xl pointer-events-none"
+              style={{
+                background: "rgba(255, 255, 255, var(--card-tint, 0))",
+              }}
+            />
+          )}
         </motion.article>
       </div>
     </div>
   );
 }
 
-function CardImage({ image, isHovered }: { image: CardImageData; isHovered: boolean }) {
+function CardImage({
+  image,
+  isHovered,
+  animated = true,
+}: {
+  image: CardImageData;
+  isHovered: boolean;
+  animated?: boolean;
+}) {
   const state = isHovered ? image.hover : image.idle;
+
+  const baseStyle = {
+    width: image.width,
+    height: image.height,
+    top: "50%",
+    left: image.idle.x.includes("-50%") ? "50%" : 0,
+    borderRadius: image.borderRadius,
+    overflow: "hidden",
+    boxShadow: image.shadow,
+  } as const;
+
+  const inner = (
+    <Image
+      src={image.src}
+      alt={image.alt}
+      width={image.width}
+      height={image.height}
+      className="w-full h-full object-cover"
+    />
+  );
+
+  // Background cards: no springs/motion — render the idle pose statically.
+  if (!animated) {
+    return (
+      <div
+        className="absolute"
+        style={{
+          ...baseStyle,
+          transform: `translateX(${image.idle.x}) translateY(${image.idle.y}) rotate(${image.idle.rotate}deg)`,
+        }}
+      >
+        {inner}
+      </div>
+    );
+  }
 
   return (
     <motion.div
       className="absolute"
-      style={{
-        width: image.width,
-        height: image.height,
-        top: "50%",
-        left: image.idle.x.includes("-50%") ? "50%" : 0,
-        borderRadius: image.borderRadius,
-        overflow: "hidden",
-        boxShadow: image.shadow,
-      }}
+      style={baseStyle}
       animate={{
         rotate: state.rotate,
         x: state.x,
@@ -150,24 +236,22 @@ function CardImage({ image, isHovered }: { image: CardImageData; isHovered: bool
       }}
       transition={springTransition}
     >
-      <Image
-        src={image.src}
-        alt={image.alt}
-        width={image.width}
-        height={image.height}
-        className="w-full h-full object-cover"
-      />
+      {inner}
     </motion.div>
   );
 }
 
 /* ─── Mobile Card ─── */
 
-function ProjectCardMobile({ card, cardIndex }: ProjectCardProps) {
+function ProjectCardMobile({
+  card,
+  cardIndex,
+  stacked = false,
+}: ProjectCardProps) {
   const idBase = `caseCards.${cardIndex}`;
   return (
     <article
-      className="relative flex flex-col gap-3 w-full rounded-3xl bg-white overflow-clip"
+      className="relative w-full rounded-3xl overflow-clip bg-white"
       style={{
         padding: "24px 24px 0 24px",
         height: 600,
@@ -175,6 +259,13 @@ function ProjectCardMobile({ card, cardIndex }: ProjectCardProps) {
         outline: "1px solid color-mix(in srgb, var(--card-text) 5%, transparent)",
       }}
     >
+      {/* Receded card blurs its OWN content via --card-content-filter
+          (front = none → sharp); frame stays crisp. */}
+      <div
+        data-card-content
+        className="flex flex-col gap-3 w-full h-full"
+        style={{ filter: "var(--card-content-filter, none)" }}
+      >
       {/* Header: logo + title + date */}
       <div className="flex flex-col gap-3">
         <Image
@@ -194,7 +285,8 @@ function ProjectCardMobile({ card, cardIndex }: ProjectCardProps) {
         </div>
       </div>
 
-      {/* Image container — fills remaining space */}
+      {/* Image container — fills remaining space. `overflow-hidden` clips
+          the image to the rounded-xl shape (matches `main` behaviour). */}
       <div className="flex-1 relative rounded-xl overflow-hidden">
         <Image
           src={card.mobileImageSrc}
@@ -204,8 +296,9 @@ function ProjectCardMobile({ card, cardIndex }: ProjectCardProps) {
           sizes="(max-width: 1024px) 100vw"
         />
       </div>
+      </div>
 
-      {/* Button — top right, idle state only */}
+      {/* Button — top right, idle state only (unblurred sibling) */}
       <button
         className="absolute top-4 right-4 flex items-center justify-center w-12 h-12 rounded-xl cursor-pointer"
         style={{
@@ -215,21 +308,48 @@ function ProjectCardMobile({ card, cardIndex }: ProjectCardProps) {
       >
         <ExpandIcon size={24} />
       </button>
+
+      {/* Frost veil — 0 for the front card, ramps as it recedes. */}
+      {stacked && (
+        <div
+          aria-hidden
+          className="absolute inset-0 rounded-3xl pointer-events-none"
+          style={{ background: "rgba(255, 255, 255, var(--card-tint, 0))" }}
+        />
+      )}
     </article>
   );
 }
 
 /* ─── Responsive Wrapper ─── */
 
-export function ProjectCard({ card, cardIndex, onClick, onPrefetch }: ProjectCardProps) {
+export function ProjectCard({
+  card,
+  cardIndex,
+  onClick,
+  onPrefetch,
+  variant = "interactive",
+  stacked = false,
+}: ProjectCardProps) {
   const cursor = onClick ? "cursor-pointer" : "cursor-default";
   return (
     <>
       <div className={`hidden lg:block ${cursor}`} onClick={onClick}>
-        <ProjectCardDesktop card={card} cardIndex={cardIndex} onPrefetch={onPrefetch} />
+        <ProjectCardDesktop
+          card={card}
+          cardIndex={cardIndex}
+          onPrefetch={onPrefetch}
+          variant={variant}
+          stacked={stacked}
+        />
       </div>
       <div className={`lg:hidden ${cursor}`} onClick={onClick}>
-        <ProjectCardMobile card={card} cardIndex={cardIndex} />
+        <ProjectCardMobile
+          card={card}
+          cardIndex={cardIndex}
+          variant={variant}
+          stacked={stacked}
+        />
       </div>
     </>
   );

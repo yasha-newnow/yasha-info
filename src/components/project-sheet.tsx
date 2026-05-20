@@ -7,8 +7,7 @@ import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 import { preload } from "react-dom";
-import { DialRoot, useDialKit } from "dialkit";
-import { Agentation } from "agentation";
+import { useDialKit } from "dialkit";
 import { ArrowUpRight } from "./icons";
 import type { CaseStudy, CaseSection, GalleryImage } from "@/data/schemas";
 import { useCaseStudies } from "@/lib/edit-mode/content-context";
@@ -190,18 +189,13 @@ export function ProjectSheet({
             </Drawer.Close>
           </div>
 
-          {/* Dev tools — mounted INSIDE Drawer.Content so clicks don't trigger
-              Vaul's outside-click close. `data-vaul-no-drag` blocks drag-detection.
-
-              DialRoot UI is currently HIDDEN — useDialKit still runs in EmblaGallery
-              and returns the tuned defaults that drive Embla's snap behavior.
-              To play with dial again, uncomment `<DialRoot mode="inline" />` below. */}
-          {process.env.NODE_ENV === "development" && (
-            <div data-vaul-no-drag className="absolute top-4 right-4 z-30 max-h-[calc(100%-32px)] overflow-auto pointer-events-auto">
-              {/* <DialRoot mode="inline" /> */}
-              <Agentation />
-            </div>
-          )}
+          {/* Agentation moved to layout.tsx (so it's visible on the main page,
+              not only inside this drawer). DialRoot UI is HIDDEN — useDialKit
+              still runs in EmblaGallery and returns tuned defaults driving
+              Embla's snap. To play with dial again, mount
+              `<div data-vaul-no-drag ...><DialRoot mode="inline" /></div>`
+              here inside Drawer.Content (data-vaul-no-drag is needed so Vaul
+              doesn't treat clicks as drag/dismiss). */}
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>

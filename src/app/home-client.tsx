@@ -69,7 +69,7 @@ export default function HomeClient() {
         <div className="max-w-[1280px] mx-auto w-full min-h-full px-4 lg:px-0">
           <Hero />
 
-          <WorksSection />
+          <WorksSection scrollContainer={mainRef} />
 
           <AboutSection />
 
