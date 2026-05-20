@@ -285,9 +285,9 @@ function ProjectCardMobile({
         </div>
       </div>
 
-      {/* Image container — fills remaining space. `overflow-visible` matches
-          the desktop variant (image container doesn't clip). */}
-      <div className="flex-1 relative rounded-xl">
+      {/* Image container — fills remaining space. `overflow-hidden` clips
+          the image to the rounded-xl shape (matches `main` behaviour). */}
+      <div className="flex-1 relative rounded-xl overflow-hidden">
         <Image
           src={card.mobileImageSrc}
           alt={card.mobileImageAlt}
@@ -298,14 +298,11 @@ function ProjectCardMobile({
       </div>
       </div>
 
-      {/* Button — top right. v6: replaced `backdrop-filter: blur(10px)` (an
-          always-on backdrop-filter on every visible mobile card → expensive
-          per-frame repaint on iOS) with a translucent bg tinted by the card
-          text colour. Same visual hierarchy, no compositor-thrash. */}
+      {/* Button — top right, idle state only (unblurred sibling) */}
       <button
         className="absolute top-4 right-4 flex items-center justify-center w-12 h-12 rounded-xl cursor-pointer"
         style={{
-          backgroundColor: "color-mix(in srgb, var(--card-text) 4%, transparent)",
+          backdropFilter: "blur(10px)",
           color: "var(--card-text)",
         }}
       >
