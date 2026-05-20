@@ -58,3 +58,4 @@ storybook-static
 /Users/
 /tmp/
 /gmail_mcp.log
+.env*.local

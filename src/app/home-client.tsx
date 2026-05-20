@@ -77,8 +77,13 @@ export default function HomeClient() {
         </div>
       </main>
 
+      {/* Picker — design dev-tool for accent colour. Hidden on mobile:
+          (a) it has backdrop-filter:blur(10px) + filter:blur(0px) which are
+          known iOS Safari perf hogs during scroll; (b) palette tapping on
+          phone is awkward; (c) end-users rarely change accent colour from
+          mobile. Desktop UX unchanged. */}
       <motion.div
-        className="fixed bottom-4 right-4 z-30 flex items-end justify-end"
+        className="fixed bottom-4 right-4 z-30 hidden lg:flex items-end justify-end"
         initial={false}
         animate={
           showPicker

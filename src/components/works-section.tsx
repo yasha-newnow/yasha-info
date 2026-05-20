@@ -54,6 +54,11 @@ type StackConsts = {
   /** Extra flex-gap on pinned-container (gap-4=16 mobile / gap-0 desktop)
    *  so total title↔card distance = mb + gap = 56 mobile / 64 desktop. */
   PINNED_FLEX_GAP: number;
+  /** Cumulative vertical offsets (px) of receded cards in the fan.
+   *  depth=0 → 0px; depth=1 → −OFFSET_STEPS[1]px (upward); etc.
+   *  Per-viewport: mobile uses tighter stack (~halved values) so cards
+   *  in the fan sit closer together visually. */
+  OFFSET_STEPS: readonly number[];
 };
 
 const DESKTOP: StackConsts = {
@@ -65,30 +70,29 @@ const DESKTOP: StackConsts = {
   H2_HEIGHT: 76,
   TITLE_MB: 64, // SectionHeader's lg:mb-16
   PINNED_FLEX_GAP: 0, // desktop: no extra gap (mb-16 alone = 64)
+  OFFSET_STEPS: [0, 16, 27, 34, 38], // current values, tapered
 };
 
 const MOBILE: StackConsts = {
   SCALE_STEP: 0.06,
-  MAX_VISIBLE: 5,
+  MAX_VISIBLE: 3, // v6: was 5; mobile fan shows front + 2 receded only
   MIN_SCALE: 0.74,
   SPACING_PX: 700, // card_h ≈ 600 + INTER_GAP 100
   CARD_H: 600, // ProjectCardMobile fixed
   H2_HEIGHT: 56,
   TITLE_MB: 40, // SectionHeader's mb-10
   PINNED_FLEX_GAP: 16, // mobile: gap-4 brings total title↔card to 56
+  OFFSET_STEPS: [0, 10, 16, 20, 22], // v6: tighter stack (~halved) for mobile
 };
 
-/* Tapered vertical offsets: gaps between consecutive cards shrink with depth
-   (16/11/7/4 px) → cumulative upward offset, clamped beyond depth 4. */
-const OFFSET_STEPS = [0, 16, 27, 34, 38] as const;
-function offsetFor(d: number): number {
+/* Tapered vertical offsets resolved per-viewport via consts.OFFSET_STEPS.
+   Linear interpolation between adjacent steps, clamped at max. */
+function offsetFor(d: number, steps: readonly number[]): number {
   if (d <= 0) return 0;
-  const max = OFFSET_STEPS.length - 1; // 4
-  if (d >= max) return OFFSET_STEPS[max]; // 38
+  const max = steps.length - 1;
+  if (d >= max) return steps[max];
   const lo = Math.floor(d);
-  return (
-    OFFSET_STEPS[lo] + (d - lo) * (OFFSET_STEPS[lo + 1] - OFFSET_STEPS[lo])
-  );
+  return steps[lo] + (d - lo) * (steps[lo + 1] - steps[lo]);
 }
 
 /* Frosted-recede tuning (QA-tunable). FRONT_SHARP: a card stays fully sharp
@@ -174,8 +178,9 @@ function StackedCard({
   // translateY = waitDistance * SPACING_PX (pushes DOWN to natural list slot)
   //            − offsetFor(depth) (pushes UP for fan offset). Mutually
   //            exclusive: one or the other is non-zero (never both).
+  //            OFFSET_STEPS now per-viewport (mobile uses tighter values).
   const ty = useTransform([waitDistance, depth], ([w, d]) => {
-    return (w as number) * consts.SPACING_PX - offsetFor(d as number);
+    return (w as number) * consts.SPACING_PX - offsetFor(d as number, consts.OFFSET_STEPS);
   });
   // Full opacity while clearly visible, then a short 1→0 fade so the buried
   // tail dissolves. Depth legibility = scale + tapered offset + content blur
@@ -196,7 +201,13 @@ function StackedCard({
     );
   // Continuous from 0 at the threshold (no pop): at d=FRONT_SHARP ramp=0 →
   // blur(0px) which is seamless with "none", then grows smoothly to BLUR_MAX.
+  // v6: SKIP filter:blur entirely on mobile — iOS Safari can't cache blur
+  //     output when the radius changes per frame, costing ~30-50% of frame
+  //     budget on A12-A14 devices. Depth on mobile is conveyed via scale
+  //     + offsetFor + tint + opacity-fade (already in place); the blur cue
+  //     was an additional amplifier, not strictly needed.
   const contentFilter = useTransform(depth, (d) => {
+    if (consts === MOBILE) return "none";
     if (d < FRONT_SHARP) return "none";
     return `blur(${(ramp(d) * BLUR_MAX).toFixed(2)}px)`;
   });
@@ -207,9 +218,12 @@ function StackedCard({
 
   const transform = useMotionTemplate`translate3d(0, ${ty}px, 0) scale(${scale})`;
 
-  // Expose depth for QA/diagnostics.
+  // Expose depth for QA/diagnostics (dev/test only — skipped in production
+  // to avoid per-frame DOM mutations).
   useMotionValueEvent(depth, "change", (d) => {
-    if (ref.current) ref.current.dataset.depth = d.toFixed(2);
+    if (process.env.NODE_ENV !== "production" && ref.current) {
+      ref.current.dataset.depth = d.toFixed(2);
+    }
   });
 
   const style = {
@@ -217,7 +231,9 @@ function StackedCard({
     opacity,
     zIndex: index, // later cards paint over earlier ones
     transformOrigin: "top center",
-    willChange: "transform, opacity",
+    // v6: skip pre-allocated compositor layers on mobile (low GPU memory).
+    // Browser creates the layer on-demand when transform animates.
+    willChange: consts === MOBILE ? "auto" : "transform, opacity",
     "--card-content-filter": contentFilter,
     "--card-tint": cardTint,
   } as MotionStyle;
@@ -368,12 +384,12 @@ function WorksStack({
     offset: ["start start", `end ${pinnedH}px`],
   });
 
-  // Expose true progress for QA/diagnostics on the section itself (which
-  // also carries `data-card-count` — matching existing test selectors that
-  // expect a single element with both attributes + the full scroll-runway
-  // height, used to compute scroll-progress positions).
+  // Expose true progress for QA/diagnostics on the section itself (dev/test
+  // only — skipped in production to avoid per-frame DOM mutations).
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    if (sectionRef.current) sectionRef.current.dataset.p = v.toFixed(3);
+    if (process.env.NODE_ENV !== "production" && sectionRef.current) {
+      sectionRef.current.dataset.p = v.toFixed(3);
+    }
   });
 
   return (
@@ -397,7 +413,13 @@ function WorksStack({
             viewports stay rendered (consistent on desktop and mobile). */}
       <div
         className="sticky top-[-80px] lg:top-0 flex flex-col pt-[56px] pb-[80px] gap-4 lg:gap-0"
-        style={{ height: `${pinnedH}px`, background: "var(--accent)" }}
+        style={{
+          height: `${pinnedH}px`,
+          background: "var(--accent)",
+          // v6: isolate sticky into its own compositor layer to fix Safari
+          // sticky+transform duplication artifact (WebKit bug 229648).
+          willChange: "transform",
+        }}
       >
         <SectionHeader title={sections[0].title} tag={sections[0].tag} />
 
