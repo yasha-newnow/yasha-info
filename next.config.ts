@@ -1,13 +1,11 @@
 import type { NextConfig } from "next";
-import path from "path";
-import os from "os";
 
 const nextConfig: NextConfig = {
-  // Workaround: Turbopack can't write to paths with non-ASCII chars (• in project path).
-  // Only needed for local dev — Vercel builds use default .next
-  ...(process.env.VERCEL
-    ? {}
-    : { distDir: path.join(os.homedir(), ".cache", "yasha-portfolio-next") }),
+  // Explicit Turbopack root: lock-file auto-detection is unreliable on paths
+  // containing non-ASCII characters (the `•` in this project path).
+  turbopack: {
+    root: __dirname,
+  },
 };
 
 export default nextConfig;
