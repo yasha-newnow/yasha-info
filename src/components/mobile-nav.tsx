@@ -11,6 +11,9 @@ import { EMAIL, copyEmail } from "@/lib/copy-email";
 interface MobileNavProps {
   show?: boolean;
   scrollContainer?: React.RefObject<HTMLElement | null>;
+  groupDelay?: number;
+  staggerDelay?: number;
+  itemDuration?: number;
 }
 
 /* ── Scroll direction hook ──────────────────────── */
@@ -81,44 +84,7 @@ function useScrollDirection(
 
 /* ── Animation config ────────────────────────────── */
 
-const GROUP_DELAY = 0.25;
-const STAGGER_DELAY = 0.1;
-const ITEM_DURATION = 0.3;
 const ITEM_Y = 4;
-
-function sectionVariants(groupIndex: number) {
-  return {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: STAGGER_DELAY,
-        delayChildren: groupIndex * GROUP_DELAY,
-      },
-    },
-    exit: {
-      transition: {
-        staggerChildren: 0.03,
-        staggerDirection: 1, // top items exit first
-      },
-    },
-  };
-}
-
-const fadeInItem = {
-  hidden: { opacity: 0, y: ITEM_Y, filter: "blur(5px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: ITEM_DURATION, ease: "easeOut" as const },
-  },
-  exit: {
-    opacity: 0,
-    y: -8,
-    filter: "blur(5px)",
-    transition: { duration: 0.35, ease: "easeIn" as const },
-  },
-};
 
 /* ── Helpers ──────────────────────────────────────── */
 
@@ -133,7 +99,45 @@ type NavState = "closed" | "open" | "closing" | "shrinking";
 
 /* ── Component ───────────────────────────────────── */
 
-export function MobileNav({ show = false, scrollContainer }: MobileNavProps) {
+export function MobileNav({
+  show = false,
+  scrollContainer,
+  groupDelay = 0.35,
+  staggerDelay = 0.1,
+  itemDuration = 0.25,
+}: MobileNavProps) {
+  const sectionVariants = (groupIndex: number) => ({
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: staggerDelay,
+        delayChildren: groupIndex * groupDelay,
+      },
+    },
+    exit: {
+      transition: {
+        staggerChildren: 0.03,
+        staggerDirection: 1, // top items exit first
+      },
+    },
+  });
+
+  const fadeInItem = {
+    hidden: { opacity: 0, y: ITEM_Y, filter: "blur(5px)" },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: { duration: itemDuration, ease: "easeOut" as const },
+    },
+    exit: {
+      opacity: 0,
+      y: -8,
+      filter: "blur(5px)",
+      transition: { duration: 0.35, ease: "easeIn" as const },
+    },
+  };
+
   const [state, setState] = useState<NavState>("closed");
   const [pendingScroll, setPendingScroll] = useState<string | null>(null);
   const forcedActiveRef = useRef<string | null>(null);

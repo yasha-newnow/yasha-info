@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { useDialKit } from "dialkit";
+import { useDialKit, DialRoot } from "dialkit";
 import {
   Hero,
   type EntranceTuning,
@@ -40,13 +40,22 @@ export default function EntranceTunePage() {
       },
       text: {
         titleDelay: [1.7, 0, 4.0, 0.05],
-        descriptionDelay: [2.6, 0, 5.0, 0.05],
+        titleCharDuration: [0.2, 0.05, 1.5, 0.05],
+        titleCharStagger: [0.02, 0.005, 0.2, 0.005],
+        descriptionDelay: [2.2, 0, 5.0, 0.05],
+        descriptionWordDuration: [0.2, 0.05, 1.5, 0.05],
+        descriptionWordStagger: [0.03, 0.005, 0.2, 0.005],
       },
       sidebar: {
-        sidebarDelay: [3.2, 0, 7.0, 0.1],
+        sidebarDelay: [2.6, 0, 7.0, 0.1],
+      },
+      mobileNav: {
+        groupDelay: [0.35, 0, 1.5, 0.05],
+        staggerDelay: [0.1, 0, 0.5, 0.01],
+        itemDuration: [0.25, 0.05, 1.5, 0.05],
       },
       picker: {
-        delay: [4.2, 0, 7.0, 0.1],
+        delay: [2.8, 0, 7.0, 0.1],
         duration: [0.25, 0.1, 1.5, 0.05],
         slideX: [6, 0, 80, 1],
         slideY: [6, 0, 40, 1],
@@ -90,11 +99,21 @@ export default function EntranceTunePage() {
     shaderDelay: dial.shader.delay,
     titleDelay: dial.text.titleDelay,
     descriptionDelay: dial.text.descriptionDelay,
+    titleCharDuration: dial.text.titleCharDuration,
+    titleCharStagger: dial.text.titleCharStagger,
+    descriptionWordDuration: dial.text.descriptionWordDuration,
+    descriptionWordStagger: dial.text.descriptionWordStagger,
   };
 
   return (
     <div className="flex flex-col lg:flex-row h-dvh px-4 lg:gap-0 relative">
-      <MobileNav show={showSidebar} scrollContainer={mainRef} />
+      <MobileNav
+        show={showSidebar}
+        scrollContainer={mainRef}
+        groupDelay={dial.mobileNav.groupDelay}
+        staggerDelay={dial.mobileNav.staggerDelay}
+        itemDuration={dial.mobileNav.itemDuration}
+      />
       <Sidebar show={showSidebar} delay={0} scrollContainer={mainRef} />
 
       <main
@@ -124,6 +143,10 @@ export default function EntranceTunePage() {
       >
         <ButtonCustomization />
       </motion.div>
+
+      {process.env.NODE_ENV === "development" && (
+        <DialRoot position="top-right" />
+      )}
     </div>
   );
 }

@@ -12,8 +12,10 @@ import { ContactSection } from "@/components/contact-section";
 
 // Shifted by 0.3s along with the rest of entrance timings to accommodate the
 // 300ms fade-in lead delay on the shader (see hero.tsx FADE_IN_DELAY_MS).
-const SIDEBAR_DELAY = 3.5;
-const PICKER_DELAY = 4.5;
+// Mobile = breakpoints below lg (1024px), where the sidebar collapses into a
+// header (MobileNav) and the picker fades in without the desktop sidebar stagger.
+const DESKTOP_TIMINGS = { sidebar: 2.6, picker: 3.5 };
+const MOBILE_TIMINGS = { sidebar: 2.6, picker: 2.8 };
 const PICKER_DURATION = 0.25;
 const PICKER_SLIDE_X = 6;
 const PICKER_SLIDE_Y = 6;
@@ -31,6 +33,8 @@ export default function HomeClient() {
       setShowPicker(true);
       return;
     }
+    const isMobile = window.matchMedia("(max-width: 1023px)").matches;
+    const t = isMobile ? MOBILE_TIMINGS : DESKTOP_TIMINGS;
     const main = mainRef.current;
     if (main) {
       main.style.overflow = "hidden";
@@ -38,7 +42,7 @@ export default function HomeClient() {
     }
     const sidebarTimer = setTimeout(
       () => setShowSidebar(true),
-      SIDEBAR_DELAY * 1000,
+      t.sidebar * 1000,
     );
     const pickerTimer = setTimeout(() => {
       setShowPicker(true);
@@ -46,7 +50,7 @@ export default function HomeClient() {
         main.style.overflow = "";
         main.style.touchAction = "";
       }
-    }, PICKER_DELAY * 1000);
+    }, t.picker * 1000);
     return () => {
       clearTimeout(sidebarTimer);
       clearTimeout(pickerTimer);

@@ -33,11 +33,6 @@ const TITLE_LINES = ["I'm Yasha,", "Product Designer."];
 const DESCRIPTION =
   "10+ years driving $20M+ revenue through research & leadership in Apps, FinTech & Complex B2B";
 
-const TITLE_CHAR_STAGGER = 0.04;
-const TITLE_CHAR_DURATION = 0.3;
-const DESCRIPTION_WORD_STAGGER = 0.05;
-const DESCRIPTION_WORD_DURATION = 0.3;
-
 export type EntranceEasingKey =
   | "easeOutStrong"
   | "iosDrawer"
@@ -61,18 +56,23 @@ export interface EntranceTuning {
   shaderDelay: number;
   titleDelay: number;
   descriptionDelay: number;
+  titleCharDuration: number;
+  titleCharStagger: number;
+  descriptionWordDuration: number;
+  descriptionWordStagger: number;
 }
 
 export const DEFAULT_ENTRANCE_TUNING: EntranceTuning = {
   duration: 1.2,
   initialScale: 1.6,
   easing: "iosDrawer",
-  // Shifted by 0.3s to accommodate the 300ms fade-in lead delay so all
-  // entrance animations (shader scale, title, description, sidebar, color
-  // picker in page.tsx) remain in sync relative to the shader appearing.
-  shaderDelay: 1.8,
-  titleDelay: 2.0,
-  descriptionDelay: 2.9,
+  shaderDelay: 1.5,
+  titleDelay: 1.7,
+  descriptionDelay: 2.2,
+  titleCharDuration: 0.2,
+  titleCharStagger: 0.02,
+  descriptionWordDuration: 0.2,
+  descriptionWordStagger: 0.03,
 };
 
 interface HeroProps {
@@ -205,7 +205,7 @@ export function Hero({
       opacity: 1,
       filter: "blur(0px)",
       y: 0,
-      transition: { duration: TITLE_CHAR_DURATION },
+      transition: { duration: entranceTuning.titleCharDuration },
     },
   };
 
@@ -214,7 +214,7 @@ export function Hero({
     show: {
       opacity: 1,
       filter: "blur(0px)",
-      transition: { duration: DESCRIPTION_WORD_DURATION },
+      transition: { duration: entranceTuning.descriptionWordDuration },
     },
   };
 
@@ -250,7 +250,7 @@ export function Hero({
           variants={{
             show: {
               transition: {
-                staggerChildren: TITLE_CHAR_STAGGER,
+                staggerChildren: entranceTuning.titleCharStagger,
                 delayChildren: entranceTuning.titleDelay,
               },
             },
@@ -286,7 +286,7 @@ export function Hero({
           variants={{
             show: {
               transition: {
-                staggerChildren: DESCRIPTION_WORD_STAGGER,
+                staggerChildren: entranceTuning.descriptionWordStagger,
                 delayChildren: entranceTuning.descriptionDelay,
               },
             },
