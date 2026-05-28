@@ -1,15 +1,58 @@
 {
   "caseStudies": [
     {
+      "slug": "preply",
+      "company": "Preply",
+      "logoSrc": "/images/logos/preply.svg",
+      "description": "Preply is a global online language tutoring marketplace. I joined the Growth org as a contract Senior Product Designer, working mainly on the tutor side of the marketplace. Two primary projects: Editable Trial Agenda and the iOS tutor widget.\n\nAlongside, I contributed to the Preply design system, used AI-coded prototypes for concept testing, partnered closely with DesignOps, UX Research, Data Analytics, and UX Writing, and pressure-tested direction in design jams and concept reviews with peers across teams.",
+      "role": "Senior Product Designer",
+      "timeframe": "2025 — 2026",
+      "scope": "Placeholder — scope to be added",
+      "platform": "Web, iOS",
+      "viewSiteUrl": "https://preply.com",
+      "heroImage": {
+        "src": "/images/projects/preply-main.jpg",
+        "alt": "Preply project hero — placeholder",
+        "width": 839,
+        "height": 525
+      },
+      "sections": [
+        {
+          "title": "Editable Trial Agenda",
+          "description": "The Trial Agenda is the screen tutors use during a trial lesson to drive subscription conversion. V1 worked everywhere except where it mattered most: Power Tutors — who deliver the majority of trials and drive CR2Sub — rejected it as too basic. V2 added scheduling prompts and was killed for flat conversion and a drop in monetization. One signal held across iterations: the agenda needed to belong to the tutor, not to Preply.\n\nI joined Preply's Growth team as a contract Senior Product Designer and owned the project end-to-end — research brief, usability testing, design from concept through the Phase 1 / Phase 2 split with the PM. Bex, the senior designer who owned this design area, partnered through the work; direction was set jointly.\n\nThe bet was a contract change: the agenda stops being Preply's checklist and becomes the tutor's artifact — freshly generated each trial from what the platform already knew about the student, editable on the fly. A new \"prepare-then-use\" behavior emerged: tutors edit pre-class and reference live. Per-tutor defaults and a shareable-with-student hook surfaced in testing — both deferred to Phase 2 to keep Phase 1 small and shippable.\n\nA/B across ~37K tutors. Stat-sig lifts across engagement and monetization. Shipped. \n\n**Detailed metrics available upon request.**",
+          "images": [
+            {
+              "src": "/images/projects/preply-main.jpg",
+              "alt": "Editable Trial Agenda placeholder",
+              "width": 839,
+              "height": 525
+            }
+          ]
+        },
+        {
+          "title": "Tutor iOS widget",
+          "description": "The V1 widget shipped in Q3 2025 with two states — a non-inferiority bet by App Core to unlock iOS widget infrastructure for other product squads. It passed but didn't move business metrics. Field signals showed appetite: 3.5% organic adoption, 6% with prompt, tutor adoption above student.\n\nPM Ariadna brought me the brief with four candidate states. I joined as a contract Senior Product Designer and owned the design end-to-end, refreshing Preply's internal iOS widget guidelines along the way.\n\nI mapped the full tutor lifecycle — new, recently activated, active, mature — proposed a state taxonomy, and tied each state to a business signal: first-week churn, TWA, Super Tutor conversion, advocacy. PM partnered on refinement. Each state got its own widget URL so other squads could extend the surface. Phase 1 shipped the highest-leverage states; the rest held for Phase 2.\n\nFour new widget surfaces shipped; adoption grew over the year post-launch. \n\n**Detailed metrics available upon request.**",
+          "images": [
+            {
+              "src": "/images/projects/preply-sidebar.jpg",
+              "alt": "Tutor iOS widget placeholder",
+              "width": 180,
+              "height": 578
+            }
+          ]
+        }
+      ]
+    },
+    {
       "slug": "guesty",
       "company": "Guesty",
       "logoSrc": "/images/logos/guesty.svg",
-      "description": "At Guesty, I worked across two product groups. In Business & Financials, I owned design for Additional Fees — from creation flow to how they surface across the platform — and co-led Mid-stay Relocation alongside Inesa Muchnik. In the Cross-platform team, I led the Notifications system rebuild and the Login & Registration flow revamp.\nAlongside product work, I ran hiring interviews, mentored teammates, and regularly contributed to the design system.",
+      "description": "At Guesty, I worked across two product groups. In Business & Financials, I owned design for Additional Fees — from creation flow to how they surface across the platform — and co-led Mid-stay Relocation alongside Inesa Muchnik. In the Cross-platform team, I led the Notifications system rebuild and the Login & Registration flow revamp.\n\nAlongside product work, I ran hiring interviews, mentored teammates, and regularly contributed to the design system.",
       "role": "Sr. Product Designer",
       "timeframe": "2024 — 2025",
       "scope": "Placeholder — scope to be added",
       "platform": "Web",
-      "viewSiteUrl": null,
+      "viewSiteUrl": "https://www.guesty.com/",
       "heroImage": {
         "src": "/images/projects/preply-main.jpg",
         "alt": "Project hero image",
@@ -21,6 +64,12 @@
           "title": "Notifications Revamp",
           "description": "Notifications were a silent operational risk. Everything landed in one flat, messy list — a reservation cancellation tomorrow next to one two weeks out, alongside payment failures, channel sync errors, and routine confirmations. Customers had built Zapier integrations to route around it. 75 PFRs from 113 accounts, 19 interviews, a 50-ticket CS audit — the problem was real and overdue.\n\nA strategic call early on: build on a third-party notification platform instead of from scratch — accepting its API constraints in exchange for cutting time-to-market roughly in half, and treating this as Phase 1 of a 5-phase roadmap (customizable triggers, collaborative lifecycle, notifications SDK).\n\nI led the project end-to-end — reshaping information architecture, auditing ~50 event types, benchmarking references, and designing the new system in alignment with the PM and key stakeholders: a severity taxonomy (Critical / Important / Updates), permission-aware preferences with cost-aware delivery defaults, and a scalable layout with Phase 2 designs prepped.\n\n**Detailed metrics available upon request.**",
           "images": [
+            {
+              "src": "/images/projects/designjoy-test.png",
+              "alt": "Designjoy test image",
+              "width": 2400,
+              "height": 2636
+            },
             {
               "src": "/images/projects/preply-main.jpg",
               "alt": "Detail view 1",
@@ -95,7 +144,7 @@
       "slug": "similarweb",
       "company": "SimilarWeb",
       "logoSrc": "/images/logos/similarweb.svg",
-      "description": "I spent three years at SimilarWeb working across Core Platform Products — the navigation redesign, the Website Segments builder, and two new pods launched from scratch (Market Research and Demand Analysis). Across all of them, I worked closely with PMs and key stakeholders to shape product strategy and define design \ndirection.\nAlongside this, I pushed for system-level consistency, championed UX, set clearer cross-designer process, ran Figma sessions for engineers, and hired and mentored designers across teams.",
+      "description": "I spent three years at SimilarWeb working across Core Platform Products — the navigation redesign, the Website Segments builder, and two new pods launched from scratch (Market Research and Demand Analysis). Across all of them, I worked closely with PMs and key stakeholders to shape product strategy and define design \ndirection.\n\nAlongside this, I pushed for system-level consistency, championed UX, set clearer cross-designer process, ran Figma sessions for engineers, and hired and mentored designers across teams.",
       "role": "Sr. Product Designer",
       "timeframe": "2021 — 2024",
       "scope": "Product Strategy, Information Architecture,  Stakeholder Alignment, 0⇢1 Product Launch",
@@ -112,6 +161,12 @@
           "title": "Navigation redesign",
           "description": "Six months after the previous redesign, the sidebar navigation was still broken: unaligned IA across product sections, users losing filters, inputs and context between pages, inconsistent visual hierarchy and patterns.\n\nBottom-up initiative. Started as a 1.5-hour design exercise, became a cross-team push we sold to stakeholders ourselves. I led discovery through delivery across 5 designers, 2 team leads, PMs, FE/BE, and UX writer.\n\nThe Acquisition homepage was the structural blocker. Its owners defended it until a 0.6% engagement number settled the argument. Removing it unlocked simplified IA across the entire platform.\n\n**Nav time 1.3 min → 42 sec (-53%); MAU increased by 2-3X on buried pages; Median pageviews per session 4.5 → 5 (+10%).**\n\n",
           "images": [
+            {
+              "src": "/images/projects/designjoy-test.png",
+              "alt": "Designjoy test image",
+              "width": 2400,
+              "height": 2636
+            },
             {
               "src": "/images/projects/preply-main.jpg",
               "alt": "Detail view 1",
@@ -258,7 +313,7 @@
       "slug": "sber",
       "company": "Sber",
       "logoSrc": "/images/logos/sber.svg",
-      "description": "Sber spun up an internal PFM (Personal Financial Management) startup to address Russia's savings and financial education problem — 43% with no savings, 82% not planning expenses, 98% not investing. The Tribe began with five product teams and grew to twelve over three years. I owned design for the Total Funds product group, which started as one team and grew into three during my tenure.",
+      "description": "Sber stood up an internal PFM (Personal Financial Management) tribe to address Russia's savings problem — 43% of adults had no savings, 82% didn't plan expenses, 98% didn't invest. The tribe scaled from five to twelve product teams over three years. \nI led design across the Total Funds group — owned the central screen solo and directed the group as it grew from one team to three.\n\nAlongside the product work, I led hiring for the product group, mentored across the design team, and directly managed two designers. With colleagues from Sber, I also taught product design at the British Higher School of Art and Design (Moscow) — reviewing student work, and mentoring students into the industry.",
       "role": "Lead Designer",
       "timeframe": "2019 — 2021",
       "scope": "Product Strategy, Design Thinking, Information Architecture, Stakeholder Alignment",
@@ -272,8 +327,20 @@
       },
       "sections": [
         {
+          "title": "Discovery",
+          "description": "As Russia's largest bank, Sber could take this on at scale — both the social weight and a clear commercial upside. But the product itself was undefined: Total Funds was conceived as the group's hub, with its mental model, audience, and priorities all open.\n\nDiscovery was nonlinear — strategy sessions with PMs across teams, brainstorms with tribe leadership, repeated iteration on what \"manage your money efficiently\" should mean in product terms.\n\nFormal research closed the phase: a 1,200-user quant study mapped four target audiences; a 6-day Design Thinking session with 13 respondents generated 145 ideas, 87 of which entered the backlog.\n\nThe output set direction for the Total Funds rebuild and seeded the backlog that grew into Financial Cushion, the analytical iteration, and adjacent products across the group.",
+          "images": [
+            {
+              "src": "/images/projects/sber-hero.png",
+              "alt": "Discovery phase placeholder — to be replaced via the in-app editor",
+              "width": 3840,
+              "height": 2156
+            }
+          ]
+        },
+        {
           "title": "Total Funds rebuild",
-          "description": "I owned design for Total Funds with a PM and two other designers. The old version was a 12-segment product pie nobody read as 'composition of capital'. We replaced it with a donut grouped by asset type (Cards, Savings, Investments, outside-Sber) plus leading buttons for next-product actions. The donut isn't the most accurate chart and adjacent teams pushed back — we held the line and partnered with Sber's gamification team on the spin: haptics, rolling numbers, color logic per category. ~88% of users actually spun it. Total Funds became Sber's 2nd-most-popular entry to the inner market — ~13% of customers came through, generating $20M+ in invest-product cross-sell in 2021.",
+          "description": "The old Total Funds was a 12-segment pie nobody read as \"composition of capital.\" Users couldn't tell what they owned, and the screen ended at the chart — no path to the next action.\n\nI led design on Total Funds. Collapsed the 12 segments into four asset-type groups — Cards, Savings, Investments, outside-Sber — so the screen finally read as a composition of capital. Added leading buttons below the chart that opened next-product flows directly from the screen.\n\nThe donut form we landed on isn't statistically accurate and adjacent teams pushed back. We held the line on comprehension over precision, then partnered with Sber's gamification team on the spin: haptics, rolling numbers, color logic per category. ~88% of users actually spun it.\n\n**Total Funds became Sber's 2nd-most-popular entry to the inner investment market; MAU 1.4M → 4.8M; $20M+ in invest-product cross-sell in 2021 only.**",
           "images": [
             {
               "src": "/images/projects/sber-app-context.png",
@@ -291,7 +358,7 @@
         },
         {
           "title": "Financial Cushion",
-          "description": "Inside Total Funds, the standard 'set a goal' flow had weak follow-through — people set targets, then dropped off. We built a dedicated Financial Cushion flow framed in human terms ('for what?', 'how much do I need?'), auto-calculating the amount from the user's own monthly spending. I designed the flow with the team and helped scope the cut of a much-loved sibling idea — 'Business Angel,' a feature letting a trusted third party hold part of your wallet, scrapped because the fiduciary structure raised juridical issues we couldn't resolve. Users who set up a cushion from Total Funds continued accumulating at +81% the rate of users with ordinary Targets.",
+          "description": "Financial Cushion is a savings-for-emergencies reserve — money set aside against income loss or sudden expense. The existing \"Goals\" product, where users used to set up such savings, had weak follow-through: most dropped off within one or two months.\n\nThe legacy flow asked for a target amount up front. People couldn't commit to an abstract number with no anchor in their own life and abandoned the goal soon after.\n\nWe built Cushion as a separate product, entered both from the bank's main screen and from a dedicated entry point on Total Funds. Instead of asking users to estimate a target, the flow auto-calculated it from their own monthly spending — replacing an abstract number with one anchored to real expense. Framed in human terms: \"for what?\", \"how much do I actually need?\". I led design as the team formed.\n\n**Users who created Cushion through Total Funds kept accumulating for 6+ months at +81% the rate compare to users with ordinary Targets.**",
           "images": [
             {
               "src": "/images/projects/sber-cushion.png",
@@ -302,8 +369,8 @@
           ]
         },
         {
-          "title": "We were wrong",
-          "description": "Post-launch metrics inverted our assumption. In user testing people understood the deep-analysis tools — filters, history slicing, multi-angle grouping — but in production, a funny-small percentage actually used them. Even our high-income target users wanted simpler triggers, not analytical surface area. We ran another round of research focused on real usage; I owned the cut list with the PM. Final reduced foreground: balance, open-a-product, switch-grouping. The rest pushed into secondary navigation or out entirely. Retention climbed to 5.3% (from 2.6%), conversion to inner-market sales kept rising, CSI lifted. Testing measures comprehension; production measures want.",
+          "title": "Feature cut",
+          "description": "After the rebuild we kept extending Total Funds — capital history, grouping by product type and currency, multi-angle filters. Each feature tested well; users in sessions praised the analytical depth.\n\nProduction told a different story. Engagement on parts of this layer stayed low even among high-income users — the same group most enthusiastic in tests. Testing measures comprehension; production measures want.\n\nI ran a second round of research on real usage and owned the cut list with the PM. We cut the specific filter and grouping types nobody touched in production; capital history and the filters that mattered stayed. Foreground reduced to three core actions — balance, open-a-product, switch-grouping.\n\n**Retention grown 2.6% → 5.3%; customer satisfaction lifted; inner invest market conversion kept rising.**",
           "images": [
             {
               "src": "/images/projects/sber-graph.png",
