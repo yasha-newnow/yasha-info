@@ -67,7 +67,7 @@
           "shadow": "0px 15px 30px #00000012"
         }
       ],
-      "mobileImageSrc": "/images/projects/preply-main.jpg",
+      "mobileImageSrc": "/images/projects/similarweb-mockup.png",
       "mobileImageAlt": "Guesty product interface",
       "caseSlug": "guesty"
     },
@@ -139,7 +139,7 @@
           "shadow": "0px 15px 30px #00000012"
         }
       ],
-      "mobileImageSrc": "/images/projects/preply-main.jpg",
+      "mobileImageSrc": "/images/projects/similarweb-mockup.png",
       "mobileImageAlt": "SimilarWeb platform interface",
       "caseSlug": "similarweb"
     },
@@ -211,7 +211,7 @@
           "shadow": "0px 15px 30px #00000012"
         }
       ],
-      "mobileImageSrc": "/images/projects/preply-main.jpg",
+      "mobileImageSrc": "/images/projects/similarweb-mockup.png",
       "mobileImageAlt": "Sber Total Funds app",
       "caseSlug": "sber"
     }

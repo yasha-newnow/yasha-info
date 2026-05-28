@@ -266,48 +266,47 @@ function ProjectCardMobile({
         className="flex flex-col gap-3 w-full h-full"
         style={{ filter: "var(--card-content-filter, none)" }}
       >
-      {/* Header: logo + title + date */}
-      <div className="flex flex-col gap-3">
-        <Image
-          src={card.logoSrc}
-          alt={`${card.company} logo`}
-          width={40}
-          height={40}
-          className="rounded-xl"
-        />
-        <div className="flex flex-col gap-1">
-          <p className="body text-medium text-card-text">
-            <Editable id={`${idBase}.jobTitle`} value={card.jobTitle} />
-          </p>
-          <span className="caption text-secondary text-card-text">
-            <Editable id={`${idBase}.date`} value={card.date} />
-          </span>
+      <div className="flex flex-col items-start gap-1 self-stretch">
+        {/* Title wrapper: py-0.5 gives the heading 4px of vertical air,
+            pr-15 reserves 60px under the absolute logo badge so long
+            company names don't run under it. */}
+        <div className="flex flex-col items-start justify-center self-stretch py-0.5 pr-15">
+          <h3 className="title-lg text-card-text">
+            <Editable id={`${idBase}.company`} value={card.company} />
+          </h3>
         </div>
+        <p className="body text-medium text-card-text">
+          <Editable id={`${idBase}.jobTitle`} value={card.jobTitle} />
+        </p>
+        <span className="caption text-secondary text-card-text">
+          <Editable id={`${idBase}.date`} value={card.date} />
+        </span>
       </div>
 
-      {/* Image container — fills remaining space. `overflow-hidden` clips
-          the image to the rounded-xl shape (matches `main` behaviour). */}
-      <div className="flex-1 relative rounded-xl overflow-hidden">
+      {/* Image height fills the card; width is derived from the image's
+          intrinsic aspect ratio. As the card widens, the image stays
+          the same size and centers. As the card narrows, it overflows
+          sides (clipped by the article's outer `overflow-clip`). */}
+      <div className="flex-1 flex justify-center">
         <Image
           src={card.mobileImageSrc}
           alt={card.mobileImageAlt}
-          fill
-          className="object-cover"
-          sizes="(max-width: 1024px) 100vw"
+          width={1976}
+          height={1352}
+          className="h-full w-auto max-w-none"
+          sizes="700px"
         />
       </div>
       </div>
 
-      {/* Button — top right, idle state only (unblurred sibling) */}
-      <button
-        className="absolute top-4 right-4 flex items-center justify-center w-12 h-12 rounded-xl cursor-pointer"
-        style={{
-          backdropFilter: "blur(10px)",
-          color: "var(--card-text)",
-        }}
-      >
-        <ExpandIcon size={24} />
-      </button>
+      {/* Logo badge — dark fill + white path baked into the SVG asset. */}
+      <Image
+        src={card.logoSrc}
+        alt={`${card.company} logo`}
+        width={40}
+        height={40}
+        className="absolute top-6 right-6 rounded-xl"
+      />
 
       {/* Frost veil — 0 for the front card, ramps as it recedes. */}
       {stacked && (
