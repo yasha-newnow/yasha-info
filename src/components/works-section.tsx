@@ -19,7 +19,7 @@ import {
 } from "@/lib/edit-mode/content-context";
 import { useEditMode } from "@/lib/edit-mode/use-edit-mode";
 import { sections } from "@/data/navigation";
-import type { CaseCard } from "@/data/schemas";
+import type { CaseCard, GalleryImage } from "@/data/schemas";
 import { ProjectCard } from "./project-card";
 import { SectionHeader } from "./section-header";
 import { ProjectSheet } from "./project-sheet";
@@ -123,8 +123,8 @@ function useResponsiveStackConsts(): StackConsts {
   return consts;
 }
 
-function prefetchHero(src: string) {
-  preload(src, { as: "image" });
+function prefetchHero(media: GalleryImage) {
+  preload(media.src, { as: media.kind === "video" ? "video" : "image" });
 }
 
 type CardHandlers = {
@@ -290,7 +290,7 @@ export function WorksSection({
         setActiveSlug(study.slug);
         setSheetOpen(true);
       },
-      onPrefetch: () => prefetchHero(study.heroImage.src),
+      onPrefetch: () => prefetchHero(study.heroImage),
     };
   };
 

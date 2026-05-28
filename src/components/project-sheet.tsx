@@ -1,18 +1,26 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal, preload } from "react-dom";
 import { Drawer } from "vaul";
-import { motion, type Variants } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
-import { preload } from "react-dom";
 import { useDialKit } from "dialkit";
 import { ArrowUpRight } from "./icons";
 import type { CaseStudy, CaseSection, GalleryImage } from "@/data/schemas";
 import { useCaseStudies } from "@/lib/edit-mode/content-context";
 import { Editable } from "./edit-mode/editable";
 import { parseBold } from "@/lib/edit-mode/markdown-bold";
+import { MediaItem } from "./media-item";
+import {
+  Lightbox,
+  MediaZoomContext,
+  useMediaZoom,
+  type OpenZoom,
+  type ZoomState,
+} from "./media-lightbox";
 
 const ITEM_DURATION = 0.35;
 const STAGGER = 0.12;
@@ -48,6 +56,40 @@ export function ProjectSheet({
   const scrollRef = useRef<HTMLDivElement>(null);
   const gallerySnapOptions = useGallerySnapDial();
 
+  // Lightbox state lives here so we can (a) disable Vaul's outside-dismiss
+  // while a lightbox is open via `dismissible={!zoom}`, and (b) render the
+  // Lightbox via a portal next to Drawer.Root (not inside Drawer.Content).
+  const [zoom, setZoom] = useState<ZoomState | null>(null);
+  const openZoom = useCallback<OpenZoom>(
+    (item, sourceRect, natural) => setZoom({ item, sourceRect, natural }),
+    [],
+  );
+  const closeZoom = useCallback(() => setZoom(null), []);
+
+  // Esc to close lightbox (only when one is open).
+  useEffect(() => {
+    if (!zoom) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeZoom();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [zoom, closeZoom]);
+
+  // Focus trap via native `inert` on every body sibling except the lightbox root.
+  useEffect(() => {
+    if (!zoom) return;
+    const inerted: Element[] = [];
+    for (const el of Array.from(document.body.children)) {
+      if (el.hasAttribute("data-lightbox-root")) continue;
+      if (!el.hasAttribute("inert")) {
+        el.setAttribute("inert", "");
+        inerted.push(el);
+      }
+    }
+    return () => inerted.forEach((el) => el.removeAttribute("inert"));
+  }, [zoom]);
+
   const allCaseStudies = useCaseStudies();
   if (!caseStudy) return null;
 
@@ -62,13 +104,26 @@ export function ProjectSheet({
       setBackgroundColorOnScale={false}
       direction="bottom"
       onAnimationEnd={onAnimationEnd}
+      dismissible={!zoom}
     >
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
         <Drawer.Content
           className="fixed inset-x-0 bottom-0 z-50 bg-white rounded-t-[40px] overflow-clip outline-none"
           style={{ height: "97dvh" }}
+          onPointerDownOutside={(e) => {
+            // While the lightbox is open, Radix sees pointerdowns on the
+            // portaled lightbox as "outside" the drawer content and would
+            // dismiss the entire drawer (especially on touch — `dismissible`
+            // is a drag-only safeguard in Vaul). Prevent default to block
+            // the dismissal; the lightbox handles its own close.
+            if (zoom) e.preventDefault();
+          }}
+          onInteractOutside={(e) => {
+            if (zoom) e.preventDefault();
+          }}
         >
+        <MediaZoomContext.Provider value={openZoom}>
           {/* a11y */}
           <Drawer.Title className="sr-only">{caseStudy.company}</Drawer.Title>
           <Drawer.Description className="sr-only">
@@ -139,22 +194,9 @@ export function ProjectSheet({
                   </div>
                 </motion.header>
 
-                {/* Hero — natural aspect ratio (no crop). Fills outer width, height by source aspect. */}
-                <motion.div
-                  variants={itemVariants}
-                  className="w-full rounded-[24px] overflow-hidden"
-                >
-                  <Image
-                    src={caseStudy.heroImage.src}
-                    alt={caseStudy.heroImage.alt}
-                    width={caseStudy.heroImage.width}
-                    height={caseStudy.heroImage.height}
-                    className="w-full h-auto block"
-                    loading="eager"
-                    fetchPriority="high"
-                    sizes="(max-width: 1024px) 100vw, 1200px"
-                  />
-                </motion.div>
+                {/* Hero — natural aspect ratio (no crop). Fills outer width, height by source aspect.
+                    Renders via MediaItem so video kind is supported automatically. */}
+                <HeroMedia heroImage={caseStudy.heroImage} />
               </motion.div>
 
               {/* ── Sections: scroll-triggered ─── */}
@@ -196,8 +238,20 @@ export function ProjectSheet({
               `<div data-vaul-no-drag ...><DialRoot mode="inline" /></div>`
               here inside Drawer.Content (data-vaul-no-drag is needed so Vaul
               doesn't treat clicks as drag/dismiss). */}
+        </MediaZoomContext.Provider>
         </Drawer.Content>
       </Drawer.Portal>
+
+      {/* Lightbox lives in its own portal next to (not inside) Drawer.Content
+          so its DOM is outside the drawer's clipping container — and so we can
+          control Drawer's `dismissible` flag based on zoom state above. */}
+      {typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
+            {zoom && <Lightbox state={zoom} onClose={closeZoom} />}
+          </AnimatePresence>,
+          document.body,
+        )}
     </Drawer.Root>
   );
 }
@@ -272,6 +326,17 @@ function MetaBlock({ idBase, role, timeframe, scope, platform }: MetaBlockProps)
   );
 }
 
+/* ─── Hero media ─── */
+
+function HeroMedia({ heroImage }: { heroImage: GalleryImage }) {
+  const onZoom = useMediaZoom() ?? undefined;
+  return (
+    <motion.div variants={itemVariants}>
+      <MediaItem item={heroImage} variant="fullWidth" priority onZoom={onZoom} />
+    </motion.div>
+  );
+}
+
 /* ─── Section ─── */
 
 function SectionBlock({
@@ -285,6 +350,7 @@ function SectionBlock({
   scrollRoot: React.RefObject<HTMLDivElement | null>;
   gallerySnapOptions: GallerySnapOptions;
 }) {
+  const onZoom = useMediaZoom() ?? undefined;
   return (
     <motion.section
       className="w-full flex flex-col gap-12 lg:gap-20"
@@ -318,10 +384,17 @@ function SectionBlock({
         </div>
       </motion.div>
 
-      {/* Gallery — full outer width */}
+      {/* Media — full outer width.
+          - 1 item → standalone (single full-width block, no carousel).
+          - 2+ items → gallery (mobile stack + desktop Embla carousel).
+          - 0 items → nothing rendered. */}
       {section.images.length > 0 && (
         <motion.div variants={itemVariants} className="w-full">
-          <SectionGallery images={section.images} snapOptions={gallerySnapOptions} />
+          {section.images.length === 1 ? (
+            <MediaItem item={section.images[0]} variant="fullWidth" onZoom={onZoom} />
+          ) : (
+            <SectionGallery items={section.images} snapOptions={gallerySnapOptions} onZoom={onZoom} />
+          )}
         </motion.div>
       )}
     </motion.section>
@@ -330,18 +403,26 @@ function SectionBlock({
 
 /* ─── Gallery ─── */
 
-function SectionGallery({ images, snapOptions }: { images: GalleryImage[]; snapOptions: GallerySnapOptions }) {
+function SectionGallery({
+  items,
+  snapOptions,
+  onZoom,
+}: {
+  items: GalleryImage[];
+  snapOptions: GallerySnapOptions;
+  onZoom?: (item: GalleryImage, sourceRect: DOMRect) => void;
+}) {
   return (
     <>
       {/* Mobile: vertical stack */}
       <div className="flex flex-col gap-6 w-full lg:hidden">
-        {images.map((img, i) => (
-          <GalleryImageItem key={i} img={img} mobile />
+        {items.map((m, i) => (
+          <MediaItem key={i} item={m} variant="fullWidth" onZoom={onZoom} />
         ))}
       </div>
       {/* Desktop: Embla horizontal carousel with 1200 frame + peek bleed */}
       <div className="hidden lg:block w-full">
-        <EmblaGallery images={images} options={snapOptions} />
+        <EmblaGallery items={items} options={snapOptions} onZoom={onZoom} />
       </div>
     </>
   );
@@ -398,18 +479,28 @@ function useGallerySnapDial(): GallerySnapOptions {
   };
 }
 
-function EmblaGallery({ images, options }: { images: GalleryImage[]; options: GallerySnapOptions }) {
+function EmblaGallery({
+  items,
+  options,
+  onZoom,
+}: {
+  items: GalleryImage[];
+  options: GallerySnapOptions;
+  onZoom?: (item: GalleryImage, sourceRect: DOMRect) => void;
+}) {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     options,
     [WheelGesturesPlugin({ forceWheelAxis: "x" })],
   );
 
-  // Preload all gallery images on mount — prevents flash/glitch during fast
-  // skipSnaps wheel scrolling (Embla can fly past 3+ slides in 200ms; if images
-  // weren't yet loaded by native lazy IntersectionObserver, you see blanks).
+  // Preload gallery images on mount — prevents flash/glitch during fast
+  // skipSnaps wheel scrolling. Videos skip aggressive preload (heavy);
+  // <video preload="metadata"> on the element fetches first frame as needed.
   useEffect(() => {
-    images.forEach((img) => preload(img.src, { as: "image" }));
-  }, [images]);
+    items.forEach((m) => {
+      if (m.kind !== "video") preload(m.src, { as: "image" });
+    });
+  }, [items]);
 
   // Live re-init when dial knobs change (dev only).
   useEffect(() => {
@@ -426,9 +517,9 @@ function EmblaGallery({ images, options }: { images: GalleryImage[]; options: Ga
       className="w-full overflow-visible cursor-grab active:cursor-grabbing select-none"
     >
       <div className="flex gap-6 touch-pan-y">
-        {images.map((img, i) => (
+        {items.map((m, i) => (
           <div key={i} className="shrink-0 h-[680px]">
-            <GalleryImageItem img={img} />
+            <MediaItem item={m} variant="carouselSlot" onZoom={onZoom} />
           </div>
         ))}
       </div>
@@ -436,25 +527,3 @@ function EmblaGallery({ images, options }: { images: GalleryImage[]; options: Ga
   );
 }
 
-function GalleryImageItem({ img, mobile }: { img: GalleryImage; mobile?: boolean }) {
-  return (
-    <div className={mobile ? "rounded-[24px] overflow-hidden w-full" : "rounded-[24px] overflow-hidden h-full"}>
-      <Image
-        src={img.src}
-        alt={img.alt}
-        width={img.width}
-        height={img.height}
-        // Mobile = vertical stack with native lazy load (works fine — slow vertical scroll).
-        // Desktop = Embla carousel; eager + preload (in EmblaGallery) prevents flash on fast wheel/skipSnaps.
-        loading={mobile ? "lazy" : "eager"}
-        sizes={mobile ? "100vw" : "(max-width: 1024px) 100vw, auto"}
-        draggable={false}
-        className={
-          mobile
-            ? "w-full h-auto block pointer-events-none"
-            : "w-auto h-full object-cover block pointer-events-none"
-        }
-      />
-    </div>
-  );
-}

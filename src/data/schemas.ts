@@ -5,12 +5,14 @@ export const GalleryImageSchema = z.object({
   alt: z.string(),
   width: z.number(),
   height: z.number(),
+  kind: z.enum(["image", "video"]).default("image"),
 });
 
 export const CaseSectionSchema = z.object({
   title: z.string(),
   description: z.string(),
   images: z.array(GalleryImageSchema),
+  layout: z.enum(["gallery", "standalone"]).default("gallery"),
 });
 
 export const CaseStudySchema = z.object({
