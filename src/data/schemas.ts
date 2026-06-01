@@ -3,8 +3,11 @@ import { z } from "zod";
 export const GalleryImageSchema = z.object({
   src: z.string(),
   alt: z.string(),
-  width: z.number(),
-  height: z.number(),
+  // .int().positive() guards against NaN/0 dimensions (e.g. a failed browser
+  // metadata read) — a non-finite number serializes to null and would make the
+  // whole file unloadable on the next force-dynamic read.
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
   kind: z.enum(["image", "video"]).default("image"),
 });
 
@@ -48,6 +51,11 @@ export const CardImageSchema = z.object({
   hover: TransformSchema,
   borderRadius: z.number(),
   shadow: z.string(),
+  // Horizontal anchor of the absolutely-positioned image. Optional for
+  // backward compat: when omitted, it's derived from idle.x (left/center).
+  anchor: z.enum(["left", "center", "right"]).optional(),
+  // CSS transform-origin for the rotation pivot. Optional; defaults to center.
+  transformOrigin: z.string().optional(),
 });
 
 export const CaseCardSchema = z.object({
@@ -60,6 +68,11 @@ export const CaseCardSchema = z.object({
   images: z.array(CardImageSchema),
   mobileImageSrc: z.string(),
   mobileImageAlt: z.string(),
+  // Optional intrinsic size of the mobile image. When present, the mobile card
+  // renders it sized (h-full w-auto) so a wide composite (phone fan) bleeds past
+  // the frame edges; when absent, it falls back to `fill object-cover`.
+  mobileImageWidth: z.number().optional(),
+  mobileImageHeight: z.number().optional(),
   caseSlug: z.string().nullable(),
 });
 

@@ -15,7 +15,10 @@ interface EditableProps {
   children?: ReactNode;
 }
 
-function splitId(id: string): { fileKey: ContentFileKey; fieldPath: string[] } {
+export function splitId(id: string): {
+  fileKey: ContentFileKey;
+  fieldPath: string[];
+} {
   const [head, ...rest] = id.split(".");
   if (head !== "caseStudies" && head !== "caseCards" && head !== "about") {
     throw new Error(`Editable id must start with a known fileKey, got "${head}"`);
@@ -84,6 +87,7 @@ export function Editable({
         onClick={(e) => {
           e.stopPropagation();
           openPanel({
+            kind: "text",
             fileKey,
             fieldPath,
             initialValue: value,

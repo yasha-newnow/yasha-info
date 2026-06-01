@@ -190,11 +190,18 @@ function CardImage({
 }) {
   const state = isHovered ? image.hover : image.idle;
 
+  // Horizontal anchor: explicit `anchor` wins; otherwise derive from idle.x
+  // (legacy behavior — "-50%" means centered, else left-aligned).
+  const anchor =
+    image.anchor ?? (image.idle.x.includes("-50%") ? "center" : "left");
+
   const baseStyle = {
     width: image.width,
     height: image.height,
     top: "50%",
-    left: image.idle.x.includes("-50%") ? "50%" : 0,
+    left: anchor === "right" ? undefined : anchor === "center" ? "50%" : 0,
+    right: anchor === "right" ? 0 : undefined,
+    transformOrigin: image.transformOrigin,
     borderRadius: image.borderRadius,
     overflow: "hidden",
     boxShadow: image.shadow,
@@ -285,16 +292,31 @@ function ProjectCardMobile({
         </div>
       </div>
 
-      {/* Image container — fills remaining space. `overflow-hidden` clips
-          the image to the rounded-xl shape (matches `main` behaviour). */}
-      <div className="flex-1 relative rounded-xl overflow-hidden">
-        <Image
-          src={card.mobileImageSrc}
-          alt={card.mobileImageAlt}
-          fill
-          className="object-cover"
-          sizes="(max-width: 1024px) 100vw"
-        />
+      {/* Image container — fills remaining space. `overflow-visible` so a wide
+          composite (the phone fan) bleeds past the frame's left/right edges;
+          the parent <article> keeps `overflow-clip`, so nothing escapes the
+          card bounds. */}
+      <div className="flex-1 min-h-0 relative rounded-xl overflow-visible flex items-center justify-center">
+        {card.mobileImageWidth && card.mobileImageHeight ? (
+          // Sized: height fills the frame, width is auto (→ wider than the
+          // frame), centered, overflowing the sides like the Paper design.
+          <Image
+            src={card.mobileImageSrc}
+            alt={card.mobileImageAlt}
+            width={card.mobileImageWidth}
+            height={card.mobileImageHeight}
+            className="h-full w-auto max-w-none object-cover"
+            sizes="(max-width: 1024px) 100vw"
+          />
+        ) : (
+          <Image
+            src={card.mobileImageSrc}
+            alt={card.mobileImageAlt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw"
+          />
+        )}
       </div>
       </div>
 
@@ -332,9 +354,12 @@ export function ProjectCard({
   stacked = false,
 }: ProjectCardProps) {
   const cursor = onClick ? "cursor-pointer" : "cursor-default";
+  // Card-width breakpoint: switch desktop↔mobile by the CARD's own width
+  // (container query), not the site viewport. Below 840px the desktop 3-image
+  // fan compresses badly, so the card falls back to the mobile single-PNG layout.
   return (
-    <>
-      <div className={`hidden lg:block ${cursor}`} onClick={onClick}>
+    <div className="@container/card w-full">
+      <div className={`hidden @min-[840px]/card:block ${cursor}`} onClick={onClick}>
         <ProjectCardDesktop
           card={card}
           cardIndex={cardIndex}
@@ -343,7 +368,7 @@ export function ProjectCard({
           stacked={stacked}
         />
       </div>
-      <div className={`lg:hidden ${cursor}`} onClick={onClick}>
+      <div className={`@min-[840px]/card:hidden ${cursor}`} onClick={onClick}>
         <ProjectCardMobile
           card={card}
           cardIndex={cardIndex}
@@ -351,6 +376,6 @@ export function ProjectCard({
           stacked={stacked}
         />
       </div>
-    </>
+    </div>
   );
 }

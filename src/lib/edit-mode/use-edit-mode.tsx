@@ -8,18 +8,37 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { ContentFileKey } from "@/data/schemas";
+import type { ContentFileKey, GalleryImage } from "@/data/schemas";
 import { saveContent } from "./save-content";
 
 const EDIT_MODE_STORAGE_KEY = "edit-mode-enabled";
 
-export interface PanelTarget {
+// One panel channel, two shapes. The text editor (EditSidePanel) and the
+// gallery editor (GalleryEditPanel) both read `panel` and bail unless its
+// `kind` matches theirs — so openPanel/closePanel and the toggle-off cleanup
+// (setPanel(null)) serve both for free.
+export interface TextPanelTarget {
+  kind: "text";
   fileKey: ContentFileKey;
   fieldPath: string[];
   initialValue: string;
   richText: boolean;
   label?: string;
 }
+
+export interface GalleryPanelTarget {
+  kind: "gallery";
+  fileKey: ContentFileKey;
+  fieldPath: string[];
+  images: GalleryImage[];
+  // When true, the field at fieldPath is a SINGLE GalleryImage object (the case
+  // hero), not an array. The panel renders one row (replace + alt only) and
+  // persists the object, not the array. See GalleryEditPanel's `wire()`.
+  single?: boolean;
+  label?: string;
+}
+
+export type PanelTarget = TextPanelTarget | GalleryPanelTarget;
 
 interface EditEntry {
   fileKey: ContentFileKey;

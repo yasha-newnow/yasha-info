@@ -37,7 +37,8 @@
               "src": "/images/projects/preply-sidebar.jpg",
               "alt": "Tutor iOS widget placeholder",
               "width": 180,
-              "height": 578
+              "height": 578,
+              "kind": "image"
             }
           ]
         }
@@ -68,37 +69,50 @@
               "src": "/images/projects/designjoy-test.png",
               "alt": "Designjoy test image",
               "width": 2400,
-              "height": 2636
+              "height": 2636,
+              "kind": "image"
             },
             {
               "src": "/images/projects/preply-main.jpg",
               "alt": "Detail view 1",
               "width": 3000,
-              "height": 2000
+              "height": 2000,
+              "kind": "image"
             },
             {
               "src": "/images/projects/preply-sidebar.jpg",
               "alt": "Detail view 2",
               "width": 1500,
-              "height": 2000
+              "height": 2000,
+              "kind": "image"
+            },
+            {
+              "src": "/images/projects/guesty-test.png",
+              "alt": "",
+              "width": 1466,
+              "height": 834,
+              "kind": "image"
             },
             {
               "src": "/images/projects/portrait-test.png",
               "alt": "Portrait test",
               "width": 1018,
-              "height": 1780
+              "height": 1780,
+              "kind": "image"
             },
             {
               "src": "/images/projects/preply-panels.jpg",
               "alt": "Detail view 3",
               "width": 3000,
-              "height": 4000
+              "height": 4000,
+              "kind": "image"
             },
             {
               "src": "/images/projects/portrait-test.png",
               "alt": "Portrait test (last)",
               "width": 1018,
-              "height": 1780
+              "height": 1780,
+              "kind": "image"
             }
           ]
         },
@@ -110,31 +124,36 @@
               "src": "/images/projects/preply-main.jpg",
               "alt": "Detail view 1",
               "width": 3000,
-              "height": 2000
+              "height": 2000,
+              "kind": "image"
             },
             {
               "src": "/images/projects/preply-sidebar.jpg",
               "alt": "Detail view 2",
               "width": 1500,
-              "height": 2000
+              "height": 2000,
+              "kind": "image"
             },
             {
               "src": "/images/projects/portrait-test.png",
               "alt": "Portrait test",
               "width": 1018,
-              "height": 1780
+              "height": 1780,
+              "kind": "image"
             },
             {
               "src": "/images/projects/preply-panels.jpg",
               "alt": "Detail view 3",
               "width": 3000,
-              "height": 4000
+              "height": 4000,
+              "kind": "image"
             },
             {
               "src": "/images/projects/portrait-test.png",
               "alt": "Portrait test (last)",
               "width": 1018,
-              "height": 1780
+              "height": 1780,
+              "kind": "image"
             }
           ]
         }
@@ -320,39 +339,57 @@
       "platform": "iOS, Android",
       "viewSiteUrl": "https://www.sberbank.ru",
       "heroImage": {
-        "src": "/images/projects/sber-hero.png",
+        "src": "/images/projects/sber-main-4.png",
         "alt": "Total Funds redesign — old 12-segment product pie versus new asset-type donut with leading buttons",
         "width": 3840,
-        "height": 2156
+        "height": 2560,
+        "kind": "image"
       },
       "sections": [
         {
           "title": "Discovery",
-          "description": "As Russia's largest bank, Sber could take this on at scale — both the social weight and a clear commercial upside. But the product itself was undefined: Total Funds was conceived as the group's hub, with its mental model, audience, and priorities all open.\n\nDiscovery was nonlinear — strategy sessions with PMs across teams, brainstorms with tribe leadership, repeated iteration on what \"manage your money efficiently\" should mean in product terms.\n\nFormal research closed the phase: a 1,200-user quant study mapped four target audiences; a 6-day Design Thinking session with 13 respondents generated 145 ideas, 87 of which entered the backlog.\n\nThe output set direction for the Total Funds rebuild and seeded the backlog that grew into Financial Cushion, the analytical iteration, and adjacent products across the group.",
+          "description": "As Russia's largest bank, Sber could take this on at scale — both the social weight and a clear commercial upside. But the product itself was undefined: Total Funds was conceived as the group's hub, with its mental model, audience, and priorities all open.\n\nDiscovery was nonlinear — strategy sessions with PMs across teams, brainstorms with tribe leadership, repeated iteration on what \"manage your money efficiently\" should mean in product terms.\n\n**Formal research closed the phase: a 1,200-user quant study mapped four target audiences; a 6-day Design Thinking session with 13 respondents generated 145 ideas, 87 of which entered the backlog.**\n\nThe output set direction for the Total Funds rebuild and seeded the backlog that grew into Financial Cushion, the analytical iteration, and adjacent products across the group.",
           "images": [
             {
-              "src": "/images/projects/sber-hero.png",
+              "src": "/images/projects/sber-discovery-pic-1.png",
               "alt": "Discovery phase placeholder — to be replaced via the in-app editor",
-              "width": 3840,
-              "height": 2156
+              "width": 2856,
+              "height": 1832,
+              "kind": "image"
+            },
+            {
+              "src": "/images/projects/sber-discovery-pic-2.png",
+              "alt": "",
+              "width": 2856,
+              "height": 1832,
+              "kind": "image"
             }
           ]
         },
         {
           "title": "Total Funds rebuild",
-          "description": "The old Total Funds was a 12-segment pie nobody read as \"composition of capital.\" Users couldn't tell what they owned, and the screen ended at the chart — no path to the next action.\n\nI led design on Total Funds. Collapsed the 12 segments into four asset-type groups — Cards, Savings, Investments, outside-Sber — so the screen finally read as a composition of capital. Added leading buttons below the chart that opened next-product flows directly from the screen.\n\nThe donut form we landed on isn't statistically accurate and adjacent teams pushed back. We held the line on comprehension over precision, then partnered with Sber's gamification team on the spin: haptics, rolling numbers, color logic per category. ~88% of users actually spun it.\n\n**Total Funds became Sber's 2nd-most-popular entry to the inner investment market; MAU 1.4M → 4.8M; $20M+ in invest-product cross-sell in 2021 only.**",
+          "description": "The old Total Funds was a 12-segment pie nobody read as \"composition of capital.\" Users couldn't tell what they owned, and the screen ended at the chart — no path to the next action.\n\nI led design on Total Funds. Collapsed the 12 segments into four asset-type groups — Cards, Savings, Investments, outside-Sber — so the screen finally read as a composition of capital. Added leading buttons below the chart that opened next-product flows directly from the screen.\n\nThe donut form we landed on isn't statistically accurate and adjacent teams pushed back. We held the line on comprehension over precision, then partnered with Sber's gamification team on the spin: haptics, rolling numbers, color logic per category. ~88% of users actually spun it.\n\n**Total Funds became Sber's 2nd-most-popular entry to the inner investment market; MAU 1.4M → 4.8M; ~$17B AUM at peak; $20M+ in invest-product cross-sell in 2021 only.**",
           "images": [
             {
-              "src": "/images/projects/sber-app-context.png",
+              "src": "/images/projects/sber-total-funds-rebuild-2-1.png",
               "alt": "Total Funds widget inside the main Sber app surface",
               "width": 3840,
-              "height": 2400
+              "height": 2560,
+              "kind": "image"
             },
             {
-              "src": "/images/projects/sber-filters.png",
+              "src": "/images/projects/sber-total-funds-rebuild.png",
               "alt": "Five filter states of the asset donut: All, Cards, Savings, Investments, Outside Sber",
-              "width": 3840,
-              "height": 2400
+              "width": 2960,
+              "height": 2560,
+              "kind": "image"
+            },
+            {
+              "src": "/images/projects/sber-total-funds-rebuild-1.png",
+              "alt": "",
+              "width": 2960,
+              "height": 2560,
+              "kind": "image"
             }
           ]
         },
@@ -361,28 +398,51 @@
           "description": "Financial Cushion is a savings-for-emergencies reserve — money set aside against income loss or sudden expense. The existing \"Goals\" product, where users used to set up such savings, had weak follow-through: most dropped off within one or two months.\n\nThe legacy flow asked for a target amount up front. People couldn't commit to an abstract number with no anchor in their own life and abandoned the goal soon after.\n\nWe built Cushion as a separate product, entered both from the bank's main screen and from a dedicated entry point on Total Funds. Instead of asking users to estimate a target, the flow auto-calculated it from their own monthly spending — replacing an abstract number with one anchored to real expense. Framed in human terms: \"for what?\", \"how much do I actually need?\". I led design as the team formed.\n\n**Users who created Cushion through Total Funds kept accumulating for 6+ months at +81% the rate compare to users with ordinary Targets.**",
           "images": [
             {
-              "src": "/images/projects/sber-cushion.png",
+              "src": "/images/projects/sber-financial-cushion-1.png",
               "alt": "Financial Cushion setup flow with auto-calculated target",
               "width": 3840,
-              "height": 2400
+              "height": 2560,
+              "kind": "image"
+            }
+          ]
+        },
+        {
+          "title": "Analytics & Surfaces expansion",
+          "description": "After Total Funds rebuild and Financial Cushion shipped, we extended the product on two fronts: depth and reach. Strategy followed the Discovery backlog, refreshed through additional Design Thinking sessions with adjacent teams and cross-team strat sessions. A/B testing and user research ran continuously throughout.\n\nI led the expansion with Dima, a designer I'd brought onto the team, partnering with PM, analyst, and CJE. For depth: capital history, multi-axis asset grouping (product type, currency, asset class, withdrawal speed), customizable inclusion filters (e.g., assets outside Sber, credit cards), liabilities aggregation, real estate valuation via government services.\n\nFor reach: a main-screen savings widget that funneled bank-wide traffic into Total Funds, and dedicated screens and widgets built with the Athena voice-assistant team for queries like \"show me the forecast\" or \"how much do I have.\" Each layer shipped behind A/B testing and usability validation, based on defined priorities.\n\n**Total Funds extended into a multi-surface wealth analysis system; main-screen widget A/B-tested at +25% CTR uplift in best variant.**",
+          "images": [
+            {
+              "src": "/images/projects/sber-analytics-surfaces-expansion.png",
+              "alt": "",
+              "width": 2560,
+              "height": 2560,
+              "kind": "image"
+            },
+            {
+              "src": "/images/projects/sber-analytics-surfaces-expansion-2.png",
+              "alt": "",
+              "width": 2960,
+              "height": 2560,
+              "kind": "image"
+            },
+            {
+              "src": "/images/projects/sber-analytics-surfaces-expansion-1-3.png",
+              "width": 2960,
+              "height": 2560,
+              "kind": "image",
+              "alt": ""
             }
           ]
         },
         {
           "title": "Feature cut",
-          "description": "After the rebuild we kept extending Total Funds — capital history, grouping by product type and currency, multi-angle filters. Each feature tested well; users in sessions praised the analytical depth.\n\nProduction told a different story. Engagement on parts of this layer stayed low even among high-income users — the same group most enthusiastic in tests. Testing measures comprehension; production measures want.\n\nI ran a second round of research on real usage and owned the cut list with the PM. We cut the specific filter and grouping types nobody touched in production; capital history and the filters that mattered stayed. Foreground reduced to three core actions — balance, open-a-product, switch-grouping.\n\n**Retention grown 2.6% → 5.3%; customer satisfaction lifted; inner invest market conversion kept rising.**",
+          "description": "After the rebuild we kept extending Total Funds — capital history, grouping by product type and currency, multi-angle filters. Each feature tested well; users in sessions praised the analytical depth.\n\nProduction told a different story. Engagement stayed low even among high-income users — the same group most enthusiastic in tests. Usability testing measures comprehension; production measures want.\n\nI ran a second round of research on real usage and owned the cut list with the PM. We cut the specific filter and grouping types nobody touched in production; capital history and the filters that mattered stayed. Foreground reduced to three core actions — balance, open-a-product, switch-grouping.\n\n**Retention grown 2.6% → 5.3%; customer satisfaction lifted; inner invest market conversion kept rising.**",
           "images": [
             {
-              "src": "/images/projects/sber-graph.png",
+              "src": "/images/projects/sber-feature-cut.png",
               "alt": "Stripped-back Total Funds view with capital history graph",
               "width": 3840,
-              "height": 2400
-            },
-            {
-              "src": "/images/projects/sber-dark.png",
-              "alt": "Dark mode treatment of the simplified Total Funds view",
-              "width": 3840,
-              "height": 2400
+              "height": 2560,
+              "kind": "image"
             }
           ]
         }

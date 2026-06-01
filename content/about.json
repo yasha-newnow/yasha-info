@@ -1,9 +1,9 @@
 {
   "bio": [
-    "10+ years designing mobile apps, fintech, and complex B2B platforms — from Sberbank's 50+M users to SimilarWeb's analytics platform to growing Preply's global learning marketplace.",
-    "The way things work can always (almost) work better. Driven to build products that users love and business profit from, following existential urge to make world better."
+    "I work the problem, not the industry. 10+ years of design and leadership across FinTech, B2B, and Consumer apps — Sber's PFM tribe (50M+ users), SimilarWeb's analytics platform, Preply's tutor-side growth experiments. \n\nFrom inventing and shipping new products to optimizing key metrics at scale through A/B testing and thorough user research. Hiring and mentoring design peers along the way. \n\nPrefer lean structures where fewer gates between idea and execution, transparency in decision making, and room for mistakes shape not only the team but the product outcomes themselves.",
+    "I love creating new contexts that shift the rules — the way things work can always (almost) be improved. \nDriven to build products users love and businesses profit from, following the existential urge to make the world better."
   ],
-  "howText": "Zooming out to see the full picture, challenging status quo and applying design principles in order to understand if we're solving a right problem. It helps to find where the real leverage is, build a clear strategy — and then adapt it ruthlessly as reality pushes back.",
+  "howText": "Every product lives in a context — a user doing a job, with constraints they didn't ask for. The context isn't always given; sometimes it needs to be understood deeply enough to answer one obvious question — is this the right problem to solve? \nI work it as a system: what's the taxonomy, what's missing, where the product can land closer to the user's context. I keep trade-offs visible, attach design decisions to business outcomes, and pressure-test direction with peers. AI tools in daily practice for rapid prototyping and concept exploration.",
   "skills": [
     {
       "name": "UX/UI & Interaction Design",
@@ -28,43 +28,43 @@
   ],
   "workHistory": [
     {
-      "title": "Senior Designer at Preply",
-      "description": "Growth design team, tutor-side experience.",
+      "title": "Preply ✱ Sr. Product Designer",
+      "description": "C2C learning marketplace, 32K+ tutors / Trial agenda A/B and iOS widget V2 / Growth team, tutor-side",
       "period": "2025 – 2026"
     },
     {
-      "title": "Senior Designer at Guesty",
-      "description": "Business & Financials domain features, Cross-platform onboarding, Notifications system revamp.",
+      "title": "Guesty ✱ Sr. Product Designer",
+      "description": "B2B vacation rental SaaS, 250K+ properties / Notifications rebuild & Mid-stay Relocation 0→1 / Business & Financials, Cross-platform",
       "period": "2024 – 2025"
     },
     {
-      "title": "Senior Designer at SimilarWeb",
-      "description": "Navigation redesign, Core platform products optimization, Market Research and Demand Analysis pods launch.",
+      "title": "SimilarWeb ✱ Sr. Product Designer",
+      "description": "B2B analytics SaaS, 4K+ enterprise customers / Platform Navigation redesign & Market Research + Demand Analysis 0→1 / Core Platform Products",
       "period": "2021 – 2024"
     },
     {
-      "title": "Lead Designer at Sber",
-      "description": "Personal finance services in core banking iOS / Android apps, led 3-designer team.",
+      "title": "Sber ✱ Lead Product Designer",
+      "description": "FinTech consumer apps, 50M+ users / Total Funds product group rebuild / Core banking, PFM tribe, led 3-designer team",
       "period": "2019 – 2021"
     },
     {
-      "title": "Senior Designer at Bankex",
-      "description": "Crypto trading & custodian service, 0→1 product launch.",
+      "title": "Bankex ✱ Sr. Product Designer",
+      "description": "FinTech crypto trading & custodian, $70M+ raised / Custodian product 0→1 in 3.5 months / Crypto startup",
       "period": "2018 – 2019"
     },
     {
-      "title": "Senior Designer at COMS",
-      "description": "Enterprise network monitoring platform redesign.",
+      "title": "COMS ✱ Sr. Product Designer",
+      "description": "B2B enterprise monitoring SaaS, top-5 RU enterprise customers / Full platform redesign / Rostelecom startup team",
       "period": "2018"
     },
     {
-      "title": "UX/UI Designer at Svyaznoy",
-      "description": "Corporate platform, cross-platform mobile app.",
+      "title": "Svyaznoy ✱ UX/UI Designer",
+      "description": "Internal corporate platform, 20K+ employees / Platform redesign + extension / In-house team",
       "period": "2017"
     },
     {
-      "title": "UX/UI & Brand Designer at Armex",
-      "description": "Art direction, branding & digital projects for banks.",
+      "title": "Armex ✱ UX/UI & Brand Designer",
+      "description": "Banking client work, 10+ RU regional banks / Branding and digital design / Studio role",
       "period": "2016 – 2017"
     }
   ]

@@ -54,8 +54,10 @@ export function EditSidePanel() {
   // panel body out of the production client bundle via dead-code elimination.
   if (process.env.NODE_ENV === "production") return null;
   const { panel, closePanel, pushEdit } = useEditMode();
-  const fileKey = panel?.fileKey ?? "about";
-  const fieldPath = panel?.fieldPath ?? [];
+  // This panel only handles text edits; gallery edits go to GalleryEditPanel.
+  const textPanel = panel?.kind === "text" ? panel : null;
+  const fileKey = textPanel?.fileKey ?? "about";
+  const fieldPath = textPanel?.fieldPath ?? [];
   const { save, saving, error, clearError } = useEditableContent({
     fileKey,
     fieldPath,
@@ -71,9 +73,9 @@ export function EditSidePanel() {
   useEffect(() => {
     const el = dialogRef.current;
     if (!el) return;
-    if (panel) {
+    if (textPanel) {
       if (!el.open) el.showModal();
-      setText(panel.initialValue);
+      setText(textPanel.initialValue);
       setSaved(false);
       clearError();
       // Move focus to textarea; browser auto-focuses first focusable, but the
@@ -82,26 +84,26 @@ export function EditSidePanel() {
     } else if (el.open) {
       el.close();
     }
-  }, [panel, clearError]);
+  }, [textPanel, clearError]);
 
   const handleSave = useCallback(async () => {
-    if (!panel) return;
-    if (text === panel.initialValue) {
+    if (!textPanel) return;
+    if (text === textPanel.initialValue) {
       closePanel();
       return;
     }
     const ok = await save(text);
     if (ok) {
       pushEdit({
-        fileKey: panel.fileKey,
-        fieldPath: panel.fieldPath,
-        oldValue: panel.initialValue,
+        fileKey: textPanel.fileKey,
+        fieldPath: textPanel.fieldPath,
+        oldValue: textPanel.initialValue,
         newValue: text,
       });
       setSaved(true);
       setTimeout(() => closePanel(), 350);
     }
-  }, [panel, text, save, closePanel, pushEdit]);
+  }, [textPanel, text, save, closePanel, pushEdit]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -113,7 +115,7 @@ export function EditSidePanel() {
       if (
         (e.metaKey || e.ctrlKey) &&
         e.key.toLowerCase() === "b" &&
-        panel?.richText &&
+        textPanel?.richText &&
         textareaRef.current
       ) {
         e.preventDefault();
@@ -129,15 +131,15 @@ export function EditSidePanel() {
       }
       // Esc is handled natively by the <dialog> (fires onClose).
     },
-    [handleSave, panel?.richText],
+    [handleSave, textPanel?.richText],
   );
 
   return (
     <dialog
       ref={dialogRef}
-      aria-label={panel?.label ?? "Edit content"}
+      aria-label={textPanel?.label ?? "Edit content"}
       data-edit-panel
-      data-edit-panel-label={panel?.label ?? "Edit content"}
+      data-edit-panel-label={textPanel?.label ?? "Edit content"}
       onClose={closePanel}
       style={{
         // Override native <dialog> centering: pin to right edge as a side panel.
@@ -155,14 +157,14 @@ export function EditSidePanel() {
         background: "#0a0a0a",
         color: "#f5f5f5",
         boxShadow: "-12px 0 32px rgba(0,0,0,0.5)",
-        display: panel ? "flex" : "none",
+        display: textPanel ? "flex" : "none",
         flexDirection: "column",
         fontFamily:
           "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
         fontSize: 14,
       }}
     >
-      {panel && (
+      {textPanel && (
         <>
           <header
             style={{
@@ -176,7 +178,7 @@ export function EditSidePanel() {
           >
             <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <strong style={{ fontSize: 14, fontWeight: 600 }}>
-                {panel.label ?? "Edit text"}
+                {textPanel.label ?? "Edit text"}
               </strong>
               <span
                 style={{
@@ -185,7 +187,7 @@ export function EditSidePanel() {
                   fontFamily: "ui-monospace, monospace",
                 }}
               >
-                {panel.fileKey}.{panel.fieldPath.join(".")}
+                {textPanel.fileKey}.{textPanel.fieldPath.join(".")}
               </span>
             </div>
             <button
@@ -226,7 +228,7 @@ export function EditSidePanel() {
             }}
           />
 
-          {panel.richText && (
+          {textPanel.richText && (
             <div
               style={{
                 padding: "12px 20px",
@@ -270,7 +272,7 @@ export function EditSidePanel() {
             }}
           >
             <span style={{ fontSize: 11, opacity: 0.6 }}>
-              {panel.richText ? "Cmd+B bold · " : ""}Cmd+S save · Esc cancel
+              {textPanel.richText ? "Cmd+B bold · " : ""}Cmd+S save · Esc cancel
             </span>
             <div style={{ display: "flex", gap: 8 }}>
               <button

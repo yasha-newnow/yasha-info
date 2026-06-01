@@ -163,7 +163,8 @@ export function AboutSection() {
               </p>
             </div>
 
-            {/* Right column: Skills with dots and dividers */}
+            {/* Right column: Skills with dots and dividers — temporarily hidden */}
+            {/*
             <div className="flex-1 flex flex-col gap-4">
               {skills.map((skill, index) => (
                 <Fragment key={`${index}-${skill.name}`}>
@@ -179,6 +180,7 @@ export function AboutSection() {
                 </Fragment>
               ))}
             </div>
+            */}
           </motion.div>
 
           {/* Card 3: WHY + Motivation — icon left, text right */}

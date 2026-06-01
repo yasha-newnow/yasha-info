@@ -6,6 +6,7 @@ import "./globals.css";
 import { EditModeProvider } from "@/lib/edit-mode/use-edit-mode";
 import { EditToggleButton } from "@/components/edit-mode/edit-toggle-button";
 import { EditSidePanel } from "@/components/edit-mode/edit-side-panel";
+import { GalleryEditPanel } from "@/components/edit-mode/gallery-edit-panel";
 import { ContentProvider } from "@/lib/edit-mode/content-context";
 import { loadAllContent } from "@/data/server-load";
 import { Agentation } from "agentation";
@@ -66,6 +67,7 @@ export default async function RootLayout({
             </div>
             <EditToggleButton />
             <EditSidePanel />
+            <GalleryEditPanel />
           </EditModeProvider>
         </ContentProvider>
         {/* Agentation — AI-comment overlay for annotating concrete UI elements.

@@ -11,7 +11,8 @@ import { useDialKit } from "dialkit";
 import { ArrowUpRight } from "./icons";
 import type { CaseStudy, CaseSection, GalleryImage } from "@/data/schemas";
 import { useCaseStudies } from "@/lib/edit-mode/content-context";
-import { Editable } from "./edit-mode/editable";
+import { useEditMode } from "@/lib/edit-mode/use-edit-mode";
+import { Editable, splitId } from "./edit-mode/editable";
 import { parseBold } from "@/lib/edit-mode/markdown-bold";
 import { MediaItem } from "./media-item";
 import {
@@ -196,7 +197,7 @@ export function ProjectSheet({
 
                 {/* Hero — natural aspect ratio (no crop). Fills outer width, height by source aspect.
                     Renders via MediaItem so video kind is supported automatically. */}
-                <HeroMedia heroImage={caseStudy.heroImage} />
+                <HeroMedia heroImage={caseStudy.heroImage} idBase={csIdBase} />
               </motion.div>
 
               {/* ── Sections: scroll-triggered ─── */}
@@ -328,10 +329,37 @@ function MetaBlock({ idBase, role, timeframe, scope, platform }: MetaBlockProps)
 
 /* ─── Hero media ─── */
 
-function HeroMedia({ heroImage }: { heroImage: GalleryImage }) {
+function HeroMedia({
+  heroImage,
+  idBase,
+}: {
+  heroImage: GalleryImage;
+  idBase: string;
+}) {
   const onZoom = useMediaZoom() ?? undefined;
+  const { editMode, openPanel } = useEditMode();
   return (
-    <motion.div variants={itemVariants}>
+    <motion.div variants={itemVariants} className="flex flex-col gap-3">
+      {editMode && (
+        <button
+          type="button"
+          data-vaul-no-drag
+          onMouseDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            openPanel({
+              kind: "gallery",
+              single: true,
+              ...splitId(`${idBase}.heroImage`),
+              images: [heroImage],
+              label: "Edit hero image",
+            });
+          }}
+          className="self-start rounded-md border-2 border-dashed border-card-text/30 px-3 py-1.5 text-sm text-card-text/70 transition-colors hover:bg-card-text/5"
+        >
+          Edit hero
+        </button>
+      )}
       <MediaItem item={heroImage} variant="fullWidth" priority onZoom={onZoom} />
     </motion.div>
   );
@@ -351,6 +379,7 @@ function SectionBlock({
   gallerySnapOptions: GallerySnapOptions;
 }) {
   const onZoom = useMediaZoom() ?? undefined;
+  const { editMode, openPanel } = useEditMode();
   return (
     <motion.section
       className="w-full flex flex-col gap-12 lg:gap-20"
@@ -381,6 +410,25 @@ function SectionBlock({
               {parseBold(section.description, "text-medium")}
             </Editable>
           </p>
+          {editMode && (
+            <button
+              type="button"
+              data-vaul-no-drag
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                openPanel({
+                  kind: "gallery",
+                  ...splitId(`${idBase}.images`),
+                  images: section.images,
+                  label: "Edit media",
+                });
+              }}
+              className="self-start rounded-md border-2 border-dashed border-card-text/30 px-3 py-1.5 text-sm text-card-text/70 transition-colors hover:bg-card-text/5"
+            >
+              Edit media ({section.images.length})
+            </button>
+          )}
         </div>
       </motion.div>
 
@@ -518,7 +566,7 @@ function EmblaGallery({
     >
       <div className="flex gap-6 touch-pan-y">
         {items.map((m, i) => (
-          <div key={i} className="shrink-0 h-[680px]">
+          <div key={i} className="shrink-0 h-[800px]">
             <MediaItem item={m} variant="carouselSlot" onZoom={onZoom} />
           </div>
         ))}
