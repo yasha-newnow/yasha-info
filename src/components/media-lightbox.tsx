@@ -129,6 +129,14 @@ export function Lightbox({
     sourceRect.bottom > 0 && sourceRect.top < viewport.h;
   const exitFrame = sourceInView ? initialFrame : { ...animateFrame, opacity: 0 };
 
+  // The lightbox is portaled to <body>, so it lives OUTSIDE the drawer's own
+  // clip (`overflow-clip rounded-t-[40px]`). Without this, the morph frame
+  // paints over the drawer's rounded top corners / the strip above it while
+  // animating to/from the in-drawer source rect (visible on open and on exit).
+  // Clip the morph layer to the drawer's bounds: drawer is `inset-x-0 bottom-0`,
+  // `height: 97dvh`, `rounded-t-[40px]` → top inset = 3% of viewport height.
+  const drawerClip = `inset(${viewport.h * 0.03}px 0px 0px 0px round 40px 40px 0px 0px)`;
+
   return (
     // Vaul sets `pointer-events: none` on <body> while the drawer is open.
     // Our lightbox lives in a portal under <body>, so it inherits that
@@ -157,27 +165,37 @@ export function Lightbox({
         style={{ pointerEvents: "auto" }}
       />
 
-      {/* Frame — morphs from source rect to aspect-fitted target rect.
-          No background colour: the frame's size is mathematically fit to the
-          content's natural aspect, so the media element fills it. A `bg-white`
-          previously showed as a 1px white halo around dark images due to
-          subpixel rounding — using transparent lets the backdrop blur fill
-          any rounding gap instead. */}
-      <motion.div
-        ref={mediaRef}
-        initial={initialFrame}
-        animate={animateFrame}
-        exit={exitFrame}
-        transition={
-          reduced
-            ? { duration: 0 }
-            : { type: "spring", duration: 0.5, bounce: 0 }
-        }
-        className="absolute rounded-[24px] overflow-hidden"
-        style={{ pointerEvents: "auto" }}
+      {/* Clip wrapper — static, sized to the drawer's rounded bounds so the
+          morphing frame can never paint outside the drawer. `pointerEvents:
+          none` lets clicks "outside" the image still reach the backdrop
+          (onClose). Kept separate from the animated frame so framer-motion's
+          per-frame writes never touch the clip. */}
+      <div
+        className="absolute inset-0"
+        style={{ clipPath: drawerClip, pointerEvents: "none" }}
       >
-        <MediaItem item={item} variant="lightbox" />
-      </motion.div>
+        {/* Frame — morphs from source rect to aspect-fitted target rect.
+            No background colour: the frame's size is mathematically fit to the
+            content's natural aspect, so the media element fills it. A `bg-white`
+            previously showed as a 1px white halo around dark images due to
+            subpixel rounding — using transparent lets the backdrop blur fill
+            any rounding gap instead. */}
+        <motion.div
+          ref={mediaRef}
+          initial={initialFrame}
+          animate={animateFrame}
+          exit={exitFrame}
+          transition={
+            reduced
+              ? { duration: 0 }
+              : { type: "spring", duration: 0.5, bounce: 0 }
+          }
+          className="absolute rounded-[24px] overflow-hidden"
+          style={{ pointerEvents: "auto" }}
+        >
+          <MediaItem item={item} variant="lightbox" />
+        </motion.div>
+      </div>
 
       {/* Close button — viewport-positioned, exits with the lightbox */}
       <motion.div
