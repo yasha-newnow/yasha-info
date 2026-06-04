@@ -44,32 +44,54 @@ export function shouldUseDarkMode(accentHex: string): boolean {
   return contrastRatio(accentHex, DARK_FOREGROUND) < WCAG_AA_THRESHOLD;
 }
 
+export interface Theme {
+  accent: string;
+  foreground: string;
+  glassOverlay: string;
+  shadowGlassColor: string;
+  isLight: boolean;
+}
+
+/**
+ * Pure: compute the full theme (accent + derived CSS vars) for an accent color.
+ * No DOM access — safe to call on the server (e.g. to precompute preset themes
+ * for the pre-paint init script).
+ */
+export function computeTheme(accentHex: string): Theme {
+  const darkMode = shouldUseDarkMode(accentHex);
+  return {
+    accent: accentHex,
+    foreground: darkMode ? LIGHT_FOREGROUND : DARK_FOREGROUND,
+    glassOverlay: darkMode ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.05)",
+    // Glass card shadow color — inverted: light bg → white glow, dark bg → dark shadow
+    shadowGlassColor: darkMode ? "rgba(0, 0, 0, 0.15)" : "rgba(255, 255, 255, 0.12)",
+    isLight: !darkMode,
+  };
+}
+
 /**
  * Apply theme based on accent color.
- * Sets --foreground and --glass-overlay CSS variables.
+ * Sets the accent CSS variables on :root and notifies listeners (e.g. the shader).
  */
 export function applyTheme(accentHex: string): void {
-  const darkMode = shouldUseDarkMode(accentHex);
+  const theme = computeTheme(accentHex);
   const root = document.documentElement;
 
-  root.style.setProperty("--accent", accentHex);
-  root.style.setProperty(
-    "--foreground",
-    darkMode ? LIGHT_FOREGROUND : DARK_FOREGROUND
-  );
-  root.style.setProperty(
-    "--glass-overlay",
-    darkMode ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.05)"
-  );
-  // Glass card shadow color — inverted: light bg → white glow, dark bg → dark shadow
-  root.style.setProperty(
-    "--shadow-glass-color",
-    darkMode ? "rgba(0, 0, 0, 0.15)" : "rgba(255, 255, 255, 0.12)"
-  );
+  root.style.setProperty("--accent", theme.accent);
+  root.style.setProperty("--foreground", theme.foreground);
+  root.style.setProperty("--glass-overlay", theme.glassOverlay);
+  root.style.setProperty("--shadow-glass-color", theme.shadowGlassColor);
 
   window.dispatchEvent(
-    new CustomEvent("themechange", { detail: { isLight: !darkMode } })
+    new CustomEvent("themechange", { detail: { isLight: theme.isLight } })
   );
+}
+
+declare global {
+  interface Window {
+    /** Theme chosen by the pre-paint init script — see lib/theme-init.ts. */
+    __YASHA_THEME__?: Theme;
+  }
 }
 
 /** Picker uses inverted theme: dark page → light picker, light page → dark picker */

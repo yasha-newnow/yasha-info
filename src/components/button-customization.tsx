@@ -5,19 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { PaletteIcon } from "./icons";
 import {
   applyTheme,
+  computeTheme,
   shouldUseDarkMode,
   getPickerBackground,
   getPickerForeground,
 } from "@/lib/contrast";
 import { ColorPickerPanel } from "./color-picker-panel";
-
-const ACCENT_COLORS = [
-  "#06E979", // green
-  "#FF3F8E", // pink
-  "#7B61FF", // purple
-  "#4DC9F0", // cyan
-  "#2E1B69", // dark indigo
-];
+import { ACCENT_COLORS, BASE_ACCENT } from "@/lib/presets";
 
 // Updated from Paper Design (7-stop oklab conic)
 const RAINBOW_GRADIENT =
@@ -34,7 +28,7 @@ const STATE_STYLES = {
 
 export function ButtonCustomization() {
   const [level, setLevel] = useState<PickerLevel>("closed");
-  const [activeColor, setActiveColor] = useState("#C5F640");
+  const [activeColor, setActiveColor] = useState(BASE_ACCENT);
   const [foreground, setForeground] = useState("#0A0A0A");
   const [isHovered, setIsHovered] = useState(false);
   const [isCustomColor, setIsCustomColor] = useState(false);
@@ -42,6 +36,17 @@ export function ButtonCustomization() {
 
   // Reset hover when level changes (prevents sticky hover after picker close)
   useEffect(() => { setIsHovered(false); }, [level]);
+
+  // Sync the picker UI with the accent the pre-paint init script actually
+  // applied (random preset or saved manual choice). Done in an effect — not in
+  // useState — to avoid a hydration mismatch on the rendered swatch/icon colors.
+  useEffect(() => {
+    const theme = typeof window !== "undefined" ? window.__YASHA_THEME__ : undefined;
+    if (!theme) return;
+    setActiveColor(theme.accent);
+    setForeground(theme.foreground);
+    setIsCustomColor(!ACCENT_COLORS.includes(theme.accent));
+  }, []);
 
   const toggle = useCallback(() => {
     setLevel((prev) => (prev === "closed" ? (isCustomColor ? "full" : "presets") : "closed"));
@@ -51,6 +56,13 @@ export function ButtonCustomization() {
     setActiveColor(hex);
     applyTheme(hex);
     setForeground(shouldUseDarkMode(hex) ? "#FFFFFF" : "#0A0A0A");
+    // Remember the manual choice so it sticks across reloads (sticky overrides
+    // the random default). Stored as the full computed theme for the init script.
+    try {
+      localStorage.setItem("accent:manual", JSON.stringify(computeTheme(hex)));
+    } catch {
+      // storage may be unavailable — the choice just won't persist
+    }
   }, []);
 
   // STATE 2: apply, stay open

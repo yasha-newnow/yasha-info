@@ -1,15 +1,17 @@
 @import "tailwindcss";
 
+/* No-JS / pre-paint fallback. Keep in sync with BASE_ACCENT in src/lib/presets.ts.
+   The init script (lib/theme-init.ts) overrides these with a random preset. */
 @property --accent {
   syntax: '<color>';
   inherits: true;
-  initial-value: #C5F640;
+  initial-value: #25FF1C;
 }
 
 @property --foreground {
   syntax: '<color>';
   inherits: true;
-  initial-value: #121419;
+  initial-value: #0A0A0A;
 }
 
 @property --glass-overlay {
@@ -25,8 +27,8 @@
 }
 
 :root {
-  --accent: #C5F640;
-  --foreground: #121419;
+  --accent: #25FF1C;
+  --foreground: #0A0A0A;
   --glass-overlay: rgba(0, 0, 0, 0.05);
   --shadow-glass-color: rgba(255, 255, 255, 0.12);
   --shadow-s: 0px 2px 3px color-mix(in srgb, var(--foreground) 12%, transparent);

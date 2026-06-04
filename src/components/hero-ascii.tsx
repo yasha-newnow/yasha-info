@@ -132,7 +132,12 @@ export function HeroAscii({
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const isLightRef = useRef(true);
+  // Start from the theme the pre-paint init script applied so the first frame
+  // uses the correct tuning even for dark presets. Reading window in a ref
+  // initializer is hydration-safe (refs aren't part of the rendered HTML).
+  const isLightRef = useRef(
+    typeof window !== "undefined" ? window.__YASHA_THEME__?.isLight ?? true : true
+  );
   const scrambleStartRef = useRef(0);
 
   const resolveTuning = useCallback((): ShaderTuning => {
