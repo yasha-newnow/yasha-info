@@ -79,31 +79,31 @@
             },
             {
               "src": "/images/projects/preply-widget-01-1.jpg",
+              "alt": "",
               "width": 2560,
               "height": 2560,
-              "kind": "image",
-              "alt": ""
+              "kind": "image"
             },
             {
-              "src": "/images/projects/preply-widget-02-2.jpg",
+              "src": "/images/projects/preply-widget-02-4.jpg",
+              "alt": "",
               "width": 2960,
               "height": 2560,
-              "kind": "image",
-              "alt": ""
+              "kind": "image"
             },
             {
-              "src": "/images/projects/preply-widget-03-1.jpg",
+              "src": "/images/projects/preply-widget-03-2.jpg",
+              "alt": "",
               "width": 2960,
               "height": 2560,
-              "kind": "image",
-              "alt": ""
+              "kind": "image"
             },
             {
-              "src": "/images/projects/preply-widget-04-1.jpg",
+              "src": "/images/projects/preply-widget-04-2.jpg",
+              "alt": "",
               "width": 3840,
               "height": 2560,
-              "kind": "image",
-              "alt": ""
+              "kind": "image"
             }
           ]
         }
