@@ -56,6 +56,10 @@ export const CardImageSchema = z.object({
   anchor: z.enum(["left", "center", "right"]).optional(),
   // CSS transform-origin for the rotation pivot. Optional; defaults to center.
   transformOrigin: z.string().optional(),
+  // CSS border shorthand (e.g. "1px solid #E6E9EC"). Optional; mirrors the
+  // outline some Paper screens carry so light dashboards don't blend into the
+  // white card. Omitted → no border (Sber/Preply phone shots don't need one).
+  border: z.string().optional(),
 });
 
 export const CaseCardSchema = z.object({

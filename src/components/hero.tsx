@@ -29,7 +29,7 @@ function makeCubicBezier(coords: [number, number, number, number]): (t: number) 
   };
 }
 
-const TITLE_LINES = ["I'm Yasha,", "Product Designer."];
+const TITLE_LINES = ["Hey! I'm Yasha,", "Product Designer."];
 const DESCRIPTION =
   "10+ years on 0→1 launches and platform-scale rebuilds across FinTech, B2B, and Consumer products. Architect by training. AI tools in daily practice.";
 

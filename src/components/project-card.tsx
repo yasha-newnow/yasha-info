@@ -203,6 +203,7 @@ function CardImage({
     right: anchor === "right" ? 0 : undefined,
     transformOrigin: image.transformOrigin,
     borderRadius: image.borderRadius,
+    border: image.border,
     overflow: "hidden",
     boxShadow: image.shadow,
   } as const;

@@ -550,9 +550,55 @@ function EmblaGallery({
     });
   }, [items]);
 
+  // TEMP DIAG — remove after capture. Traces settle-vs-reInit timing to find
+  // what interrupts the return-to-center animation. Read via window.__emblaDiag.
+  useEffect(() => {
+    if (!emblaApi) return;
+    const buf: { t: number; type: string; idx: number }[] = [];
+    (window as unknown as { __emblaDiag?: typeof buf }).__emblaDiag = buf;
+    const push = (type: string) =>
+      buf.push({
+        t: Math.round(performance.now()),
+        type,
+        idx: emblaApi.selectedScrollSnap(),
+      });
+    let awaitingSettleStart = false;
+    const onPointerUp = () => {
+      push("pointerUp");
+      awaitingSettleStart = true;
+    };
+    const onScroll = () => {
+      if (awaitingSettleStart) {
+        push("settle-move-start");
+        awaitingSettleStart = false;
+      }
+    };
+    const onReInit = () => push("reInit(any)");
+    const onSettle = () => push("settle");
+    emblaApi.on("pointerUp", onPointerUp);
+    emblaApi.on("scroll", onScroll);
+    emblaApi.on("reInit", onReInit);
+    emblaApi.on("settle", onSettle);
+    return () => {
+      emblaApi.off("pointerUp", onPointerUp);
+      emblaApi.off("scroll", onScroll);
+      emblaApi.off("reInit", onReInit);
+      emblaApi.off("settle", onSettle);
+    };
+  }, [emblaApi]);
+
   // Live re-init when dial knobs change (dev only).
   useEffect(() => {
     if (!emblaApi) return;
+    (
+      window as unknown as {
+        __emblaDiag?: { t: number; type: string; idx: number }[];
+      }
+    ).__emblaDiag?.push({
+      t: Math.round(performance.now()),
+      type: "ext-reInit-call",
+      idx: emblaApi.selectedScrollSnap(),
+    });
     emblaApi.reInit(options);
   }, [emblaApi, options]);
 

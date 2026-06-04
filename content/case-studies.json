@@ -11,10 +11,11 @@
       "platform": "Web, iOS",
       "viewSiteUrl": "https://preply.com",
       "heroImage": {
-        "src": "/images/projects/preply-main.jpg",
-        "alt": "Preply project hero — placeholder",
-        "width": 839,
-        "height": 525
+        "src": "/images/projects/preply-preply-main-2.jpg",
+        "alt": "",
+        "width": 3840,
+        "height": 2560,
+        "kind": "image"
       },
       "sections": [
         {
@@ -22,10 +23,46 @@
           "description": "The Trial Agenda is the screen tutors use during a trial lesson to drive subscription conversion. V1 worked everywhere except where it mattered most: Power Tutors — who deliver the majority of trials and drive CR2Sub — rejected it as too basic. V2 added scheduling prompts and was killed for flat conversion and a drop in monetization. One signal held across iterations: the agenda needed to belong to the tutor, not to Preply.\n\nI joined Preply's Growth team as a contract Senior Product Designer and owned the project end-to-end — research brief, usability testing, design from concept through the Phase 1 / Phase 2 split with the PM. Bex, the senior designer who owned this design area, partnered through the work; direction was set jointly.\n\nThe bet was a contract change: the agenda stops being Preply's checklist and becomes the tutor's artifact — freshly generated each trial from what the platform already knew about the student, editable on the fly. A new \"prepare-then-use\" behavior emerged: tutors edit pre-class and reference live. Per-tutor defaults and a shareable-with-student hook surfaced in testing — both deferred to Phase 2 to keep Phase 1 small and shippable.\n\nA/B across ~37K tutors. Stat-sig lifts across engagement and monetization. Shipped. \n\n**Detailed metrics available upon request.**",
           "images": [
             {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Editable Trial Agenda placeholder",
-              "width": 839,
-              "height": 525
+              "src": "/images/projects/preply-yasha-petrunin-cv-upd.webm",
+              "width": 3602,
+              "height": 2304,
+              "kind": "video",
+              "alt": ""
+            },
+            {
+              "src": "/images/projects/preply-editable-agenda-01-3.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image"
+            },
+            {
+              "src": "/images/projects/preply-editable-agenda-02-4.jpg",
+              "width": 2560,
+              "height": 2560,
+              "kind": "image",
+              "alt": ""
+            },
+            {
+              "src": "/images/projects/preply-editable-agenda-03-3.jpg",
+              "width": 2960,
+              "height": 2560,
+              "kind": "image",
+              "alt": ""
+            },
+            {
+              "src": "/images/projects/preply-editable-agenda-04-4.jpg",
+              "width": 2960,
+              "height": 2560,
+              "kind": "image",
+              "alt": ""
+            },
+            {
+              "src": "/images/projects/preply-editable-agenda-05-2.jpg",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image",
+              "alt": ""
             }
           ]
         },
@@ -34,11 +71,39 @@
           "description": "The V1 widget shipped in Q3 2025 with two states — a non-inferiority bet by App Core to unlock iOS widget infrastructure for other product squads. It passed but didn't move business metrics. Field signals showed appetite: 3.5% organic adoption, 6% with prompt, tutor adoption above student.\n\nPM Ariadna brought me the brief with four candidate states. I joined as a contract Senior Product Designer and owned the design end-to-end, refreshing Preply's internal iOS widget guidelines along the way.\n\nI mapped the full tutor lifecycle — new, recently activated, active, mature — proposed a state taxonomy, and tied each state to a business signal: first-week churn, TWA, Super Tutor conversion, advocacy. PM partnered on refinement. Each state got its own widget URL so other squads could extend the surface. Phase 1 shipped the highest-leverage states; the rest held for Phase 2.\n\nFour new widget surfaces shipped; adoption grew over the year post-launch. \n\n**Detailed metrics available upon request.**",
           "images": [
             {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Tutor iOS widget placeholder",
-              "width": 180,
-              "height": 578,
-              "kind": "image"
+              "src": "/images/projects/preply-widget-animation-1.webm",
+              "alt": "",
+              "width": 2776,
+              "height": 1852,
+              "kind": "video"
+            },
+            {
+              "src": "/images/projects/preply-widget-01-1.jpg",
+              "width": 2560,
+              "height": 2560,
+              "kind": "image",
+              "alt": ""
+            },
+            {
+              "src": "/images/projects/preply-widget-02-2.jpg",
+              "width": 2960,
+              "height": 2560,
+              "kind": "image",
+              "alt": ""
+            },
+            {
+              "src": "/images/projects/preply-widget-03-1.jpg",
+              "width": 2960,
+              "height": 2560,
+              "kind": "image",
+              "alt": ""
+            },
+            {
+              "src": "/images/projects/preply-widget-04-1.jpg",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image",
+              "alt": ""
             }
           ]
         }
@@ -55,10 +120,11 @@
       "platform": "Web",
       "viewSiteUrl": "https://www.guesty.com/",
       "heroImage": {
-        "src": "/images/projects/preply-main.jpg",
+        "src": "/images/projects/guesty-guesty-main-1.jpg",
         "alt": "Project hero image",
-        "width": 3000,
-        "height": 2000
+        "width": 1920,
+        "height": 1280,
+        "kind": "image"
       },
       "sections": [
         {
@@ -66,52 +132,31 @@
           "description": "Notifications were a silent operational risk. Everything landed in one flat, messy list — a reservation cancellation tomorrow next to one two weeks out, alongside payment failures, channel sync errors, and routine confirmations. Customers had built Zapier integrations to route around it. 75 PFRs from 113 accounts, 19 interviews, a 50-ticket CS audit — the problem was real and overdue.\n\nA strategic call early on: build on a third-party notification platform instead of from scratch — accepting its API constraints in exchange for cutting time-to-market roughly in half, and treating this as Phase 1 of a 5-phase roadmap (customizable triggers, collaborative lifecycle, notifications SDK).\n\nI led the project end-to-end — reshaping information architecture, auditing ~50 event types, benchmarking references, and designing the new system in alignment with the PM and key stakeholders: a severity taxonomy (Critical / Important / Updates), permission-aware preferences with cost-aware delivery defaults, and a scalable layout with Phase 2 designs prepped.\n\n**Detailed metrics available upon request.**",
           "images": [
             {
-              "src": "/images/projects/designjoy-test.png",
-              "alt": "Designjoy test image",
-              "width": 2400,
-              "height": 2636,
-              "kind": "image"
-            },
-            {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000,
-              "kind": "image"
-            },
-            {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000,
-              "kind": "image"
-            },
-            {
-              "src": "/images/projects/guesty-test.png",
+              "src": "/images/projects/guesty-guesty-notifications-animation.webm",
               "alt": "",
-              "width": 1466,
-              "height": 834,
+              "width": 3602,
+              "height": 2304,
+              "kind": "video"
+            },
+            {
+              "src": "/images/projects/guesty-notifications-1-2.jpg",
+              "alt": "",
+              "width": 2960,
+              "height": 2560,
               "kind": "image"
             },
             {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780,
+              "src": "/images/projects/guesty-notifications-2-1.jpg",
+              "alt": "",
+              "width": 2560,
+              "height": 2560,
               "kind": "image"
             },
             {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000,
-              "kind": "image"
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780,
+              "src": "/images/projects/guesty-notifications-3-1.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
               "kind": "image"
             }
           ]
@@ -121,38 +166,17 @@
           "description": "Moving a guest between units mid-stay required a five-step workaround — dummy listings, shortened reservations, manual reconciliation, broken automations, a new confirmation code — a recurring operational tax with no clean path through the system.\n\nA 0→1 feature spanning eight teams — one of the largest cross-team initiatives in Guesty's history. I co-led design with Inesa Muchnik, owning the core relocation flow: rate recalculation, owner revenue split, and in-modal pricing choice — all while keeping a single reservation ID intact across owner statements, channel sync, folio, and calendar.\n\nThe hard part wasn't the UI — mid-stay relocation served two distinct sets of jobs: operational (which property, which dates, how revenue splits) and financial (full folio breakdown with before-and-after across fees, taxes, line items). We split the modal accordingly — Timeline and Folio breakdown — so each user gets exactly what they need in their context.\n\n**Detailed metrics available upon request.**",
           "images": [
             {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000,
+              "src": "/images/projects/guesty-mid-stay-1.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
               "kind": "image"
             },
             {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000,
-              "kind": "image"
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780,
-              "kind": "image"
-            },
-            {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000,
-              "kind": "image"
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780,
+              "src": "/images/projects/guesty-mid-stay-2.jpg",
+              "alt": "",
+              "width": 2560,
+              "height": 2560,
               "kind": "image"
             }
           ]
@@ -170,10 +194,11 @@
       "platform": "Web",
       "viewSiteUrl": "https://www.similarweb.com",
       "heroImage": {
-        "src": "/images/projects/preply-main.jpg",
+        "src": "/images/projects/similarweb-main-1.jpg",
         "alt": "Project hero image",
-        "width": 3000,
-        "height": 2000
+        "width": 3840,
+        "height": 2560,
+        "kind": "image"
       },
       "sections": [
         {
@@ -181,40 +206,46 @@
           "description": "Six months after the previous redesign, the sidebar navigation was still broken: unaligned IA across product sections, users losing filters, inputs and context between pages, inconsistent visual hierarchy and patterns.\n\nBottom-up initiative. Started as a 1.5-hour design exercise, became a cross-team push we sold to stakeholders ourselves. I led discovery through delivery across 5 designers, 2 team leads, PMs, FE/BE, and UX writer.\n\nThe Acquisition homepage was the structural blocker. Its owners defended it until a 0.6% engagement number settled the argument. Removing it unlocked simplified IA across the entire platform.\n\n**Nav time 1.3 min → 42 sec (-53%); MAU increased by 2-3X on buried pages; Median pageviews per session 4.5 → 5 (+10%).**\n\n",
           "images": [
             {
-              "src": "/images/projects/designjoy-test.png",
-              "alt": "Designjoy test image",
-              "width": 2400,
-              "height": 2636
+              "src": "/images/projects/similarweb-test-2.webm",
+              "alt": "",
+              "width": 3456,
+              "height": 2304,
+              "kind": "video"
             },
             {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000
+              "src": "/images/projects/similarweb-before-1.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image"
             },
             {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000
+              "src": "/images/projects/similarweb-after-2.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image"
             },
             {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780
+              "src": "/images/projects/similarweb-details-1-1.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image"
             },
             {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000
+              "src": "/images/projects/similarweb-details-2-1.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image"
             },
             {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780
+              "src": "/images/projects/similarweb-details-3-1.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image"
             }
           ]
         },
@@ -223,34 +254,18 @@
           "description": "Website Segments lets users group URLs by specific parameters to track any defined slices of sites separately. ~35% of platform revenue comes from this functionality, with pricing scaled by segment quota — even Top Tier Enterprise packages capped at 25 segments, so every new segment was direct revenue. \n\nSegment builder completion rate was stuck at 64% and CS managers were doing most of the creation for clients. In close collaboration with VP of Product and PM we defined three concrete blockers: opaque Include/Exclude logic, a multi-step wizard misaligned with users' mental models, and no final URL list preview. \n\nI owned the full redesign cycle from discovery to delivery. Single-screen builder, live URL list preview, two clear Include/Exclude buckets editable side-by-side. \n\n**Completion rate 64% → 81% (+16.8pp); Time to create 4 min 5 sec → 23 sec (-90.6%); Segments per user +0.633.**",
           "images": [
             {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000
+              "src": "/images/projects/similarweb-segments-03-2.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image"
             },
             {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780
-            },
-            {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780
+              "src": "/images/projects/similarweb-segments-02-1.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image"
             }
           ]
         },
@@ -259,70 +274,80 @@
           "description": "Market Research launched in September 2023 as a new section in the platform — helping business leaders identify new markets, benchmark on KPIs, and size markets by sector and geography. Built to eventually replace the legacy Web Category Analysis surface, which had stalled on retention.\n\nFast 0-to-1 launch. We reused legacy data pipelines but rebuilt the UX from scratch — a new section with multiple pages (Overview, Segmentation, Players, Geography, Demographics) shipped as a paid add-on. I owned design end-to-end.\n\nThe design bet: surface preset answers for each business question instead of asking users to assemble them from filters and pickers. Players became the most-used surface in the section, and the new **Quadrant widget drew 2X the interaction rate vs the legacy one.** One Quadrant spotted in a blog article drove an $80K deal back from Wolverine.\n\n**38% of accounts purchased the new add-on within 6 months; 63% of users visited Players page within day one, 58.8% returned 3+ times within a month; 4-week retention +18% vs legacy section.**",
           "images": [
             {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000
+              "src": "/images/projects/similarweb-market-research.webm",
+              "alt": "",
+              "width": 2972,
+              "height": 1982,
+              "kind": "video"
             },
             {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000
+              "src": "/images/projects/similarweb-players.webm",
+              "alt": "",
+              "width": 2972,
+              "height": 1982,
+              "kind": "video"
             },
             {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780
+              "src": "/images/projects/similarweb-market-research-01-3.jpg",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image",
+              "alt": ""
             },
             {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000
+              "src": "/images/projects/similarweb-market-research-02-2.jpg",
+              "width": 2560,
+              "height": 2560,
+              "kind": "image",
+              "alt": ""
             },
             {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780
+              "src": "/images/projects/similarweb-market-research-03-1.jpg",
+              "width": 2960,
+              "height": 2560,
+              "kind": "image",
+              "alt": ""
+            },
+            {
+              "src": "/images/projects/similarweb-market-research-04-1.jpg",
+              "width": 2960,
+              "height": 2560,
+              "kind": "image",
+              "alt": ""
             }
           ]
         },
         {
           "title": "Demand Analysis",
-          "description": "Demand Analysis launched in February 2024 as a second new section in the platform, alongside Market Research. Focused on forward-looking demand signals — projecting where audience attention was moving, not just describing where it had been. \n\nI owned design end-to-end across Search Trends (the lead surface), period-over-period (PoP) mode, and the keyword list engine that powered the section. \n\nWorking closely with PM and VP, we shaped the section's product strategy — and made the core bet on the keyword list generation mechanic. Previously a fully manual process — users uploaded CSVs or added keywords one by one. We rebuilt it so users could auto-generate an entire list from a single seed keyword, which then could be edited and saved. \n\n**Search Trends MAU: +70% vs old Traffic by Country page (by month 4); Save events on generated lists: +34%; Edit events on generated lists: +42%**",
+          "description": "Demand Analysis launched in February 2024 as a second new section in the platform, alongside Market Research. Focused on forward-looking demand signals — projecting where audience attention was moving, not just describing where it had been. \n\nI owned design end-to-end across Search Trends (Topics), Keyword list engine that powered the section.\n\nWorking closely with PM and VP, we shaped the section's product strategy — and made the core bet on the keyword list generation mechanic. Previously a fully manual process — users uploaded CSVs or added keywords one by one. We rebuilt it so users could auto-generate an entire list from a single seed keyword, which then could be edited and saved. \n\n**Search Trends MAU: +70% vs old Traffic by Country page (by month 4); Save events on generated lists: +34%; Edit events on generated lists: +42%**",
           "images": [
             {
-              "src": "/images/projects/preply-main.jpg",
-              "alt": "Detail view 1",
-              "width": 3000,
-              "height": 2000
+              "src": "/images/projects/similarweb-demand-analysis-1.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image"
             },
             {
-              "src": "/images/projects/preply-sidebar.jpg",
-              "alt": "Detail view 2",
-              "width": 1500,
-              "height": 2000
+              "src": "/images/projects/similarweb-demand-analysis-2-3.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image"
             },
             {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test",
-              "width": 1018,
-              "height": 1780
+              "src": "/images/projects/similarweb-demand-analysis-3.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image"
             },
             {
-              "src": "/images/projects/preply-panels.jpg",
-              "alt": "Detail view 3",
-              "width": 3000,
-              "height": 4000
-            },
-            {
-              "src": "/images/projects/portrait-test.png",
-              "alt": "Portrait test (last)",
-              "width": 1018,
-              "height": 1780
+              "src": "/images/projects/similarweb-demand-analysis-4.jpg",
+              "alt": "",
+              "width": 3840,
+              "height": 2560,
+              "kind": "image"
             }
           ]
         }
@@ -339,8 +364,8 @@
       "platform": "iOS, Android",
       "viewSiteUrl": "https://www.sberbank.ru",
       "heroImage": {
-        "src": "/images/projects/sber-main-4.png",
-        "alt": "Total Funds redesign — old 12-segment product pie versus new asset-type donut with leading buttons",
+        "src": "/images/projects/sber-main.jpg",
+        "alt": "",
         "width": 3840,
         "height": 2560,
         "kind": "image"
@@ -351,14 +376,14 @@
           "description": "As Russia's largest bank, Sber could take this on at scale — both the social weight and a clear commercial upside. But the product itself was undefined: Total Funds was conceived as the group's hub, with its mental model, audience, and priorities all open.\n\nDiscovery was nonlinear — strategy sessions with PMs across teams, brainstorms with tribe leadership, repeated iteration on what \"manage your money efficiently\" should mean in product terms.\n\n**Formal research closed the phase: a 1,200-user quant study mapped four target audiences; a 6-day Design Thinking session with 13 respondents generated 145 ideas, 87 of which entered the backlog.**\n\nThe output set direction for the Total Funds rebuild and seeded the backlog that grew into Financial Cushion, the analytical iteration, and adjacent products across the group.",
           "images": [
             {
-              "src": "/images/projects/sber-discovery-pic-1.png",
-              "alt": "Discovery phase placeholder — to be replaced via the in-app editor",
+              "src": "/images/projects/sber-discovery-pic-2.jpg",
+              "alt": "",
               "width": 2856,
               "height": 1832,
               "kind": "image"
             },
             {
-              "src": "/images/projects/sber-discovery-pic-2.png",
+              "src": "/images/projects/sber-discovery-pic-3.jpg",
               "alt": "",
               "width": 2856,
               "height": 1832,
@@ -371,21 +396,28 @@
           "description": "The old Total Funds was a 12-segment pie nobody read as \"composition of capital.\" Users couldn't tell what they owned, and the screen ended at the chart — no path to the next action.\n\nI led design on Total Funds. Collapsed the 12 segments into four asset-type groups — Cards, Savings, Investments, outside-Sber — so the screen finally read as a composition of capital. Added leading buttons below the chart that opened next-product flows directly from the screen.\n\nThe donut form we landed on isn't statistically accurate and adjacent teams pushed back. We held the line on comprehension over precision, then partnered with Sber's gamification team on the spin: haptics, rolling numbers, color logic per category. ~88% of users actually spun it.\n\n**Total Funds became Sber's 2nd-most-popular entry to the inner investment market; MAU 1.4M → 4.8M; ~$17B AUM at peak; $20M+ in invest-product cross-sell in 2021 only.**",
           "images": [
             {
-              "src": "/images/projects/sber-total-funds-rebuild-2-1.png",
-              "alt": "Total Funds widget inside the main Sber app surface",
+              "src": "/images/projects/sber-animation-2.webm",
+              "alt": "",
+              "width": 1800,
+              "height": 1806,
+              "kind": "video"
+            },
+            {
+              "src": "/images/projects/sber-total-funds-rebuild-2.jpg",
+              "alt": "",
               "width": 3840,
               "height": 2560,
               "kind": "image"
             },
             {
-              "src": "/images/projects/sber-total-funds-rebuild.png",
-              "alt": "Five filter states of the asset donut: All, Cards, Savings, Investments, Outside Sber",
+              "src": "/images/projects/sber-total-funds-rebuild.jpg",
+              "alt": "",
               "width": 2960,
               "height": 2560,
               "kind": "image"
             },
             {
-              "src": "/images/projects/sber-total-funds-rebuild-1.png",
+              "src": "/images/projects/sber-total-funds-rebuild-1.jpg",
               "alt": "",
               "width": 2960,
               "height": 2560,
@@ -395,11 +427,11 @@
         },
         {
           "title": "Financial Cushion",
-          "description": "Financial Cushion is a savings-for-emergencies reserve — money set aside against income loss or sudden expense. The existing \"Goals\" product, where users used to set up such savings, had weak follow-through: most dropped off within one or two months.\n\nThe legacy flow asked for a target amount up front. People couldn't commit to an abstract number with no anchor in their own life and abandoned the goal soon after.\n\nWe built Cushion as a separate product, entered both from the bank's main screen and from a dedicated entry point on Total Funds. Instead of asking users to estimate a target, the flow auto-calculated it from their own monthly spending — replacing an abstract number with one anchored to real expense. Framed in human terms: \"for what?\", \"how much do I actually need?\". I led design as the team formed.\n\n**Users who created Cushion through Total Funds kept accumulating for 6+ months at +81% the rate compare to users with ordinary Targets.**",
+          "description": "Financial Cushion is a savings-for-emergencies reserve — money set aside against income loss or sudden expense. The existing \"Target\" product, where users used to set up such savings, had weak follow-through: most dropped off within one or two months.\n\nThe legacy flow asked for a target amount up front. People couldn't commit to an abstract number with no anchor in their own life and abandoned the target soon after.\n\nWe built Cushion as a separate product, entered both from the bank's main screen and from a dedicated entry point on Total Funds. Instead of asking users to estimate a target, the flow auto-calculated it from their own monthly spending — replacing an abstract number with one anchored to real expense. Framed in human terms: \"for what?\", \"how much do I actually need?\". I led design as the team formed.\n\n**Users who created Cushion through Total Funds kept accumulating for 6+ months at +81% the rate compare to users with ordinary Targets.**",
           "images": [
             {
-              "src": "/images/projects/sber-financial-cushion-1.png",
-              "alt": "Financial Cushion setup flow with auto-calculated target",
+              "src": "/images/projects/sber-financial-cushion-2.png",
+              "alt": "",
               "width": 3840,
               "height": 2560,
               "kind": "image"
@@ -411,25 +443,25 @@
           "description": "After Total Funds rebuild and Financial Cushion shipped, we extended the product on two fronts: depth and reach. Strategy followed the Discovery backlog, refreshed through additional Design Thinking sessions with adjacent teams and cross-team strat sessions. A/B testing and user research ran continuously throughout.\n\nI led the expansion with Dima, a designer I'd brought onto the team, partnering with PM, analyst, and CJE. For depth: capital history, multi-axis asset grouping (product type, currency, asset class, withdrawal speed), customizable inclusion filters (e.g., assets outside Sber, credit cards), liabilities aggregation, real estate valuation via government services.\n\nFor reach: a main-screen savings widget that funneled bank-wide traffic into Total Funds, and dedicated screens and widgets built with the Athena voice-assistant team for queries like \"show me the forecast\" or \"how much do I have.\" Each layer shipped behind A/B testing and usability validation, based on defined priorities.\n\n**Total Funds extended into a multi-surface wealth analysis system; main-screen widget A/B-tested at +25% CTR uplift in best variant.**",
           "images": [
             {
-              "src": "/images/projects/sber-analytics-surfaces-expansion.png",
+              "src": "/images/projects/sber-analytics-surfaces-expansion.jpg",
               "alt": "",
               "width": 2560,
               "height": 2560,
               "kind": "image"
             },
             {
-              "src": "/images/projects/sber-analytics-surfaces-expansion-2.png",
+              "src": "/images/projects/sber-analytics-surfaces-expansion-1.jpg",
               "alt": "",
               "width": 2960,
               "height": 2560,
               "kind": "image"
             },
             {
-              "src": "/images/projects/sber-analytics-surfaces-expansion-1-3.png",
+              "src": "/images/projects/sber-analytics-surfaces-expansion-2.jpg",
+              "alt": "",
               "width": 2960,
               "height": 2560,
-              "kind": "image",
-              "alt": ""
+              "kind": "image"
             }
           ]
         },
@@ -438,8 +470,8 @@
           "description": "After the rebuild we kept extending Total Funds — capital history, grouping by product type and currency, multi-angle filters. Each feature tested well; users in sessions praised the analytical depth.\n\nProduction told a different story. Engagement stayed low even among high-income users — the same group most enthusiastic in tests. Usability testing measures comprehension; production measures want.\n\nI ran a second round of research on real usage and owned the cut list with the PM. We cut the specific filter and grouping types nobody touched in production; capital history and the filters that mattered stayed. Foreground reduced to three core actions — balance, open-a-product, switch-grouping.\n\n**Retention grown 2.6% → 5.3%; customer satisfaction lifted; inner invest market conversion kept rising.**",
           "images": [
             {
-              "src": "/images/projects/sber-feature-cut.png",
-              "alt": "Stripped-back Total Funds view with capital history graph",
+              "src": "/images/projects/sber-feature-cut-1.png",
+              "alt": "",
               "width": 3840,
               "height": 2560,
               "kind": "image"

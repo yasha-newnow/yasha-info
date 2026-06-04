@@ -12,62 +12,69 @@
       ],
       "images": [
         {
-          "src": "/images/projects/preply-main.jpg",
-          "alt": "Preply project preview",
-          "width": 839,
-          "height": 525,
+          "src": "/images/projects/preply-card-1.png",
+          "alt": "Preply trial agenda overview",
+          "width": 320,
+          "height": 798,
+          "anchor": "left",
+          "transformOrigin": "0% 0%",
           "idle": {
-            "rotate": -3.08,
-            "x": "26px",
-            "y": "calc(-50% + 28px)"
+            "rotate": -4.35,
+            "x": "15.176px",
+            "y": "calc(-50% + 127.296px)"
           },
           "hover": {
-            "rotate": -4.56,
-            "x": "0px",
-            "y": "calc(-50% + 28px)"
+            "rotate": -5.87,
+            "x": "-16px",
+            "y": "calc(-50% + 116.462px)"
           },
-          "borderRadius": 8,
+          "borderRadius": 6,
           "shadow": "0px 15px 30px #00000012"
         },
         {
-          "src": "/images/projects/preply-sidebar.jpg",
-          "alt": "Preply project detail",
-          "width": 180,
-          "height": 578,
+          "src": "/images/projects/preply-card-2.png",
+          "alt": "Preply trial agenda detail",
+          "width": 320,
+          "height": 798,
+          "anchor": "center",
           "idle": {
-            "rotate": 3.93,
-            "x": "calc(-50% + 176px)",
-            "y": "calc(-50% - 3px)"
+            "rotate": 0,
+            "x": "calc(-50% + -5px)",
+            "y": "calc(-50% + 187px)"
           },
           "hover": {
-            "rotate": 4.79,
-            "x": "calc(-50% + 184px)",
-            "y": "calc(-50% - 12px)"
+            "rotate": 0,
+            "x": "calc(-50% + -5px)",
+            "y": "calc(-50% + 163px)"
           },
-          "borderRadius": 16,
+          "borderRadius": 6,
           "shadow": "0px 15px 30px #00000012"
         },
         {
-          "src": "/images/projects/preply-panels.jpg",
-          "alt": "Preply project panels",
-          "width": 225,
-          "height": 578,
+          "src": "/images/projects/preply-card-3.png",
+          "alt": "Preply tutor iOS widget",
+          "width": 506,
+          "height": 1009,
+          "anchor": "right",
+          "transformOrigin": "0% 0%",
           "idle": {
-            "rotate": 8.64,
-            "x": "calc(-50% + 345px)",
-            "y": "calc(-50% - 17px)"
+            "rotate": 3.07,
+            "x": "61.34px",
+            "y": "calc(-50% + 349.693px)"
           },
           "hover": {
-            "rotate": 10.11,
-            "x": "calc(-50% + 365px)",
-            "y": "calc(-50% - 34px)"
+            "rotate": 5.2,
+            "x": "90.716px",
+            "y": "calc(-50% + 325.668px)"
           },
-          "borderRadius": 20,
-          "shadow": "0px 15px 30px #00000012"
+          "borderRadius": 0,
+          "shadow": "none"
         }
       ],
-      "mobileImageSrc": "/images/projects/preply-main.jpg",
+      "mobileImageSrc": "/images/projects/preply-pic.png",
       "mobileImageAlt": "Preply product interface",
+      "mobileImageWidth": 2200,
+      "mobileImageHeight": 1216,
       "caseSlug": "preply"
     },
     {
@@ -83,62 +90,52 @@
       ],
       "images": [
         {
-          "src": "/images/projects/preply-main.jpg",
-          "alt": "Guesty project preview",
-          "width": 839,
-          "height": 525,
+          "src": "/images/projects/guesty-card-1.png",
+          "alt": "Guesty property management form",
+          "width": 691,
+          "height": 491,
+          "anchor": "left",
+          "transformOrigin": "0% 0%",
+          "border": "1px solid #E6E9EC",
           "idle": {
-            "rotate": -3.08,
-            "x": "26px",
-            "y": "calc(-50% + 28px)"
-          },
-          "hover": {
-            "rotate": -4.56,
+            "rotate": -1.33,
             "x": "0px",
-            "y": "calc(-50% + 28px)"
+            "y": "calc(-50% + 64.077px)"
           },
-          "borderRadius": 8,
+          "hover": {
+            "rotate": -3.38,
+            "x": "-45.845px",
+            "y": "calc(-50% + 95.756px)"
+          },
+          "borderRadius": 6,
           "shadow": "0px 15px 30px #00000012"
         },
         {
-          "src": "/images/projects/preply-sidebar.jpg",
-          "alt": "Guesty project detail",
-          "width": 180,
-          "height": 578,
+          "src": "/images/projects/guesty-card-2.png",
+          "alt": "Guesty hotel notification screen",
+          "width": 502,
+          "height": 973,
+          "anchor": "center",
+          "transformOrigin": "0% 0%",
+          "border": "1px solid #E6E9EC",
           "idle": {
-            "rotate": 3.93,
-            "x": "calc(-50% + 176px)",
-            "y": "calc(-50% - 3px)"
+            "rotate": 2,
+            "x": "calc(-50% + 262.121px)",
+            "y": "calc(-50% + 230.5px)"
           },
           "hover": {
-            "rotate": 4.79,
-            "x": "calc(-50% + 184px)",
-            "y": "calc(-50% - 12px)"
+            "rotate": 3.35,
+            "x": "calc(-50% + 297.85px)",
+            "y": "calc(-50% + 193.126px)"
           },
-          "borderRadius": 16,
-          "shadow": "0px 15px 30px #00000012"
-        },
-        {
-          "src": "/images/projects/preply-panels.jpg",
-          "alt": "Guesty project panels",
-          "width": 225,
-          "height": 578,
-          "idle": {
-            "rotate": 8.64,
-            "x": "calc(-50% + 345px)",
-            "y": "calc(-50% - 17px)"
-          },
-          "hover": {
-            "rotate": 10.11,
-            "x": "calc(-50% + 365px)",
-            "y": "calc(-50% - 34px)"
-          },
-          "borderRadius": 20,
+          "borderRadius": 6,
           "shadow": "0px 15px 30px #00000012"
         }
       ],
-      "mobileImageSrc": "/images/projects/similarweb-mockup.png",
+      "mobileImageSrc": "/images/projects/guesty-pic.png",
       "mobileImageAlt": "Guesty product interface",
+      "mobileImageWidth": 2200,
+      "mobileImageHeight": 1216,
       "caseSlug": "guesty"
     },
     {
@@ -155,62 +152,73 @@
       ],
       "images": [
         {
-          "src": "/images/projects/preply-main.jpg",
-          "alt": "SimilarWeb sidebar redesign",
-          "width": 839,
-          "height": 525,
+          "src": "/images/projects/similarweb-card-1.png",
+          "alt": "SimilarWeb market shares chart",
+          "width": 879,
+          "height": 378,
+          "anchor": "left",
+          "transformOrigin": "0% 0%",
+          "border": "1px solid #E6E9EC",
           "idle": {
-            "rotate": -3.08,
-            "x": "26px",
-            "y": "calc(-50% + 28px)"
+            "rotate": -1.54,
+            "x": "-32.132px",
+            "y": "calc(-50% + 126.614px)"
           },
           "hover": {
-            "rotate": -4.56,
-            "x": "0px",
-            "y": "calc(-50% + 28px)"
+            "rotate": -2.54,
+            "x": "-67.166px",
+            "y": "calc(-50% + 142.424px)"
           },
-          "borderRadius": 8,
+          "borderRadius": 6,
           "shadow": "0px 15px 30px #00000012"
         },
         {
-          "src": "/images/projects/preply-sidebar.jpg",
-          "alt": "SimilarWeb navigation detail",
-          "width": 180,
-          "height": 578,
+          "src": "/images/projects/similarweb-card-2.png",
+          "alt": "SimilarWeb market difficulty scorecard",
+          "width": 498,
+          "height": 332,
+          "anchor": "center",
+          "transformOrigin": "0% 0%",
+          "border": "1px solid #E6E9EC",
           "idle": {
-            "rotate": 3.93,
-            "x": "calc(-50% + 176px)",
-            "y": "calc(-50% - 3px)"
+            "rotate": 2.39,
+            "x": "calc(-50% + -1.031px)",
+            "y": "calc(-50% + -75.238px)"
           },
           "hover": {
-            "rotate": 4.79,
-            "x": "calc(-50% + 184px)",
-            "y": "calc(-50% - 12px)"
+            "rotate": 2.85,
+            "x": "calc(-50% + -39.607px)",
+            "y": "calc(-50% + -85.176px)"
           },
-          "borderRadius": 16,
+          "borderRadius": 6,
           "shadow": "0px 15px 30px #00000012"
         },
         {
-          "src": "/images/projects/preply-panels.jpg",
-          "alt": "SimilarWeb platform panels",
-          "width": 225,
-          "height": 578,
+          "src": "/images/projects/similarweb-card-3.png",
+          "alt": "SimilarWeb web analysis tools",
+          "width": 405,
+          "height": 746,
+          "anchor": "right",
+          "transformOrigin": "0% 0%",
+          "border": "1px solid #E6E9EC",
           "idle": {
-            "rotate": 8.64,
-            "x": "calc(-50% + 345px)",
-            "y": "calc(-50% - 17px)"
+            "rotate": 2.7,
+            "x": "32.846px",
+            "y": "calc(-50% + 86.412px)"
           },
           "hover": {
-            "rotate": 10.11,
-            "x": "calc(-50% + 365px)",
-            "y": "calc(-50% - 34px)"
+            "rotate": 4.31,
+            "x": "62.666px",
+            "y": "calc(-50% + 53.369px)"
           },
-          "borderRadius": 20,
+          "borderRadius": 6,
           "shadow": "0px 15px 30px #00000012"
         }
       ],
-      "mobileImageSrc": "/images/projects/similarweb-mockup.png",
+      "mobileImageSrc": "/images/projects/similarweb-pic.png",
       "mobileImageAlt": "SimilarWeb platform interface",
+      "mobileImageWidth": 2200,
+      "mobileImageHeight": 1216,
       "caseSlug": "similarweb"
     },
     {
@@ -253,12 +261,12 @@
           "anchor": "center",
           "idle": {
             "rotate": 0,
-            "x": "calc(-50% + 26px)",
+            "x": "calc(-50% + 18px)",
             "y": "calc(-50% + 178px)"
           },
           "hover": {
             "rotate": 0,
-            "x": "calc(-50% + 26px)",
+            "x": "calc(-50% + 18px)",
             "y": "calc(-50% + 154px)"
           },
           "borderRadius": 0,
@@ -273,22 +281,22 @@
           "transformOrigin": "0% 0%",
           "idle": {
             "rotate": -3.56,
-            "x": "77.118px",
+            "x": "61.118px",
             "y": "calc(-50% + 142.51px)"
           },
           "hover": {
             "rotate": -5.96,
-            "x": "33.94px",
+            "x": "17.94px",
             "y": "calc(-50% + 142.295px)"
           },
           "borderRadius": 0,
           "shadow": "0px 15px 30px #00000012"
         }
       ],
-      "mobileImageSrc": "/images/projects/sber-card-mobile.png",
+      "mobileImageSrc": "/images/projects/sber-pic.png",
       "mobileImageAlt": "Sber app screens",
-      "mobileImageWidth": 1888,
-      "mobileImageHeight": 1312,
+      "mobileImageWidth": 2200,
+      "mobileImageHeight": 1230,
       "caseSlug": "sber"
     }
   ]
