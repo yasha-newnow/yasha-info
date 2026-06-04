@@ -15,9 +15,9 @@ export type ZoomState = {
    * lightbox video resumes from it instead of restarting at 0. Undefined for
    * images / paused-at-start. */
   startTime?: number;
-  /** Data-URL snapshot of the source video's current frame, shown under the
-   * lightbox video during the open-morph so frame T is visible from the first
-   * paint (no frame-0 flash). Undefined for images / when capture failed. */
+  /** Data-URL snapshot of the source video's current frame, used as the
+   * lightbox <video>'s native `poster` so frame T shows during the open-morph
+   * (no frame-0 flash). Undefined for images / when capture failed. */
   poster?: string;
 };
 export type OpenZoom = (
@@ -45,11 +45,6 @@ export function Lightbox({
   const { item, sourceRect, natural, startTime, poster } = state;
   const reduced = useReducedMotion();
 
-  // Anti-flash: while a poster (frame T) is shown, keep the fresh lightbox
-  // <video> hidden until it has actually seeked to T, then reveal it. Without a
-  // poster (image, or capture failed) there's nothing to gate → ready from start.
-  const [videoReady, setVideoReady] = useState(false);
-
   // Frame sizing must match the *true* aspect ratio of the rendered media,
   // not the JSON metadata (which can lag behind on-disk files). Start with
   // whatever we got at click time (item.width/height or natural from the
@@ -63,10 +58,9 @@ export function Lightbox({
   useEffect(() => {
     const root = mediaRef.current;
     if (!root) return;
-    // Select the REAL media element — explicitly skip the decorative freeze-frame
-    // poster (`aria-hidden` <img>). Otherwise the poster is matched first and the
-    // video is never found → it isn't seeked and the gate reveals immediately.
-    const el = root.querySelector("video, img:not([aria-hidden])") as
+    // The lightbox media element. The freeze-frame is now the <video>'s native
+    // `poster` attribute (not a separate element), so a plain query is enough.
+    const el = root.querySelector("img, video") as
       | HTMLImageElement
       | HTMLVideoElement
       | null;
@@ -76,50 +70,25 @@ export function Lightbox({
         setNaturalDims({ w: el.naturalWidth, h: el.naturalHeight });
       } else if (el instanceof HTMLVideoElement && el.videoWidth > 0) {
         setNaturalDims({ w: el.videoWidth, h: el.videoHeight });
-        // Resume from the gallery video's position (videoWidth > 0 ⇒ metadata
-        // loaded ⇒ currentTime is settable). Clamp below duration so a click
-        // near the very end doesn't loop-wrap back to ~0; skip if already close.
+        // Resume from the gallery position, then start playback. The video is
+        // mounted with autoPlay OFF and its native `poster` (frame T) showing,
+        // so the browser displays frame T until the seeked frame is painted —
+        // no frame-0 flash and no reveal/gate machinery to race. Clamp below
+        // duration so a click near the very end doesn't loop-wrap back to ~0.
         if (startTime) {
           const dur = el.duration;
           const target =
             Number.isFinite(dur) && dur > 0 ? Math.min(startTime, dur - 0.05) : startTime;
           if (Math.abs(el.currentTime - target) > 0.05) el.currentTime = target;
         }
+        if (!reduced) el.play().catch(() => {});
       }
     };
     update();
     const loadEvent = el instanceof HTMLImageElement ? "load" : "loadedmetadata";
     el.addEventListener(loadEvent, update);
-
-    // Reveal the poster-gated video once it actually displays frame T. Idempotent
-    // + several fallbacks so the video can never stay stuck invisible.
-    let revealed = false;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    const reveal = () => {
-      if (revealed) return;
-      revealed = true;
-      setVideoReady(true);
-    };
-    if (!poster || !(el instanceof HTMLVideoElement) || !startTime || startTime < 0.05 || reduced) {
-      // Nothing to gate: image, no captured poster, nothing to seek, or reduced
-      // motion (morph is instant) — show immediately.
-      reveal();
-    } else {
-      // Reveal ONLY after the seek to T completes (`seeked` ⇒ frame T decoded &
-      // ready). NOT on `canplay`: for a cached video it fires on the start frame
-      // (0) before the seek lands, which would reveal frame 0 and defeat the gate.
-      // The timeout is a last-resort net so the video can never stay hidden
-      // forever if `seeked` somehow never fires (cached seek is well under it).
-      el.addEventListener("seeked", reveal, { once: true });
-      timer = setTimeout(reveal, 400);
-    }
-
-    return () => {
-      el.removeEventListener(loadEvent, update);
-      el.removeEventListener("seeked", reveal);
-      if (timer) clearTimeout(timer);
-    };
-  }, [item.src, startTime, poster, reduced]);
+    return () => el.removeEventListener(loadEvent, update);
+  }, [item.src, startTime, reduced]);
   const naturalW = naturalDims.w;
   const naturalH = naturalDims.h;
 
@@ -248,26 +217,16 @@ export function Lightbox({
           className="absolute rounded-[24px] overflow-hidden"
           style={{ pointerEvents: "auto" }}
         >
-          {/* Freeze-frame of the source video at click time. Sits UNDER the
-              video and is shown until the video has seeked to T, so the morph
-              displays frame T from the first paint (no frame-0 flash). */}
-          {poster && !videoReady && (
-            <img
-              src={poster}
-              alt=""
-              aria-hidden
-              className="absolute inset-0 w-full h-full object-contain pointer-events-none"
-            />
-          )}
-          {/* Gate the (fresh, autoplaying) video to opacity 0 until it shows
-              frame T. No poster ⇒ nothing to hide behind ⇒ stay visible. */}
-          <div
-            className={`w-full h-full ${
-              videoReady || !poster ? "" : "opacity-0"
-            }`}
-          >
-            <MediaItem item={item} variant="lightbox" />
-          </div>
+          {/* The video carries the freeze-frame as its native `poster` and is
+              mounted with autoPlay OFF (the effect seeks to T then play()s), so
+              the browser shows frame T through the morph — no frame-0 flash and
+              no separate gate element to race. */}
+          <MediaItem
+            item={item}
+            variant="lightbox"
+            poster={poster}
+            autoPlay={false}
+          />
         </motion.div>
       </div>
 

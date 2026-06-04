@@ -11,6 +11,8 @@ export function MediaItem({
   variant,
   onZoom,
   priority,
+  poster,
+  autoPlay,
 }: {
   item: GalleryImage;
   variant: "fullWidth" | "carouselSlot" | "lightbox";
@@ -22,6 +24,12 @@ export function MediaItem({
     poster?: string,
   ) => void;
   priority?: boolean;
+  /** Freeze-frame shown by the browser's native <video poster> until the real
+   * frame is painted (lightbox resume — avoids a frame-0 flash). */
+  poster?: string;
+  /** Override autoplay (lightbox passes false so the poster persists until we
+   * seek to T and call play()). Defaults to !reduced. */
+  autoPlay?: boolean;
 }) {
   const reduced = useReducedMotion();
   const isVideo = item.kind === "video";
@@ -153,7 +161,8 @@ export function MediaItem({
         <video
           src={item.src}
           aria-label={item.alt}
-          autoPlay={!reduced}
+          poster={poster}
+          autoPlay={autoPlay ?? !reduced}
           muted
           loop
           playsInline
