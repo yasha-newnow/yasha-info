@@ -5,32 +5,32 @@
 @property --accent {
   syntax: '<color>';
   inherits: true;
-  initial-value: #25FF1C;
+  initial-value: #002096;
 }
 
 @property --foreground {
   syntax: '<color>';
   inherits: true;
-  initial-value: #0A0A0A;
+  initial-value: #FFFFFF;
 }
 
 @property --glass-overlay {
   syntax: '<color>';
   inherits: true;
-  initial-value: rgba(0, 0, 0, 0.05);
+  initial-value: rgba(255, 255, 255, 0.07);
 }
 
 @property --shadow-glass-color {
   syntax: '<color>';
   inherits: true;
-  initial-value: rgba(255, 255, 255, 0.12);
+  initial-value: rgba(0, 0, 0, 0.15);
 }
 
 :root {
-  --accent: #25FF1C;
-  --foreground: #0A0A0A;
-  --glass-overlay: rgba(0, 0, 0, 0.05);
-  --shadow-glass-color: rgba(255, 255, 255, 0.12);
+  --accent: #002096;
+  --foreground: #FFFFFF;
+  --glass-overlay: rgba(255, 255, 255, 0.07);
+  --shadow-glass-color: rgba(0, 0, 0, 0.15);
   --shadow-s: 0px 2px 3px color-mix(in srgb, var(--foreground) 12%, transparent);
   --shadow-m: 0px 4px 10px color-mix(in srgb, var(--foreground) 12%, transparent);
   --shadow-l: 0px 4px 20px color-mix(in srgb, var(--foreground) 15%, transparent);
@@ -329,8 +329,41 @@ body {
   overflow: hidden;
 }
 
-/* Globe spin animation */
-@keyframes globe-spin {
-  from { transform: rotateY(0deg); }
-  to { transform: rotateY(-360deg); }
+/* Rainbow Halo attention glow — baked CSS animations (run on the compositor,
+   off the main thread, so they don't jank next to the ASCII shader). The JS
+   component only schedules replays (setTimeout) and toggles the gate. Values
+   are the tuned defaults; curve = strongInOut = cubic-bezier(0.77,0,0.175,1). */
+@keyframes halo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+/* Inner: appear 1.2s / hold 4.2s / disappear 0.6s over a 6s pulse → 20% / 90%. */
+@keyframes halo-pulse-inner {
+  0% { opacity: 0; transform: scale(0.6); animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1); }
+  20% { opacity: 1; transform: scale(1); animation-timing-function: linear; }
+  90% { opacity: 1; transform: scale(1); animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1); }
+  100% { opacity: 0; transform: scale(0.6); }
+}
+/* Outer: appear 1.5s / hold 3.7s / disappear 0.8s over a 6s pulse → 25% / 86.667%. */
+@keyframes halo-pulse-outer {
+  0% { opacity: 0; transform: scale(0.6); animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1); }
+  25% { opacity: 0.9; transform: scale(1); animation-timing-function: linear; }
+  86.667% { opacity: 0.9; transform: scale(1); animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1); }
+  100% { opacity: 0; transform: scale(0.6); }
+}
+.halo-spin {
+  animation: halo-spin 2.5s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+}
+.halo-pulse-inner {
+  animation: halo-pulse-inner 6s linear 1 forwards;
+}
+.halo-pulse-outer {
+  animation: halo-pulse-outer 6s linear 1 forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .halo-spin,
+  .halo-pulse-inner,
+  .halo-pulse-outer {
+    animation: none;
+  }
 }

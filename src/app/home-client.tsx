@@ -24,6 +24,8 @@ const PICKER_BLUR = 5;
 export default function HomeClient() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
+  // The attention glow waits until the whole entrance is done, then +0.5s.
+  const [showHalo, setShowHalo] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
 
@@ -31,6 +33,7 @@ export default function HomeClient() {
     if (reducedMotion) {
       setShowSidebar(true);
       setShowPicker(true);
+      setShowHalo(true);
       return;
     }
     const isMobile = window.matchMedia("(max-width: 1023px)").matches;
@@ -51,9 +54,15 @@ export default function HomeClient() {
         main.style.touchAction = "";
       }
     }, t.picker * 1000);
+    // Glow appears after the picker has fully faded in, plus a 0.5s beat.
+    const haloTimer = setTimeout(
+      () => setShowHalo(true),
+      (t.picker + PICKER_DURATION + 0.5) * 1000,
+    );
     return () => {
       clearTimeout(sidebarTimer);
       clearTimeout(pickerTimer);
+      clearTimeout(haloTimer);
       if (main) {
         main.style.overflow = "";
         main.style.touchAction = "";
@@ -97,7 +106,7 @@ export default function HomeClient() {
         transition={{ duration: PICKER_DURATION, ease: "easeOut" }}
         style={{ pointerEvents: showPicker ? "auto" : "none" }}
       >
-        <ButtonCustomization />
+        <ButtonCustomization haloReady={showHalo} />
       </motion.div>
     </div>
   );

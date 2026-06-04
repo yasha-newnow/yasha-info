@@ -10,11 +10,11 @@
  * and @property initial-value) in sync with BASE_ACCENT when changing this list.
  */
 export const ACCENT_COLORS = [
-  "#25FF1C", // green
-  "#10A2F9", // blue
-  "#3F0071", // purple (dark)
-  "#FF008E", // magenta
-  "#252525", // near-black (dark)
+  "#002096", // navy (dark)
+  "#BF5DFF", // light purple
+  "#DBDCFD", // pale lavender (light)
+  "#510058", // plum (dark)
+  "#003524", // dark green
 ];
 
 /** Base accent — the no-JS / SSR fallback color (must be one of the presets). */

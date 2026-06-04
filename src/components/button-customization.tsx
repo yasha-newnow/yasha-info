@@ -11,6 +11,7 @@ import {
   getPickerForeground,
 } from "@/lib/contrast";
 import { ColorPickerPanel } from "./color-picker-panel";
+import { GradientAttention } from "./gradient-attention";
 import { ACCENT_COLORS, BASE_ACCENT } from "@/lib/presets";
 
 // Updated from Paper Design (7-stop oklab conic)
@@ -26,16 +27,25 @@ const STATE_STYLES = {
   full: { width: 208, height: 320, borderRadius: 28, padding: 24 },
 };
 
-export function ButtonCustomization() {
+export function ButtonCustomization({ haloReady = false }: { haloReady?: boolean }) {
   const [level, setLevel] = useState<PickerLevel>("closed");
   const [activeColor, setActiveColor] = useState(BASE_ACCENT);
   const [foreground, setForeground] = useState("#0A0A0A");
   const [isHovered, setIsHovered] = useState(false);
   const [isCustomColor, setIsCustomColor] = useState(false);
+  // Engagement signals for the attention glow: it pings less once the user opens
+  // the palette, and far less once they actually pick a color.
+  const [hasOpened, setHasOpened] = useState(false);
+  const [hasPicked, setHasPicked] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Reset hover when level changes (prevents sticky hover after picker close)
   useEffect(() => { setIsHovered(false); }, [level]);
+
+  // Mark the palette as opened the first time it leaves the closed state.
+  useEffect(() => {
+    if (level !== "closed") setHasOpened(true);
+  }, [level]);
 
   // Sync the picker UI with the accent the pre-paint init script actually
   // applied (random preset or saved manual choice). Done in an effect — not in
@@ -53,6 +63,7 @@ export function ButtonCustomization() {
   }, [isCustomColor]);
 
   const applyColor = useCallback((hex: string) => {
+    setHasPicked(true);
     setActiveColor(hex);
     applyTheme(hex);
     setForeground(shouldUseDarkMode(hex) ? "#FFFFFF" : "#0A0A0A");
@@ -167,7 +178,18 @@ export function ButtonCustomization() {
   const dims = STATE_STYLES[level];
 
   return (
-    <motion.div
+    <div className="relative flex items-center justify-center">
+      {/* Rainbow Halo attention glow — sits behind the morphing button and only
+          plays while closed and not hovered. Outside the overflow:hidden button
+          so the blurred glow can extend past its bounds. */}
+      <GradientAttention
+        active={haloReady && level === "closed" && !isHovered}
+        ready={haloReady}
+        hasOpened={hasOpened}
+        hasPicked={hasPicked}
+      />
+
+      <motion.div
       ref={containerRef}
       className="flex flex-col items-center justify-center cursor-pointer"
       style={{
@@ -317,6 +339,7 @@ export function ButtonCustomization() {
           />
         </div>
       )}
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }

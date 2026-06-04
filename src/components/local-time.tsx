@@ -41,7 +41,7 @@ export function LocalTime() {
   return (
     <div className="flex gap-2 flex-wrap">
       <Badge icon={<AnimatedClock size={16} />} text={`Local time ${time}`} />
-      <Badge icon={<AnimatedGlobe size={16} />} text="Valencia. Spain" />
+      <Badge icon={<AnimatedGlobe size={16} />} text="Valencia, Spain" />
     </div>
   );
 }
