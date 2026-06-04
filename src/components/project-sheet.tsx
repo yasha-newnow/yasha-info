@@ -62,7 +62,8 @@ export function ProjectSheet({
   // Lightbox via a portal next to Drawer.Root (not inside Drawer.Content).
   const [zoom, setZoom] = useState<ZoomState | null>(null);
   const openZoom = useCallback<OpenZoom>(
-    (item, sourceRect, natural) => setZoom({ item, sourceRect, natural }),
+    (item, sourceRect, natural, startTime, poster) =>
+      setZoom({ item, sourceRect, natural, startTime, poster }),
     [],
   );
   const closeZoom = useCallback(() => setZoom(null), []);
@@ -458,7 +459,7 @@ function SectionGallery({
 }: {
   items: GalleryImage[];
   snapOptions: GallerySnapOptions;
-  onZoom?: (item: GalleryImage, sourceRect: DOMRect) => void;
+  onZoom?: OpenZoom;
 }) {
   return (
     <>
@@ -534,7 +535,7 @@ function EmblaGallery({
 }: {
   items: GalleryImage[];
   options: GallerySnapOptions;
-  onZoom?: (item: GalleryImage, sourceRect: DOMRect) => void;
+  onZoom?: OpenZoom;
 }) {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     options,
