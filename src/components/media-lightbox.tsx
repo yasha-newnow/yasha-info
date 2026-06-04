@@ -11,11 +11,21 @@ export type ZoomState = {
   /** Natural dimensions of the actual element clicked (img.naturalWidth,
    * video.videoWidth). Falls back to item.width/height if unavailable. */
   natural?: { width: number; height: number };
+  /** Playback position (seconds) of the source video at click time, so the
+   * lightbox video resumes from it instead of restarting at 0. Undefined for
+   * images / paused-at-start. */
+  startTime?: number;
+  /** Data-URL snapshot of the source video's current frame, shown under the
+   * lightbox video during the open-morph so frame T is visible from the first
+   * paint (no frame-0 flash). Undefined for images / when capture failed. */
+  poster?: string;
 };
 export type OpenZoom = (
   item: GalleryImage,
   sourceRect: DOMRect,
   natural?: { width: number; height: number },
+  startTime?: number,
+  poster?: string,
 ) => void;
 
 const Ctx = createContext<OpenZoom | null>(null);
@@ -32,8 +42,13 @@ export function Lightbox({
   state: ZoomState;
   onClose: () => void;
 }) {
-  const { item, sourceRect, natural } = state;
+  const { item, sourceRect, natural, startTime, poster } = state;
   const reduced = useReducedMotion();
+
+  // Anti-flash: while a poster (frame T) is shown, keep the fresh lightbox
+  // <video> hidden until it has actually seeked to T, then reveal it. Without a
+  // poster (image, or capture failed) there's nothing to gate → ready from start.
+  const [videoReady, setVideoReady] = useState(false);
 
   // Frame sizing must match the *true* aspect ratio of the rendered media,
   // not the JSON metadata (which can lag behind on-disk files). Start with
@@ -48,7 +63,10 @@ export function Lightbox({
   useEffect(() => {
     const root = mediaRef.current;
     if (!root) return;
-    const el = root.querySelector("img, video") as
+    // Select the REAL media element — explicitly skip the decorative freeze-frame
+    // poster (`aria-hidden` <img>). Otherwise the poster is matched first and the
+    // video is never found → it isn't seeked and the gate reveals immediately.
+    const el = root.querySelector("video, img:not([aria-hidden])") as
       | HTMLImageElement
       | HTMLVideoElement
       | null;
@@ -58,13 +76,50 @@ export function Lightbox({
         setNaturalDims({ w: el.naturalWidth, h: el.naturalHeight });
       } else if (el instanceof HTMLVideoElement && el.videoWidth > 0) {
         setNaturalDims({ w: el.videoWidth, h: el.videoHeight });
+        // Resume from the gallery video's position (videoWidth > 0 ⇒ metadata
+        // loaded ⇒ currentTime is settable). Clamp below duration so a click
+        // near the very end doesn't loop-wrap back to ~0; skip if already close.
+        if (startTime) {
+          const dur = el.duration;
+          const target =
+            Number.isFinite(dur) && dur > 0 ? Math.min(startTime, dur - 0.05) : startTime;
+          if (Math.abs(el.currentTime - target) > 0.05) el.currentTime = target;
+        }
       }
     };
     update();
     const loadEvent = el instanceof HTMLImageElement ? "load" : "loadedmetadata";
     el.addEventListener(loadEvent, update);
-    return () => el.removeEventListener(loadEvent, update);
-  }, [item.src]);
+
+    // Reveal the poster-gated video once it actually displays frame T. Idempotent
+    // + several fallbacks so the video can never stay stuck invisible.
+    let revealed = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const reveal = () => {
+      if (revealed) return;
+      revealed = true;
+      setVideoReady(true);
+    };
+    if (!poster || !(el instanceof HTMLVideoElement) || !startTime || startTime < 0.05 || reduced) {
+      // Nothing to gate: image, no captured poster, nothing to seek, or reduced
+      // motion (morph is instant) — show immediately.
+      reveal();
+    } else {
+      // Reveal ONLY after the seek to T completes (`seeked` ⇒ frame T decoded &
+      // ready). NOT on `canplay`: for a cached video it fires on the start frame
+      // (0) before the seek lands, which would reveal frame 0 and defeat the gate.
+      // The timeout is a last-resort net so the video can never stay hidden
+      // forever if `seeked` somehow never fires (cached seek is well under it).
+      el.addEventListener("seeked", reveal, { once: true });
+      timer = setTimeout(reveal, 400);
+    }
+
+    return () => {
+      el.removeEventListener(loadEvent, update);
+      el.removeEventListener("seeked", reveal);
+      if (timer) clearTimeout(timer);
+    };
+  }, [item.src, startTime, poster, reduced]);
   const naturalW = naturalDims.w;
   const naturalH = naturalDims.h;
 
@@ -193,7 +248,26 @@ export function Lightbox({
           className="absolute rounded-[24px] overflow-hidden"
           style={{ pointerEvents: "auto" }}
         >
-          <MediaItem item={item} variant="lightbox" />
+          {/* Freeze-frame of the source video at click time. Sits UNDER the
+              video and is shown until the video has seeked to T, so the morph
+              displays frame T from the first paint (no frame-0 flash). */}
+          {poster && !videoReady && (
+            <img
+              src={poster}
+              alt=""
+              aria-hidden
+              className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+            />
+          )}
+          {/* Gate the (fresh, autoplaying) video to opacity 0 until it shows
+              frame T. No poster ⇒ nothing to hide behind ⇒ stay visible. */}
+          <div
+            className={`w-full h-full ${
+              videoReady || !poster ? "" : "opacity-0"
+            }`}
+          >
+            <MediaItem item={item} variant="lightbox" />
+          </div>
         </motion.div>
       </div>
 

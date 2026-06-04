@@ -18,6 +18,8 @@ export function MediaItem({
     item: GalleryImage,
     sourceRect: DOMRect,
     natural?: { width: number; height: number },
+    startTime?: number,
+    poster?: string,
   ) => void;
   priority?: boolean;
 }) {
@@ -55,12 +57,37 @@ export function MediaItem({
           | HTMLVideoElement
           | null;
         let natural: { width: number; height: number } | undefined;
+        // Capture the live playback position so the lightbox can resume from it
+        // instead of restarting from 0. Read for any video (even before
+        // metadata loads `videoWidth`); harmless 0 for images.
+        let startTime: number | undefined;
+        // Snapshot the exact current frame as a data URL. The lightbox shows it
+        // under its (initially hidden) <video> so the morph displays frame T from
+        // the first paint — no frame-0 flash while the fresh video seeks. Videos
+        // are same-origin (/images/...), so the canvas isn't tainted; the
+        // try/catch degrades gracefully (no poster ⇒ lightbox skips the gate).
+        let poster: string | undefined;
         if (mediaEl instanceof HTMLImageElement && mediaEl.naturalWidth > 0) {
           natural = { width: mediaEl.naturalWidth, height: mediaEl.naturalHeight };
-        } else if (mediaEl instanceof HTMLVideoElement && mediaEl.videoWidth > 0) {
-          natural = { width: mediaEl.videoWidth, height: mediaEl.videoHeight };
+        } else if (mediaEl instanceof HTMLVideoElement) {
+          startTime = mediaEl.currentTime;
+          if (mediaEl.videoWidth > 0) {
+            natural = { width: mediaEl.videoWidth, height: mediaEl.videoHeight };
+            try {
+              const c = document.createElement("canvas");
+              c.width = mediaEl.videoWidth;
+              c.height = mediaEl.videoHeight;
+              const ctx = c.getContext("2d");
+              if (ctx) {
+                ctx.drawImage(mediaEl, 0, 0, c.width, c.height);
+                poster = c.toDataURL("image/jpeg", 0.85);
+              }
+            } catch {
+              // taint / decode failure → no poster, lightbox falls back gracefully
+            }
+          }
         }
-        onZoom(item, rect, natural);
+        onZoom(item, rect, natural, startTime, poster);
       }
     : undefined;
 
