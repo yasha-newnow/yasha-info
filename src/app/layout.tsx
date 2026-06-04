@@ -10,6 +10,9 @@ import { GalleryEditPanel } from "@/components/edit-mode/gallery-edit-panel";
 import { ContentProvider } from "@/lib/edit-mode/content-context";
 import { loadAllContent } from "@/data/server-load";
 import { Agentation } from "agentation";
+import { ACCENT_COLORS } from "@/lib/presets";
+import { computeTheme } from "@/lib/contrast";
+import { buildThemeInitScript } from "@/lib/theme-init";
 
 // Read content JSON fresh on every request so dev-time edits propagate
 // without restarting the server. Layout owns the data provider so dev tools
@@ -54,12 +57,22 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const content = await loadAllContent();
+  // Precompute each preset's full theme on the server, then hand them to the
+  // pre-paint init script that randomizes the accent on each load (no flash).
+  const themeInitScript = buildThemeInitScript(ACCENT_COLORS.map(computeTheme));
   return (
     <html
       lang="en"
       className={`${interTight.variable} ${stickNoBills.variable} ${homemadeApple.variable} ${drukCond.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full bg-black">
+        {/* Runs before first paint: sets --accent (and derived vars) from the
+            saved manual choice or a random preset, so there is no color flash. */}
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: themeInitScript }}
+        />
         <ContentProvider initial={content}>
           <EditModeProvider>
             <div data-vaul-drawer-wrapper="" className="min-h-full" style={{ backgroundColor: "var(--accent)" }}>
