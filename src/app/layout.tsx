@@ -22,7 +22,8 @@ export const dynamic = "force-dynamic";
 const interTight = Inter_Tight({
   variable: "--font-inter-tight",
   subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
+  // No 700: live routes max out at 600 (.text-bold); no font-weight:700 in CSS.
+  weight: ["400", "500", "600"],
 });
 
 const stickNoBills = Stick_No_Bills({
