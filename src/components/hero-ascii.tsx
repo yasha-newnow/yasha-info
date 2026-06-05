@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useInView, usePageInView } from "framer-motion";
 
 const CHARS = " .:-=+*#%@";
 const FILTER_ID = "hero-ascii-tint";
@@ -151,11 +152,27 @@ export function HeroAscii({
   }, [tuning, variant]);
 
   const tuningRef = useRef<ShaderTuning>(resolveTuning());
+  // Hoisted out of the per-frame loop: the LUT only depends on theme/tuning, not
+  // on time, so it is recomputed on theme/tuning change (below) instead of 60×/s.
+  const signalLutRef = useRef<Uint8Array>(
+    buildSignalLUT(tuningRef.current, isLightRef.current)
+  );
   const [reducedMotion, setReducedMotion] = useState(false);
   const [canHover, setCanHover] = useState(false);
 
+  // Pause the shader when the hero is off-screen or the tab is hidden.
+  // useInView re-fires on exit (no `once`); usePageInView tracks tab visibility.
+  // `initial: true` because the hero is above the fold (avoids a first-paint blank).
+  const inView = useInView(wrapRef, { initial: true, margin: "200px" });
+  const pageVisible = usePageInView();
+  const activeRef = useRef(true);
+  useEffect(() => {
+    activeRef.current = inView && pageVisible;
+  }, [inView, pageVisible]);
+
   useEffect(() => {
     tuningRef.current = resolveTuning();
+    signalLutRef.current = buildSignalLUT(tuningRef.current, isLightRef.current);
   }, [resolveTuning]);
 
   useEffect(() => {
@@ -164,6 +181,7 @@ export function HeroAscii({
       if (!detail) return;
       isLightRef.current = detail.isLight;
       tuningRef.current = resolveTuning();
+      signalLutRef.current = buildSignalLUT(tuningRef.current, isLightRef.current);
       scrambleStartRef.current = performance.now();
     };
     window.addEventListener("themechange", onTheme);
@@ -190,6 +208,18 @@ export function HeroAscii({
       v.play().catch(() => {});
     }
   }, []);
+
+  // Pause the hidden source <video> when inactive — its decode isn't rAF-throttled,
+  // so a backgrounded/occluded tab keeps burning CPU/GPU on it otherwise.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v || reducedMotion) return;
+    if (inView && pageVisible) {
+      v.play().catch(() => {});
+    } else {
+      v.pause();
+    }
+  }, [inView, pageVisible, reducedMotion]);
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -251,6 +281,15 @@ export function HeroAscii({
       // already correct) so this call is cheap when nothing changed.
       resize();
 
+      // Skip drawing when off-screen / tab hidden (placed AFTER resize() so a
+      // window resize while inactive can't leave a blank bitmap on return).
+      // Re-arm rAF so the loop resumes instantly; start is untouched so the
+      // wall-clock-based shimmer stays continuous (zero visible jump).
+      if (!activeRef.current) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+
       const tu = tuningRef.current;
       const t = Math.min(1, (now - start) / tu.durationMs);
       const targetCols = tu.colsStart + (tu.colsEnd - tu.colsStart) * easeInOutCubic(t);
@@ -286,8 +325,7 @@ export function HeroAscii({
         const shimmerOn = !reducedMotion;
         const timePhase = tSec * tu.shimmerSpeed;
         const shimmerAmt = tu.shimmerAmount;
-        const isLight = isLightRef.current;
-        const signalLut = buildSignalLUT(tu, isLight);
+        const signalLut = signalLutRef.current;
         const thr = tu.threshold;
         const sigMode = tu.glyphSignal;
         const charsLen = CHARS.length;

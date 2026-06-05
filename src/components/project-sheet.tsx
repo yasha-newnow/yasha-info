@@ -198,7 +198,7 @@ export function ProjectSheet({
 
                 {/* Hero — natural aspect ratio (no crop). Fills outer width, height by source aspect.
                     Renders via MediaItem so video kind is supported automatically. */}
-                <HeroMedia heroImage={caseStudy.heroImage} idBase={csIdBase} />
+                <HeroMedia heroImage={caseStudy.heroImage} idBase={csIdBase} scrollRoot={scrollRef} />
               </motion.div>
 
               {/* ── Sections: scroll-triggered ─── */}
@@ -352,9 +352,11 @@ function MetaBlock({ idBase, role, timeframe, scope, platform }: MetaBlockProps)
 function HeroMedia({
   heroImage,
   idBase,
+  scrollRoot,
 }: {
   heroImage: GalleryImage;
   idBase: string;
+  scrollRoot: React.RefObject<HTMLDivElement | null>;
 }) {
   const onZoom = useMediaZoom() ?? undefined;
   const { editMode, openPanel } = useEditMode();
@@ -380,7 +382,7 @@ function HeroMedia({
           Edit hero
         </button>
       )}
-      <MediaItem item={heroImage} variant="fullWidth" priority onZoom={onZoom} />
+      <MediaItem item={heroImage} variant="fullWidth" priority onZoom={onZoom} scrollRoot={scrollRoot} />
     </motion.div>
   );
 }
@@ -459,9 +461,9 @@ function SectionBlock({
       {section.images.length > 0 && (
         <motion.div variants={itemVariants} className="w-full">
           {section.images.length === 1 ? (
-            <MediaItem item={section.images[0]} variant="fullWidth" onZoom={onZoom} />
+            <MediaItem item={section.images[0]} variant="fullWidth" onZoom={onZoom} scrollRoot={scrollRoot} />
           ) : (
-            <SectionGallery items={section.images} snapOptions={gallerySnapOptions} onZoom={onZoom} />
+            <SectionGallery items={section.images} snapOptions={gallerySnapOptions} onZoom={onZoom} scrollRoot={scrollRoot} />
           )}
         </motion.div>
       )}
@@ -475,22 +477,24 @@ function SectionGallery({
   items,
   snapOptions,
   onZoom,
+  scrollRoot,
 }: {
   items: GalleryImage[];
   snapOptions: GallerySnapOptions;
   onZoom?: OpenZoom;
+  scrollRoot: React.RefObject<HTMLDivElement | null>;
 }) {
   return (
     <>
       {/* Mobile: vertical stack */}
       <div className="flex flex-col gap-6 w-full lg:hidden">
         {items.map((m, i) => (
-          <MediaItem key={i} item={m} variant="fullWidth" onZoom={onZoom} />
+          <MediaItem key={i} item={m} variant="fullWidth" onZoom={onZoom} scrollRoot={scrollRoot} />
         ))}
       </div>
       {/* Desktop: Embla horizontal carousel with 1200 frame + peek bleed */}
       <div className="hidden lg:block w-full">
-        <EmblaGallery items={items} options={snapOptions} onZoom={onZoom} />
+        <EmblaGallery items={items} options={snapOptions} onZoom={onZoom} scrollRoot={scrollRoot} />
       </div>
     </>
   );
@@ -551,10 +555,12 @@ function EmblaGallery({
   items,
   options,
   onZoom,
+  scrollRoot,
 }: {
   items: GalleryImage[];
   options: GallerySnapOptions;
   onZoom?: OpenZoom;
+  scrollRoot: React.RefObject<HTMLDivElement | null>;
 }) {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     options,
@@ -570,55 +576,9 @@ function EmblaGallery({
     });
   }, [items]);
 
-  // TEMP DIAG — remove after capture. Traces settle-vs-reInit timing to find
-  // what interrupts the return-to-center animation. Read via window.__emblaDiag.
+  // Live re-init when dial knobs change.
   useEffect(() => {
     if (!emblaApi) return;
-    const buf: { t: number; type: string; idx: number }[] = [];
-    (window as unknown as { __emblaDiag?: typeof buf }).__emblaDiag = buf;
-    const push = (type: string) =>
-      buf.push({
-        t: Math.round(performance.now()),
-        type,
-        idx: emblaApi.selectedScrollSnap(),
-      });
-    let awaitingSettleStart = false;
-    const onPointerUp = () => {
-      push("pointerUp");
-      awaitingSettleStart = true;
-    };
-    const onScroll = () => {
-      if (awaitingSettleStart) {
-        push("settle-move-start");
-        awaitingSettleStart = false;
-      }
-    };
-    const onReInit = () => push("reInit(any)");
-    const onSettle = () => push("settle");
-    emblaApi.on("pointerUp", onPointerUp);
-    emblaApi.on("scroll", onScroll);
-    emblaApi.on("reInit", onReInit);
-    emblaApi.on("settle", onSettle);
-    return () => {
-      emblaApi.off("pointerUp", onPointerUp);
-      emblaApi.off("scroll", onScroll);
-      emblaApi.off("reInit", onReInit);
-      emblaApi.off("settle", onSettle);
-    };
-  }, [emblaApi]);
-
-  // Live re-init when dial knobs change (dev only).
-  useEffect(() => {
-    if (!emblaApi) return;
-    (
-      window as unknown as {
-        __emblaDiag?: { t: number; type: string; idx: number }[];
-      }
-    ).__emblaDiag?.push({
-      t: Math.round(performance.now()),
-      type: "ext-reInit-call",
-      idx: emblaApi.selectedScrollSnap(),
-    });
     emblaApi.reInit(options);
   }, [emblaApi, options]);
 
@@ -633,7 +593,7 @@ function EmblaGallery({
       <div className="flex gap-6 touch-pan-y">
         {items.map((m, i) => (
           <div key={i} className="shrink-0 h-[800px]">
-            <MediaItem item={m} variant="carouselSlot" onZoom={onZoom} />
+            <MediaItem item={m} variant="carouselSlot" onZoom={onZoom} scrollRoot={scrollRoot} />
           </div>
         ))}
       </div>

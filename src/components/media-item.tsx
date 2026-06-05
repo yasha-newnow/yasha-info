@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { useReducedMotion } from "framer-motion";
+import { useInView, useReducedMotion } from "framer-motion";
 import type { GalleryImage } from "@/data/schemas";
 
 export function MediaItem({
@@ -13,6 +13,7 @@ export function MediaItem({
   priority,
   poster,
   autoPlay,
+  scrollRoot,
 }: {
   item: GalleryImage;
   variant: "fullWidth" | "carouselSlot" | "lightbox";
@@ -30,9 +31,32 @@ export function MediaItem({
   /** Override autoplay (lightbox passes false so the poster persists until we
    * seek to T and call play()). Defaults to !reduced. */
   autoPlay?: boolean;
+  /** Scroll container the gallery lives in — used as the IntersectionObserver
+   * root so off-screen videos pause (they leave this box while still inside the
+   * window, so a viewport root would never fire). */
+  scrollRoot?: React.RefObject<HTMLDivElement | null>;
 }) {
   const reduced = useReducedMotion();
   const isVideo = item.kind === "video";
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Pause off-screen gallery videos so they don't all decode at once. The
+  // lightbox drives its own playback (variant "lightbox"), so it is excluded;
+  // reduced-motion never autoplays. Edge-triggered on the in-view flip — never
+  // pauses while visible, so the click-to-zoom currentTime capture stays live.
+  const gateVideo = isVideo && variant !== "lightbox" && (autoPlay ?? !reduced);
+  const inView = useInView(wrapperRef, { root: scrollRoot, margin: "200px" });
+  useEffect(() => {
+    if (!gateVideo) return;
+    const v = videoRef.current;
+    if (!v) return;
+    if (inView) {
+      v.play().catch(() => {});
+    } else {
+      v.pause();
+    }
+  }, [gateVideo, inView]);
 
   const mediaClass =
     variant === "carouselSlot"
@@ -148,6 +172,7 @@ export function MediaItem({
 
   return (
     <div
+      ref={wrapperRef}
       className={`${wrapClass} ${cursorClass}`}
       onClick={handleClick}
       onMouseEnter={tooltipEnabled ? onMouseEnter : undefined}
@@ -159,6 +184,7 @@ export function MediaItem({
     >
       {isVideo ? (
         <video
+          ref={videoRef}
           src={item.src}
           aria-label={item.alt}
           poster={poster}
