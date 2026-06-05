@@ -209,6 +209,10 @@ function StackedCard({
   const contentFilter = useTransform(depth, (d) => {
     if (consts === MOBILE) return "none";
     if (d < FRONT_SHARP) return "none";
+    // Past MAX_VISIBLE the opacity ramp (above) has reached 0 — the card is
+    // fully invisible, so drop the blur there to stop re-rasterizing a subtree
+    // nobody can see. Boundary matches the opacity fade exactly → no visible pop.
+    if (d >= consts.MAX_VISIBLE) return "none";
     return `blur(${(ramp(d) * BLUR_MAX).toFixed(2)}px)`;
   });
   // Tint grows linearly so the frost veil reads steadily as glass.

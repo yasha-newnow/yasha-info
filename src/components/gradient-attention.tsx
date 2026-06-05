@@ -53,6 +53,10 @@ export function GradientAttention({ active, ready, hasOpened, hasPicked }: Gradi
   const reducedMotion = useReducedMotion();
   // Each tick remounts the two layers → their CSS pulse animations replay.
   const [tick, setTick] = useState(0);
+  // The halo discs are only visible for CYCLE_S after each tick; the rest of the
+  // (long) cycle they sit at opacity 0. Spin the blurred layer only during that
+  // visible window, so an invisible disc isn't composited every frame for nothing.
+  const [pulsing, setPulsing] = useState(false);
 
   const effectiveArc = hasPicked ? ARC_AFTER_PICK : hasOpened ? ARC_AFTER_OPEN : ARC_BASE;
 
@@ -71,6 +75,18 @@ export function GradientAttention({ active, ready, hasOpened, hasPicked }: Gradi
     timer = setTimeout(loop, period);
     return () => clearTimeout(timer);
   }, [reducedMotion, ready, effectiveArc]);
+
+  // Mark the visible window: true on each pulse start (tick / initial ready),
+  // false a hair after CYCLE_S so the spin keeps running through the entire
+  // fade-out, then pauses during the invisible rest. The +300ms guard avoids
+  // any chance of pausing while a disc is still faintly visible. Pausing while
+  // invisible means the spin angle never visibly jumps on resume.
+  useEffect(() => {
+    if (reducedMotion || !ready) return;
+    setPulsing(true);
+    const t = setTimeout(() => setPulsing(false), CYCLE_S * 1000 + 300);
+    return () => clearTimeout(t);
+  }, [tick, ready, reducedMotion]);
 
   if (reducedMotion) return null;
 
@@ -97,7 +113,13 @@ export function GradientAttention({ active, ready, hasOpened, hasPicked }: Gradi
           {ready && (
             <div
               className="halo-spin"
-              style={{ position: "relative", width: 0, height: 0, willChange: "transform" }}
+              style={{
+                position: "relative",
+                width: 0,
+                height: 0,
+                willChange: "transform",
+                animationPlayState: pulsing ? "running" : "paused",
+              }}
             >
               <div
                 key={`o${tick}`}

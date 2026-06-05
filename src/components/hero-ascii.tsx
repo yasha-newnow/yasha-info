@@ -270,6 +270,8 @@ export function HeroAscii({
       t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
     let raf = 0;
+    let lastDraw = 0;
+    const FRAME_MS = 1000 / 60;
     const start = performance.now();
 
     const tick = (now: number) => {
@@ -291,6 +293,17 @@ export function HeroAscii({
       }
 
       const tu = tuningRef.current;
+      // Once the entrance + scramble settle, the only per-frame change is the
+      // subtle shimmer — cap it to ~60fps so a 120Hz ProMotion display doesn't
+      // redraw the full grid twice as often. The entrance and scramble keep
+      // drawing at the native refresh rate, so their motion stays identical.
+      const settled = now - start >= tu.durationMs && scrambleStartRef.current === 0;
+      if (settled && now - lastDraw < FRAME_MS) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+      lastDraw = now;
+
       const t = Math.min(1, (now - start) / tu.durationMs);
       const targetCols = tu.colsStart + (tu.colsEnd - tu.colsStart) * easeInOutCubic(t);
       const cell = Math.max(tu.minCellPx, w / targetCols);
