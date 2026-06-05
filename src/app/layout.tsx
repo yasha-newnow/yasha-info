@@ -45,10 +45,60 @@ const drukCond = localFont({
   display: "swap",
 });
 
+const SITE_URL = "https://yasha.info";
+const TITLE = "Yasha Petrunin ✱ Product Designer";
+const DESCRIPTION =
+  "Product designer, 10+ years on 0→1 launches and platform-scale rebuilds across FinTech, B2B, and Consumer. Architect by training. AI tools in daily practice.";
+
 export const metadata: Metadata = {
-  title: "Yasha Petrunin — Designer",
-  description:
-    "Designer and educator with two decades of experience specialized in designing products, digital experiences, and building overpowered teams obsessed with craft.",
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: "Yasha Petrunin",
+    title: TITLE,
+    description: DESCRIPTION,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+};
+
+// Machine-readable identity for Google rich results and AI/search assistants.
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Yasha Petrunin",
+  url: SITE_URL,
+  jobTitle: "Product Designer",
+  description: DESCRIPTION,
+  image: `${SITE_URL}/opengraph-image`,
+  email: "mailto:yashapetrunin@gmail.com",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Valencia",
+    addressCountry: "ES",
+  },
+  knowsAbout: [
+    "Product Design",
+    "Product Strategy",
+    "Information Architecture",
+    "User Research",
+    "A/B Testing",
+    "Design Systems",
+    "Interaction Design",
+  ],
+  sameAs: ["https://www.linkedin.com/in/yashapetrunin/"],
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "Moscow Institute of Architecture",
+  },
 };
 
 export default async function RootLayout({
@@ -72,6 +122,11 @@ export default async function RootLayout({
         <script
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: themeInitScript }}
+        />
+        {/* Person structured data (schema.org) — identity for Google/AI. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
         <ContentProvider initial={content}>
           <EditModeProvider>
