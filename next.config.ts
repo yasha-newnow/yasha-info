@@ -6,6 +6,14 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  // Keep public/ out of serverless function bundles. The dev-only
+  // api/upload-image route references public/images/projects via process.cwd(),
+  // which made the file tracer bundle the whole ~377MB public/ dir into the
+  // function (353MB > Vercel's 300MB limit) and fail the deploy. Public assets
+  // are served statically by the CDN — no function needs them bundled.
+  outputFileTracingExcludes: {
+    "*": ["public/**"],
+  },
 };
 
 export default nextConfig;
