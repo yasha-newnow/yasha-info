@@ -369,11 +369,11 @@ export function MobileNav({
             >
               <ButtonMenuSecondary
                 items={[
-                  { label: "CV", icon: <ArrowUpRight size={20} />, href: "#" },
+                  { label: "CV", icon: <ArrowUpRight size={20} />, href: "/cv.html" },
                   {
                     label: "LinkedIn",
                     icon: <ArrowUpRight size={20} />,
-                    href: "#",
+                    href: "https://www.linkedin.com/in/yashapetrunin/",
                   },
                   {
                     label: EMAIL,

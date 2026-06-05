@@ -120,8 +120,8 @@ export function Sidebar({ show = false, delay = 0, scrollContainer }: SidebarPro
         >
           <ButtonMenuSecondary
             items={[
-              { label: "CV", icon: <ArrowUpRight size={20} />, href: "#" },
-              { label: "LinkedIn", icon: <ArrowUpRight size={20} />, href: "#" },
+              { label: "CV", icon: <ArrowUpRight size={20} />, href: "/cv.html" },
+              { label: "LinkedIn", icon: <ArrowUpRight size={20} />, href: "https://www.linkedin.com/in/yashapetrunin/" },
               {
                 label: EMAIL,
                 icon: <CopyIcon size={20} />,

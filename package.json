@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "node scripts/patch-vaul.mjs"
+    "cv:pdf": "node scripts/generate-cv-pdf.mjs",
+    "postinstall": "node scripts/patch-vaul.mjs && node scripts/setup-hooks.mjs"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.3",

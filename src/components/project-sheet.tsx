@@ -211,6 +211,25 @@ export function ProjectSheet({
                   gallerySnapOptions={gallerySnapOptions}
                 />
               ))}
+
+              {/* Footer chip — 1:1 from Paper template (VIW-0 / VKY-0).
+                  Parent div is full-width and centers the chip; chip hugs its text. */}
+              <motion.div
+                className="flex flex-col items-center self-stretch"
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ root: scrollRef, once: true, margin: "0px 0px -80px 0px" }}
+              >
+                <motion.div
+                  variants={itemVariants}
+                  className="flex flex-col items-start rounded-lg bg-card-text/10 px-3 py-2"
+                >
+                  <p className="caption text-card-text self-stretch text-center">
+                    CASE STUDIES PROVIDED UPON REQUEST.
+                  </p>
+                </motion.div>
+              </motion.div>
             </div>
           </div>
 

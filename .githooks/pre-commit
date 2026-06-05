@@ -1,0 +1,20 @@
+#!/bin/sh
+# Auto-rebuild public/cv.pdf whenever public/cv.html is part of the commit,
+# so the static PDF never drifts from its HTML source of truth.
+# Activated via `git config core.hooksPath .githooks` (done in postinstall).
+
+# Only act when cv.html is staged; otherwise exit instantly so normal
+# commits aren't slowed down.
+if ! git diff --cached --name-only | grep -q '^public/cv\.html$'; then
+  exit 0
+fi
+
+echo "cv.html changed → rebuilding public/cv.pdf…"
+if ! npm run --silent cv:pdf; then
+  echo "✖ CV PDF generation failed — commit aborted." >&2
+  echo "  Fix the error above (or run 'npm run cv:pdf'), then commit again." >&2
+  exit 1
+fi
+
+# Fold the freshly built PDF into this same commit.
+git add public/cv.pdf
