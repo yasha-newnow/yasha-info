@@ -120,12 +120,24 @@ export function Sidebar({ show = false, delay = 0, scrollContainer }: SidebarPro
         >
           <ButtonMenuSecondary
             items={[
-              { label: "CV", icon: <ArrowUpRight size={20} />, href: "/cv.html" },
-              { label: "LinkedIn", icon: <ArrowUpRight size={20} />, href: "https://www.linkedin.com/in/yashapetrunin/" },
+              {
+                label: "CV",
+                icon: <ArrowUpRight size={20} />,
+                href: "/cv.html",
+                event: "cv_clicked",
+                eventProps: { placement: "sidebar" },
+              },
+              {
+                label: "LinkedIn",
+                icon: <ArrowUpRight size={20} />,
+                href: "https://www.linkedin.com/in/yashapetrunin/",
+                event: "linkedin_clicked",
+                eventProps: { placement: "sidebar" },
+              },
               {
                 label: EMAIL,
                 icon: <CopyIcon size={20} />,
-                onClick: copyEmail,
+                onClick: () => copyEmail("sidebar"),
                 feedback: { label: "Copied!", icon: <CheckIcon size={20} /> },
               },
             ]}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, type Variants } from "framer-motion";
+import { track } from "@/lib/analytics";
 
 interface ButtonMenuItemFeedback {
   label: string;
@@ -15,6 +16,9 @@ interface ButtonMenuItem {
   icon: ReactNode;
   href?: string;
   onClick?: () => void;
+  /** Optional analytics event fired on click (for both link and button items). */
+  event?: string;
+  eventProps?: Record<string, unknown>;
   /** Optional post-click swap state. Only one item with feedback can be active at a time. */
   feedback?: ButtonMenuItemFeedback;
 }
@@ -50,6 +54,7 @@ export function ButtonMenuSecondary({ items, itemVariants }: ButtonMenuSecondary
 
   function handleClick(index: number, item: ButtonMenuItem) {
     item.onClick?.();
+    if (item.event) track(item.event, item.eventProps);
     if (!item.feedback) return;
     clickTimestampRef.current = performance.now();
     pendingResetRef.current = false;
@@ -112,6 +117,9 @@ export function ButtonMenuSecondary({ items, itemVariants }: ButtonMenuSecondary
                 target="_blank"
                 rel="noopener noreferrer"
                 className="button-menu-item"
+                onClick={() => {
+                  if (item.event) track(item.event, item.eventProps);
+                }}
                 onPointerEnter={() => handlePointerEnter(index)}
                 onPointerLeave={() => handlePointerLeave(index)}
               >

@@ -23,6 +23,7 @@ import type { CaseCard, GalleryImage } from "@/data/schemas";
 import { ProjectCard } from "./project-card";
 import { SectionHeader } from "./section-header";
 import { ProjectSheet } from "./project-sheet";
+import { track } from "@/lib/analytics";
 
 /* ─── Scroll-stack tuning (responsive, swapped via matchMedia) ───
    The cards are positioned absolutely inside ONE pinned container (title +
@@ -283,6 +284,26 @@ export function WorksSection({
   const [sheetOpen, setSheetOpen] = useState(false);
   const activeStudy = useCaseStudyBySlug(activeSlug);
 
+  // Timestamp of the currently open case, for the case_study_closed dwell time.
+  const openedAtRef = useRef<number | null>(null);
+
+  // Fire case_study_closed with dwell time. Shared by the drawer's onOpenChange
+  // and the pagehide/visibilitychange safety net (tab closed while a case is open).
+  // Nulling the ref guards against a double fire.
+  function flushCaseClose() {
+    if (openedAtRef.current == null) return;
+    const dwell_seconds = Math.round((Date.now() - openedAtRef.current) / 1000);
+    openedAtRef.current = null;
+    if (!editMode && activeSlug) {
+      track("case_study_closed", { case_id: activeSlug, dwell_seconds });
+    }
+  }
+
+  function handleSheetOpenChange(open: boolean) {
+    setSheetOpen(open);
+    if (!open) flushCaseClose();
+  }
+
   const studyBySlug = (slug: string | null) =>
     slug ? (caseStudies.find((s) => s.slug === slug) ?? null) : null;
 
@@ -293,16 +314,36 @@ export function WorksSection({
       onClick: () => {
         setActiveSlug(study.slug);
         setSheetOpen(true);
+        openedAtRef.current = Date.now();
+        if (!editMode) track("case_study_opened", { case_id: study.slug });
       },
       onPrefetch: () => prefetchHero(study.heroImage),
     };
   };
 
+  // Safety net: if the tab is closed/backgrounded while a case is open, still
+  // record the dwell time — the normal close path won't fire. Double fire is
+  // prevented by flushCaseClose nulling openedAtRef.
+  useEffect(() => {
+    if (!sheetOpen) return;
+    const onVisibility = () => {
+      if (document.visibilityState === "hidden") flushCaseClose();
+    };
+    window.addEventListener("pagehide", flushCaseClose);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("pagehide", flushCaseClose);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+    // flushCaseClose reads the latest activeSlug/editMode via closure.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sheetOpen, activeSlug, editMode]);
+
   const sheet = (
     <ProjectSheet
       caseStudy={activeStudy}
       open={sheetOpen}
-      onOpenChange={setSheetOpen}
+      onOpenChange={handleSheetOpenChange}
       onAnimationEnd={(isOpen) => {
         if (!isOpen) setActiveSlug(null);
       }}

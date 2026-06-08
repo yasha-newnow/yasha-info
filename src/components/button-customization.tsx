@@ -13,6 +13,7 @@ import {
 import { ColorPickerPanel } from "./color-picker-panel";
 import { GradientAttention } from "./gradient-attention";
 import { ACCENT_COLORS, BASE_ACCENT } from "@/lib/presets";
+import { track } from "@/lib/analytics";
 
 // Updated from Paper Design (7-stop oklab conic)
 const RAINBOW_GRADIENT =
@@ -64,6 +65,10 @@ export function ButtonCustomization({ haloReady = false }: { haloReady?: boolean
 
   const applyColor = useCallback((hex: string) => {
     setHasPicked(true);
+    track("accent_color_picked", {
+      accent: hex,
+      source: ACCENT_COLORS.includes(hex) ? "preset" : "custom",
+    });
     setActiveColor(hex);
     applyTheme(hex);
     setForeground(shouldUseDarkMode(hex) ? "#FFFFFF" : "#0A0A0A");

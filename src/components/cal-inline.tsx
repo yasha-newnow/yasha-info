@@ -2,6 +2,7 @@
 
 import Cal, { getCalApi } from "@calcom/embed-react";
 import { useEffect } from "react";
+import { track } from "@/lib/analytics";
 
 // Layout zones:
 // - viewport < 1024 (mobile/tablet): no sidebar, month_view + Cal's
@@ -40,6 +41,40 @@ export function CalInline() {
       });
     })();
   }, [layout]);
+
+  // Booking funnel events. Registered once (NOT tied to `layout`) so a viewport
+  // resize doesn't attach duplicate listeners. The `cancelled` flag guards the
+  // async getCalApi race (cleanup can run before it resolves) and React
+  // StrictMode's double-invoke, so listeners are never registered twice. The
+  // `widgetViewed` once-guard covers Cal firing `linkReady` more than once per
+  // load. linkReady fires when the embed loaded for a visitor who scrolled to the
+  // contact section → "booking widget was seen"; bookingSuccessfulV2 = call booked
+  // (conversion). Funnel: booking_widget_viewed → booking_completed.
+  useEffect(() => {
+    let cancelled = false;
+    let off = () => {};
+    let widgetViewed = false;
+    (async () => {
+      const cal = await getCalApi({ namespace: "15min" });
+      if (cancelled) return;
+      const onLinkReady = () => {
+        if (widgetViewed) return;
+        widgetViewed = true;
+        track("booking_widget_viewed", { placement: "contact" });
+      };
+      const onBooked = () => track("booking_completed", { placement: "contact" });
+      cal("on", { action: "linkReady", callback: onLinkReady });
+      cal("on", { action: "bookingSuccessfulV2", callback: onBooked });
+      off = () => {
+        cal("off", { action: "linkReady", callback: onLinkReady });
+        cal("off", { action: "bookingSuccessfulV2", callback: onBooked });
+      };
+    })();
+    return () => {
+      cancelled = true;
+      off();
+    };
+  }, []);
 
   return (
     <Cal

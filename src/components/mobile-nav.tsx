@@ -369,16 +369,24 @@ export function MobileNav({
             >
               <ButtonMenuSecondary
                 items={[
-                  { label: "CV", icon: <ArrowUpRight size={20} />, href: "/cv.html" },
+                  {
+                    label: "CV",
+                    icon: <ArrowUpRight size={20} />,
+                    href: "/cv.html",
+                    event: "cv_clicked",
+                    eventProps: { placement: "mobile_nav" },
+                  },
                   {
                     label: "LinkedIn",
                     icon: <ArrowUpRight size={20} />,
                     href: "https://www.linkedin.com/in/yashapetrunin/",
+                    event: "linkedin_clicked",
+                    eventProps: { placement: "mobile_nav" },
                   },
                   {
                     label: EMAIL,
                     icon: <CopyIcon size={20} />,
-                    onClick: copyEmail,
+                    onClick: () => copyEmail("mobile_nav"),
                     feedback: { label: "Copied!", icon: <CheckIcon size={20} /> },
                   },
                 ]}
