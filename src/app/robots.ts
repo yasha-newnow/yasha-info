@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://yasha.info";
+const SITE_URL = "https://yasha-info.vercel.app";
 
 // Dev/internal tuning pages — keep them out of search and AI crawls.
 const DEV_PATHS = [

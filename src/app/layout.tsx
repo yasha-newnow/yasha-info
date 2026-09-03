@@ -46,7 +46,7 @@ const drukCond = localFont({
   display: "swap",
 });
 
-const SITE_URL = "https://yasha.info";
+const SITE_URL = "https://yasha-info.vercel.app";
 const TITLE = "Yasha Petrunin ✱ Product Designer";
 const DESCRIPTION =
   "Product designer, 10+ years on 0→1 launches and platform-scale rebuilds across FinTech, B2B, and Consumer. Architect by training. AI tools in daily practice.";

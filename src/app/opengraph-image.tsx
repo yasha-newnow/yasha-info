@@ -24,7 +24,7 @@ export default function OpengraphImage() {
         }}
       >
         <div style={{ display: "flex", fontSize: 34, opacity: 0.7 }}>
-          yasha.info
+          yasha-info.vercel.app
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", fontSize: 104, fontWeight: 700, letterSpacing: "-3px", lineHeight: 1.05 }}>
